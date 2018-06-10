@@ -4,6 +4,9 @@ import { relative } from 'path';
 
 class PlaceAutoComplete extends Component {
     
+    /**
+     * TODO: Seperate PlaceAutoComplete
+     */
     constructor() {
         super();
         this.state = {
@@ -12,9 +15,7 @@ class PlaceAutoComplete extends Component {
             deparPlace: undefined,
             destAC: undefined,
             destMarker: undefined,
-            destPlace: undefined,
-            uberFare: undefined,
-            lyftFare: undefined
+            destPlace: undefined
         }
     }
 
@@ -103,6 +104,8 @@ class PlaceAutoComplete extends Component {
                 this.setState({
                     deparPlace: place
                 })
+
+                this.props.setLoc('depar', place.geometry.location);
             }.bind(this));
 
             destAC.addListener('place_changed', function() {
@@ -127,7 +130,9 @@ class PlaceAutoComplete extends Component {
 
                 this.setState({
                     destPlace: place
-                })
+                });
+
+                this.props.setLoc('dest', place.geometry.location);
             }.bind(this));
 
 
@@ -139,16 +144,6 @@ class PlaceAutoComplete extends Component {
             });
 
         }
-    }
-
-    estimateFare() {
-        /**
-         * TODO: Fetch fare estimates from uber api and lyft api.
-         */
-        this.setState({
-            uberFare: 1,
-            lyftFare: 1
-        })
     }
 
     componentDidMount() {
@@ -166,7 +161,7 @@ class PlaceAutoComplete extends Component {
             <div>
                 
                 <input ref="deparRef" />
-                <input ref="destRef" />  <button onClick={(e) => this.estimateFare(e)}> Estimate Fare! </button>
+                <input ref="destRef" />
 
                 <div>
                 {    
@@ -184,19 +179,7 @@ class PlaceAutoComplete extends Component {
                     </p>
                 }    
                 </div>
-                <div>
-                {
-                    this.state.uberFare && this.state.lyftFare &&
-                    <div>
-                        <p>
-                            Estimated Uber Fare: ${ this.state.uberFare }
-                        </p>
-                        <p>
-                            Estimated Lyft Fare: ${ this.state.lyftFare }
-                        </p>
-                    </div>
-                }
-                </div>
+                
                 
                 <div ref="mapRef" style={style}> Map Place Holder </div>
             </div>
