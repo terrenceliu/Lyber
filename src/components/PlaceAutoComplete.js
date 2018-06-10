@@ -73,24 +73,30 @@ class PlaceAutoComplete extends Component {
                 }
 
                 if (place.geometry.viewport) {
-                    map.fitBounds(place.geometry.viewport);
                     const deparBounds = place.geometry.viewport.toJSON();
 
                     /**
                      * TODO: Includes depar & dest within viewport's bounds
+                     * Does the algorithm look right for calculating bounds???
                      */
                     if (this.state.destPlace) {
+                        
                         const destBounds = this.state.destAC.getPlace().geometry.viewport.toJSON();
                         
-                        const resBounds = {
-                            south: undefined,
-                            west: undefined,
-                            north: undefined,
-                            east: undefined
+                        console.log('[ViewBounds]');
+                        console.log(deparBounds);
+                        console.log(destBounds);
 
+                        const resBounds = {
+                            south: Math.max(deparBounds.south, deparBounds.north, destBounds.south, destBounds.north),
+                            west:  Math.min(deparBounds.east, deparBounds.west, destBounds.east, destBounds.west),
+                            north:  Math.min(deparBounds.south, deparBounds.north, destBounds.south, destBounds.north),
+                            east: Math.max(deparBounds.east, deparBounds.west, destBounds.east, destBounds.west),
                         }
                         
-                        // map.fitBounds(resBounds);
+                        map.fitBounds(resBounds);
+                    } else {
+                        map.fitBounds(deparBounds);
                     }
 
                 } else {
@@ -119,7 +125,26 @@ class PlaceAutoComplete extends Component {
                 }
 
                 if (place.geometry.viewport) {
-                    map.fitBounds(place.geometry.viewport);
+                    const destBounds = place.geometry.viewport.toJSON();
+                    if (this.state.deparPlace) {
+                        const deparBounds = this.state.deparAC.getPlace().geometry.viewport.toJSON();
+                        
+                        console.log('[ViewBounds]');
+                        console.log(deparBounds);
+                        console.log(destBounds);
+                        
+                        const resBounds = {
+                            south: Math.max(deparBounds.south, deparBounds.north, destBounds.south, destBounds.north),
+                            west:  Math.min(deparBounds.east, deparBounds.west, destBounds.east, destBounds.west),
+                            north:  Math.min(deparBounds.south, deparBounds.north, destBounds.south, destBounds.north),
+                            east: Math.max(deparBounds.east, deparBounds.west, destBounds.east, destBounds.west),
+                        }
+                        
+                        map.fitBounds(resBounds);
+                    } else {
+                        map.fitBounds(deparBounds);
+                    }
+
                 } else {
                     map.setCenter(place.geometry.location);
                     map.setZoom(16);
