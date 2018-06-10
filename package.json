@@ -4,8 +4,9 @@
   "description": "Save more $$$ when you need a ride!",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --mode development",
-    "build": "webpack --mode production"
+    "start": "webpack-dev-server --mode development --open --content-base src",
+    "build": "webpack --mode production",
+    "watch": "webpack --watch --mode development"
   },
   "author": "Terrence Liu",
   "license": "ISC",

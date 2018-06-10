@@ -5,10 +5,16 @@ const htmlPlugin = new HtmlWebPackPlugin({
   filename: "./index.html"
 });
 
+const path = require('path');
+
 module.exports = {
   entry: [
     './src/index.js'
   ],
+  devtool: 'inline-source-map',
+  devServer: {
+    contentBase: './dist'
+  },
   module: {
     rules: [
       {
@@ -38,5 +44,9 @@ module.exports = {
       }
     ]
   },
-  plugins: [htmlPlugin]
+  plugins: [htmlPlugin],
+  output: {
+    filename: '[name].bundle.js',
+    path: path.resolve(__dirname,)
+  }
 };
