@@ -7,11 +7,14 @@ class PlaceAutoComplete extends Component {
     constructor() {
         super();
         this.state = {
-            posMarker: undefined,
             deparAC: undefined,
+            deparMarker: undefined,
             deparPlace: undefined,
             destAC: undefined,
-            destPlace: undefined
+            destMarker: undefined,
+            destPlace: undefined,
+            uberFare: undefined,
+            lyftFare: undefined
         }
     }
 
@@ -31,7 +34,7 @@ class PlaceAutoComplete extends Component {
             const destNode = ReactDOM.findDOMNode(destRef);
             const mapNode = ReactDOM.findDOMNode(mapRef);
 
-            // Instantiate Autocomplete to the nodes
+            // Instantiate map components to the nodes
             var deparAC = new maps.places.Autocomplete(deparNode);
             var destAC = new maps.places.Autocomplete(destNode);
             var map = new maps.Map(mapNode, {
@@ -42,16 +45,26 @@ class PlaceAutoComplete extends Component {
                 },
                 zoom: 13
             });
-            var posMarker = new maps.Marker({
+            var deparMarker = new maps.Marker({
                 map: map,
                 anchorPoint: new maps.Point(0, 0)
             });
-            
+            var destMarker = new maps.Marker({
+                map: map,
+                anchorPoint: new maps.Point(0, )
+            })
+
+            /**
+             * TODO: Display directions between depar & dest
+             */
+            // var directionService = new maps.DirectionsService;
+            // var directionDisplay = new maps.DirectionsRenderer;
+            // directionDisplay.setMap(map);
 
             deparAC.addListener('place_changed', function() {
                 var place = deparAC.getPlace();
 
-                posMarker.setVisible(false);
+                deparMarker.setVisible(false);
 
                 if (!place.geometry) {
                     alert("Details unavailable for input: " + place.name + ".");
@@ -60,26 +73,42 @@ class PlaceAutoComplete extends Component {
 
                 if (place.geometry.viewport) {
                     map.fitBounds(place.geometry.viewport);
+                    const deparBounds = place.geometry.viewport.toJSON();
+
+                    /**
+                     * TODO: Includes depar & dest within viewport's bounds
+                     */
+                    if (this.state.destPlace) {
+                        const destBounds = this.state.destAC.getPlace().geometry.viewport.toJSON();
+                        
+                        const resBounds = {
+                            south: undefined,
+                            west: undefined,
+                            north: undefined,
+                            east: undefined
+
+                        }
+                        
+                        // map.fitBounds(resBounds);
+                    }
+
                 } else {
                     map.setCenter(place.geometry.location);
                     map.setZoom(16);
                 }
 
-                posMarker.setPosition(place.geometry.location);
-                posMarker.setVisible(true);
+                deparMarker.setPosition(place.geometry.location);
+                deparMarker.setVisible(true);
 
                 this.setState({
                     deparPlace: place
                 })
-
-                console.log(place);
-
             }.bind(this));
 
             destAC.addListener('place_changed', function() {
                 var place = destAC.getPlace();
 
-                posMarker.setVisible(false);
+                destMarker.setVisible(false);
 
                 if (!place.geometry) {
                     alert("Details unavailable for input: " + place.name + ".");
@@ -93,48 +122,33 @@ class PlaceAutoComplete extends Component {
                     map.setZoom(16);
                 }
 
-                posMarker.setPosition(place.geometry.location);
-                posMarker.setVisible(true);
+                destMarker.setPosition(place.geometry.location);
+                destMarker.setVisible(true);
 
                 this.setState({
                     destPlace: place
                 })
-
-                console.log(place);
             }.bind(this));
 
 
+            this.setState({
+                deparAC: deparAC,
+                deparMarker: deparMarker,
+                destAC: destAC,
+                destMarker: destMarker
+            });
+
         }
+    }
 
-
-        // if (this.props && this.props.google) {
-            
-        //     console.log("Has google!");
-
-        //     const { google } = this.props;
-        //     const maps = google.maps;
-            
-        //     const inputRef = this.refs.acinput;
-        //     const node = ReactDOM.findDOMNode(inputRef);
-            
-        //     const autocomplete = new maps.places.Autocomplete(node)
-            
-        //     autocomplete.addListener('place_changed', function() {
-        //         var place = autocomplete.getPlace();
-                
-        //         console.log(place);
-                
-        //         this.setState({
-        //             addr: place.formatted_address
-        //         })
-                
-        //         console.log(this.state);
-        //     }.bind(this));
-
-        //     this.setState({
-        //         autocomplete: autocomplete
-        //     });
-        // }
+    estimateFare() {
+        /**
+         * TODO: Fetch fare estimates from uber api and lyft api.
+         */
+        this.setState({
+            uberFare: 1,
+            lyftFare: 1
+        })
     }
 
     componentDidMount() {
@@ -152,7 +166,7 @@ class PlaceAutoComplete extends Component {
             <div>
                 
                 <input ref="deparRef" />
-                <input ref="destRef" />
+                <input ref="destRef" />  <button onClick={(e) => this.estimateFare(e)}> Estimate Fare! </button>
 
                 <div>
                 {    
@@ -169,6 +183,19 @@ class PlaceAutoComplete extends Component {
                         [Test] Destination Address: { this.state.destPlace.formatted_address }
                     </p>
                 }    
+                </div>
+                <div>
+                {
+                    this.state.uberFare && this.state.lyftFare &&
+                    <div>
+                        <p>
+                            Estimated Uber Fare: ${ this.state.uberFare }
+                        </p>
+                        <p>
+                            Estimated Lyft Fare: ${ this.state.lyftFare }
+                        </p>
+                    </div>
+                }
                 </div>
                 
                 <div ref="mapRef" style={style}> Map Place Holder </div>
