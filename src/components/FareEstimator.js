@@ -25,21 +25,12 @@ class FareEstimator extends Component {
         const destLat = this.props.destLatLng.lat();
         const destLng = this.props.destLatLng.lng();
 
-        const body = {
-            start_latitude: deparLat,
-            start_longitude: deparLng,
-            end_latitude: destLat,
-            end_longitude: destLng
-        }
-
-        console.log(deparLat, deparLng, destLat, destLng);
-
         const uberAPI = `https://api.uber.com/v1.2/estimates/price?start_latitude=${deparLat}&start_longitude=${deparLng}&end_latitude=${destLat}&end_longitude=${destLng}`;
         console.log(uberAPI);
 
         // var uberURL = new URL(uberAPI);
         // uberURL.search = new URLSearchParams(body);
-
+        
         /**
          * TODO: Get token from .env or .config. Hide from public.
          */
@@ -51,8 +42,15 @@ class FareEstimator extends Component {
                 'Content-Type': 'application/json'
             },
             method: 'GET'
-        }).then(response => console.log(response));
+        })
+        .then(response => response.json())
+        .then(data => this.setState({
+            uberFare: data
+        }));
+    }
 
+    componentDidUpdate() {
+        console.log(this.state.uberFare);
     }
 
     render() {
@@ -60,11 +58,16 @@ class FareEstimator extends Component {
             <div>
                 <p> FareEstimator </p> <button onClick={this.estimateFare.bind(this)}> Estimate Fare! </button>
                 {
-                    this.state.uberFare && this.state.lyftFare &&
+                    this.state.uberFare &&
                     <div>
                         <p>
-                            Estimated Uber Fare: ${ this.state.uberFare }
+                            Estimated Uber Fare: { this.state.uberFare.prices[0].estimate }
                         </p>
+                    </div>
+                }
+                {
+                    this.state.lyftFare &&
+                    <div>
                         <p>
                             Estimated Lyft Fare: ${ this.state.lyftFare }
                         </p>
