@@ -9,7 +9,7 @@ class App extends Component {
     render() {
         return (
             <div>
-                <h1> Lyber</h1>
+                <h1> Lyber </h1>
                 <PlaceAutoComplete google={this.props.google}/>
             </div>
         )
