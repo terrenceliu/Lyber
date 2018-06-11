@@ -2,6 +2,24 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { relative } from 'path';
 
+// UI
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+
+
+const styles = theme => ({
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+        width: 10
+    }
+});
+
+
 class PlaceAutoComplete extends Component {
     
     /**
@@ -18,7 +36,7 @@ class PlaceAutoComplete extends Component {
             destPlace: undefined
         }
     }
-
+    
     loadAutoComplete() {
         if (this.props && this.props.google) {
             // Find props
@@ -26,14 +44,13 @@ class PlaceAutoComplete extends Component {
             const maps = google.maps;
 
             // Find ref hooks
-            const deparRef = this.refs.deparRef;
-            const destRef = this.refs.destRef;
-            const mapRef = this.refs.mapRef;
+            // const mapRef = this.refs.mapRef;
 
             // Find hook nodes
-            const deparNode = ReactDOM.findDOMNode(deparRef);
-            const destNode = ReactDOM.findDOMNode(destRef);
-            const mapNode = ReactDOM.findDOMNode(mapRef);
+            // const mapNode = ReactDOM.findDOMNode(mapRef);
+            const mapNode = document.getElementById('mapRef');
+            const deparNode = document.getElementById('deparRef');
+            const destNode = document.getElementById('destRef');
 
             // Instantiate map components to the nodes
             var deparAC = new maps.places.Autocomplete(deparNode);
@@ -142,7 +159,7 @@ class PlaceAutoComplete extends Component {
                         
                         map.fitBounds(resBounds);
                     } else {
-                        map.fitBounds(deparBounds);
+                        map.fitBounds(destBounds);
                     }
 
                 } else {
@@ -177,39 +194,44 @@ class PlaceAutoComplete extends Component {
 
     render() {
         const style = {
-            width: '50vw',
+            width: '92vw',
             height: '50vh',
-            position: relative
+            position: 'relative'
         }
 
         return (
+            
             <div>
-                
-                <input ref="deparRef" />
-                <input ref="destRef" />
-
-                <div>
-                {    
-                    this.state.deparPlace && 
-                    <p>
-                        [Test] Departure Address: { this.state.deparPlace.formatted_address } 
-                    </p>
-                }
-                </div>
-                <div>
-                {
-                    this.state.destPlace && 
-                    <p>
-                        [Test] Destination Address: { this.state.destPlace.formatted_address }
-                    </p>
-                }    
-                </div>
-                
-                
-                <div ref="mapRef" style={style}> Map Place Holder </div>
+                <Grid container spacing={24}>
+                    <Grid item xs={12} sm={6}>
+                        <TextField 
+                            id="deparRef"
+                            className="text-field"
+                            label="Departure"
+                            margin="normal"
+                            fullWidth />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                        id="destRef"
+                        className="text-field"
+                        label="Destination"
+                        margin="normal"
+                        fullWidth />
+                    </Grid>
+                </Grid>
+                {/* <div ref="mapRef" style={style}> Map Place Holder </div> */}
+                <Card>
+                    <CardContent>
+                        <div id="mapRef" style={style}></div>
+                        
+                    </CardContent>
+                </Card>
             </div>
         )
     }
 }
+ 
 
-export default PlaceAutoComplete;
+
+export default withStyles(styles)(PlaceAutoComplete);
