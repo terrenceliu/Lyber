@@ -46,7 +46,7 @@ module.exports = {
   },
   plugins: [htmlPlugin],
   output: {
-    filename: '[name].bundle.js',
+    filename: './dist/[name].bundle.js',
     path: path.resolve(__dirname,)
   }
 };
