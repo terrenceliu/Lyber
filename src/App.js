@@ -19,7 +19,7 @@ class App extends Component {
             destLatLng: undefined
         }
     }
-
+    
     setLoc(tag, latlng) {
         
         if (tag == 'depar') {
@@ -40,10 +40,14 @@ class App extends Component {
     render() {
         return (
             <MuiThemeProvider>
-                <div>
-                    <ToolBar disableGutters="true"/>                
-                    <PlaceAutoComplete google={this.props.google} setLoc={this.setLoc.bind(this)}/>
-                    <FareEstimator deparLatLng={this.state.deparLatLng} destLatLng={this.state.destLatLng} />
+                <div className="wrapper">
+                    <div className="main">
+                        <div className="container"> 
+                            <ToolBar disableGutters="true"/>                
+                            <PlaceAutoComplete google={this.props.google} setLoc={this.setLoc.bind(this)}/>
+                            <FareEstimator deparLatLng={this.state.deparLatLng} destLatLng={this.state.destLatLng} />
+                        </div>
+                    </div>
                 </div>
             </MuiThemeProvider>
         )

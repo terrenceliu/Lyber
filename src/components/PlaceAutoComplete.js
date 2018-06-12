@@ -12,10 +12,40 @@ import CardContent from '@material-ui/core/CardContent';
 
 
 const styles = theme => ({
-    textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-        width: 10
+    // wrapper: {
+    //     width: '100%',
+    //     height: '80vh',
+    //     backgroundColor: "blue"
+        
+    // },
+    // inputContainer: {
+    //     width: '100%',
+    //     height: '80vh',
+    //     backgroundColor: 'grey',
+    //     display: 'flex',
+    //     justifyContent: 'center',
+    //     alignItems: 'center'
+    // },
+    // inputContainer_tf: {
+    //     textAlign: 'center',
+    //     position: 'relative',
+    //     backgroundColor: 'yellow',
+    //     top: 0,
+    //     bottom: 0,
+    //     left: 0,
+    //     right: 0,
+    //     margin: 'auto'
+    // },
+    // textField: {
+    //     marginLeft: theme.spacing.unit,
+    //     marginRight: theme.spacing.unit,
+    // },
+    // card: {
+    //     backgroundColor: 'black'
+    // },
+    map: {
+        width: 'auto',
+        height: '50vh'
     }
 });
 
@@ -63,6 +93,7 @@ class PlaceAutoComplete extends Component {
                 },
                 zoom: 13
             });
+            
             var deparMarker = new maps.Marker({
                 map: map,
                 anchorPoint: new maps.Point(0, 0)
@@ -199,39 +230,41 @@ class PlaceAutoComplete extends Component {
             position: 'relative'
         }
 
+        const { classes } = this.props;
+
         return (
-            
-            <div>
-                <Grid container spacing={24}>
-                    <Grid item xs={12} sm={6}>
+            <div className={classes.wrapper}>
+                <div className={classes.inputContainer} >
+                    <div className={classes.inputContainer_tf}>
                         <TextField 
                             id="deparRef"
-                            className="text-field"
+                            className={classes.textField}
                             label="Departure"
                             margin="normal"
                             fullWidth />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
+                    </div>
+                    <div className={classes.inputContainer_tf}>
                         <TextField
-                        id="destRef"
-                        className="text-field"
-                        label="Destination"
-                        margin="normal"
-                        fullWidth />
-                    </Grid>
-                </Grid>
-                {/* <div ref="mapRef" style={style}> Map Place Holder </div> */}
-                <Card>
+                            id="destRef"
+                            className={classes.textField}
+                            label="Destination"
+                            margin="normal"
+                            fullWidth />
+                    </div>
+                </div>
+                <Card className={classes.card}>
                     <CardContent>
-                        <div id="mapRef" style={style}></div>
-                        
+                        <div id="mapRef" className={classes.map}></div>   
                     </CardContent>
                 </Card>
             </div>
         )
     }
 }
- 
+
+PlaceAutoComplete.propTypes = {
+    classes: PropTypes.object.isRequired
+};
 
 
 export default withStyles(styles)(PlaceAutoComplete);
