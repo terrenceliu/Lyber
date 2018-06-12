@@ -54,6 +54,8 @@ class App extends Component {
     }
 }
 
+var config = require('../config.json');
+const googleToken = config.googleToken;
 export default GoogleApiWrapper({
-    apiKey: 'AIzaSyCRkw7Lzkby2rK2AWoEenHlX_RQ19A_Hp0',
+    apiKey: googleToken,
   })(App);
