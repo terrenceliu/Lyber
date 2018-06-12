@@ -12,40 +12,54 @@ import CardContent from '@material-ui/core/CardContent';
 
 
 const styles = theme => ({
-    // wrapper: {
-    //     width: '100%',
-    //     height: '80vh',
-    //     backgroundColor: "blue"
+    wrapper: {
+        width: '100%',
+        height: '80vh',
+        // backgroundColor: "blue"
         
-    // },
-    // inputContainer: {
-    //     width: '100%',
-    //     height: '80vh',
-    //     backgroundColor: 'grey',
-    //     display: 'flex',
-    //     justifyContent: 'center',
-    //     alignItems: 'center'
-    // },
-    // inputContainer_tf: {
-    //     textAlign: 'center',
-    //     position: 'relative',
-    //     backgroundColor: 'yellow',
-    //     top: 0,
-    //     bottom: 0,
-    //     left: 0,
-    //     right: 0,
-    //     margin: 'auto'
-    // },
-    // textField: {
-    //     marginLeft: theme.spacing.unit,
-    //     marginRight: theme.spacing.unit,
-    // },
-    // card: {
-    //     backgroundColor: 'black'
-    // },
+    },
+    inputContainer: {
+        width: '100%',
+        height: '30%',
+        // backgroundColor: 'grey',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    inputContainer_grid: {
+        width: '500px',
+        textAlign: 'center',
+        position: 'relative',
+        // backgroundColor: 'yellow',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        margin: 'auto'
+    },
+    inputContainer_tf: {
+
+    },
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+    },
+    mapContainer: {
+        // backgroundColor: 'black'
+        width: '30%',
+        height: '30vh',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        margin: 'auto',
+        position: 'relative'
+    },
     map: {
         width: 'auto',
-        height: '50vh'
+        height: '30vh',
+        position: 'relative'
+        
     }
 });
 
@@ -224,39 +238,39 @@ class PlaceAutoComplete extends Component {
     }
 
     render() {
-        const style = {
-            width: '92vw',
-            height: '50vh',
-            position: 'relative'
-        }
+        // const style = {
+        //     width: '92vw',
+        //     height: '50vh',
+        //     position: 'relative'
+        // }
 
         const { classes } = this.props;
 
         return (
             <div className={classes.wrapper}>
                 <div className={classes.inputContainer} >
-                    <div className={classes.inputContainer_tf}>
-                        <TextField 
-                            id="deparRef"
-                            className={classes.textField}
-                            label="Departure"
-                            margin="normal"
-                            fullWidth />
-                    </div>
-                    <div className={classes.inputContainer_tf}>
-                        <TextField
-                            id="destRef"
-                            className={classes.textField}
-                            label="Destination"
-                            margin="normal"
-                            fullWidth />
+                    <div className={classes.inputContainer_grid}>
+                        <div className={classes.inputContainer_tf}>
+                            <TextField 
+                                id="deparRef"
+                                className={classes.textField}
+                                label="Departure"
+                                margin="normal"
+                                fullWidth />
+                        </div>
+                        <div className={classes.inputContainer_tf}>
+                            <TextField
+                                id="destRef"
+                                className={classes.textField}
+                                label="Destination"
+                                margin="normal"
+                                fullWidth />
+                        </div>
                     </div>
                 </div>
-                <Card className={classes.card}>
-                    <CardContent>
-                        <div id="mapRef" className={classes.map}></div>   
-                    </CardContent>
-                </Card>
+                <div className={classes.mapContainer}>
+                    <div id="mapRef" className={classes.map}></div> 
+                </div>
             </div>
         )
     }
