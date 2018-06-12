@@ -69,7 +69,9 @@ class FareEstimator extends Component {
     }
 
     componentDidUpdate() {
-        // console.log(this.state.uberFare);
+        if (this.state.uberFare) {
+            console.log(this.state.uberFare);
+        }
     }
 
     render() {

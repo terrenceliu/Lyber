@@ -1,5 +1,10 @@
 # Lyber
 
+## About
+[Project description goes here lol]
+
+Lyber is available on iOS. Project link: https://github.com/EdwardFeng523/Lyber-ios
+
 
 ## Getting Started
 
