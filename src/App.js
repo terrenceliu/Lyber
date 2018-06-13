@@ -45,9 +45,9 @@ class App extends Component {
                     <div className="main">
                         <div className="container"> 
                             <ToolBar disableGutters="true"/>                
-                            <MainFrame/>
-                            <PlaceAutoComplete google={this.props.google} setLoc={this.setLoc.bind(this)}/>
-                            <FareEstimator deparLatLng={this.state.deparLatLng} destLatLng={this.state.destLatLng} />
+                            <MainFrame google={this.props.google} />
+                            {/* <PlaceAutoComplete google={this.props.google} setLoc={this.setLoc.bind(this)}/> */}
+                            {/* <FareEstimator deparLatLng={this.state.deparLatLng} destLatLng={this.state.destLatLng} /> */}
                         </div>
                     </div>
                 </div>
