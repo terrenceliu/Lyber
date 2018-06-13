@@ -12,20 +12,22 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import { CardActions } from "@material-ui/core";
 
 
 const styles = theme => ({
     wrapper: {
-        height: '90vh',
+        height: '850px',
         // backgroundColor: 'grey',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        alignContent: 'center'
     },
     container: {
-        height: '80vh',
+        height: '85vh',
         width: '1500px',
-        // backgroundColor: 'purple',
+        backgroundColor: 'white',
         alignItems: 'center',
         alignContent: 'center',
         justifyContent: 'center'
@@ -69,8 +71,14 @@ const styles = theme => ({
         height: '100%'
     },
     display_card: {
-        width: '100px',
-        height: '100px'
+        width: '150px',
+        height: '150px'
+    },
+    display_card_name: {
+        marginBottom: 16
+    },
+    display_card_content: {
+
     }
 });
 
@@ -89,10 +97,8 @@ class MainFrame extends Component {
                 deparLatLng: undefined,
                 destLatLng: undefined
             },
-            res: {
-                uberData: undefined,
-                lyftData: undefined
-            }
+            uberData: undefined,
+            lyftData: undefined
         }
     }
 
@@ -285,50 +291,32 @@ class MainFrame extends Component {
         const destLat = this.state.req.destLatLng.lat();
         const destLng = this.state.req.destLatLng.lng();
 
-        const uberAPI = `https://api.uber.com/v1.2/estimates/price?start_latitude=${deparLat}&start_longitude=${deparLng}&end_latitude=${destLat}&end_longitude=${destLng}`;
-        const lyftAPI = `https://api.lyft.com/v1/cost?start_lat=${deparLat}&start_lng=${deparLng}&end_lat=${destLat}&end_lng=${destLng}`;
+        // const uberAPI = `https://api.uber.com/v1.2/estimates/price?start_latitude=${deparLat}&start_longitude=${deparLng}&end_latitude=${destLat}&end_longitude=${destLng}`;
+        // const lyftAPI = `https://api.lyft.com/v1/cost?start_lat=${deparLat}&start_lng=${deparLng}&end_lat=${destLat}&end_lng=${destLng}`;
+        
         const queryParam = `?depar_lat=${deparLat}&depar_lng=${deparLng}&dest_lat=${destLat}&dest_lng=${destLng}`;
+        const uberAPI = "https://lyber-server.herokuapp.com/api/uber" + queryParam;
+        const lyftAPI = "https://lyber-server.herokuapp.com/api/lyft" + queryParam;
+        
         // console.log(uberAPI);
         // console.log(lyftAPI);
-        console.log(queryParam);
+        // console.log(queryParam);
         
-        /**
-         * TODO: Get token from .env or .config. Hide from public.
-         */
-        const uberToken = "Token " + config.uberToken;
         const uberData = fetch(uberAPI, {
-            headers: {
-                'Authorization': uberToken,
-                'Accept-Language': 'en_US',
-                'Content-Type': 'application/json'
-            },
             method: 'GET'
         })
         .then(response => response.json())
         .then(data => this.setState({
-            res: {
-                uberData: data
-            }
+            uberData: data
         }));
 
-        /**
-         * TODO: Set up server for post request.
-         * Damn Lyft. Lyft API stops adding 'access-control-allow-origin; *' to the response.
-         * Server is needed as a proxy for getting the data.
-         * 
-         */
-        const lyftToken = "bearer " + config.lyftToken;
         const lyftData = fetch(lyftAPI, {
-            headers: {
-                'Authorization': lyftToken
-            }
-        }).then(resposne => resposne.json()).then(data => {
-            console.log(data);
-        });
-    }
-
-    cardFactory(name, distance, estimate_price) {
-        
+            method: 'GET'
+        })
+        .then(resposne => resposne.json())
+        .then(data => this.setState({
+            lyftData: data
+        }));
     }
 
     componentDidMount() {
@@ -336,8 +324,12 @@ class MainFrame extends Component {
     }
 
     componentDidUpdate() {
-        if (this.state.res.uberData) {
-            console.log(this.state.res.uberData);
+        if (this.state.uberData) {
+            console.log(this.state.uberData);
+        }
+
+        if (this.state.lyftData) {
+            console.log(this.state.lyftData);
         }
     }
 
@@ -375,21 +367,56 @@ class MainFrame extends Component {
                         <div className={classes.container_right_display}>
                             <Grid container spacing={24} className={classes.display_card_container}>
                             {
-                                this.state.res.uberData &&
-                                this.state.res.uberData.prices.map(function(item, i) {
+                                this.state.uberData &&
+                                this.state.uberData.prices.map(function(item, i) {
                                     const name = item.display_name;
-                                    const estimate = item.estimate;
+                                    const estimate = item.low_estimate;
                                     const distance = item.distance;
                                     
                                     return (
                                         <Grid item>
                                             <Card className={classes.display_card}>
-                                                <Typography color="textSecondary">
-                                                    {name}
-                                                </Typography>
-                                                <Typography variant="headline" component="h2">
-                                                    {estimate}
-                                                </Typography>
+                                                <CardContent>
+                                                    <Typography color="textSecondary" className={classes.display_card_name}>
+                                                        {name}
+                                                    </Typography>
+                                                    <Typography variant="headline" align="center" component="h2" className={classes.display_card_content}>
+                                                        ${estimate}
+                                                    </Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Button size="small" color="primary">
+                                                        Schedule
+                                                    </Button>
+                                                </CardActions>
+                                            </Card>
+                                        </Grid>
+                                    );
+                                })
+                            }
+                            {
+                                this.state.lyftData &&
+                                this.state.lyftData.cost_estimates.map(function(item, i) {
+                                    const name = item.display_name;
+                                    const estimate = item.estimated_cost_cents_min / 100.0;
+                                    const distance = item.estimated_distance_miles;
+                                    
+                                    return (
+                                        <Grid item>
+                                            <Card className={classes.display_card}>
+                                                <CardContent>
+                                                    <Typography color="textSecondary" className={classes.display_card_name}>
+                                                        {name}
+                                                    </Typography>
+                                                    <Typography variant="headline" align="center" component="h2" className={classes.display_card_content}>
+                                                        ${estimate}
+                                                    </Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Button size="small" color="primary">
+                                                        Schedule
+                                                    </Button>
+                                                </CardActions>
                                             </Card>
                                         </Grid>
                                     );
