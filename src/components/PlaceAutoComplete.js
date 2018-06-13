@@ -12,37 +12,37 @@ import CardContent from '@material-ui/core/CardContent';
 
 
 const styles = theme => ({
-    // wrapper: {
-    //     width: '100%',
-    //     height: '80vh',
-    //     backgroundColor: "blue"
+    wrapper: {
+        width: '100%',
+        height: '80vh',
+        backgroundColor: "blue"
         
-    // },
-    // inputContainer: {
-    //     width: '100%',
-    //     height: '80vh',
-    //     backgroundColor: 'grey',
-    //     display: 'flex',
-    //     justifyContent: 'center',
-    //     alignItems: 'center'
-    // },
-    // inputContainer_tf: {
-    //     textAlign: 'center',
-    //     position: 'relative',
-    //     backgroundColor: 'yellow',
-    //     top: 0,
-    //     bottom: 0,
-    //     left: 0,
-    //     right: 0,
-    //     margin: 'auto'
-    // },
-    // textField: {
-    //     marginLeft: theme.spacing.unit,
-    //     marginRight: theme.spacing.unit,
-    // },
-    // card: {
-    //     backgroundColor: 'black'
-    // },
+    },
+    inputContainer: {
+        width: '100%',
+        height: '80vh',
+        backgroundColor: 'grey',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    inputContainer_tf: {
+        textAlign: 'center',
+        position: 'relative',
+        backgroundColor: 'yellow',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        margin: 'auto'
+    },
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+    },
+    card: {
+        backgroundColor: 'black'
+    },
     map: {
         width: 'auto',
         height: '50vh'
@@ -232,26 +232,21 @@ class PlaceAutoComplete extends Component {
 
         const { classes } = this.props;
 
+
         return (
-            <div className={classes.wrapper}>
-                <div className={classes.inputContainer} >
-                    <div className={classes.inputContainer_tf}>
-                        <TextField 
-                            id="deparRef"
-                            className={classes.textField}
-                            label="Departure"
-                            margin="normal"
-                            fullWidth />
-                    </div>
-                    <div className={classes.inputContainer_tf}>
-                        <TextField
-                            id="destRef"
-                            className={classes.textField}
-                            label="Destination"
-                            margin="normal"
-                            fullWidth />
-                    </div>
-                </div>
+            <div>
+                <TextField 
+                    id="deparRef"
+                    className={classes.textField}
+                    label="Departure"
+                    margin="normal"
+                    fullWidth />
+                <TextField
+                    id="destRef"
+                    className={classes.textField}
+                    label="Destination"
+                    margin="normal"
+                    fullWidth />
                 <Card className={classes.card}>
                     <CardContent>
                         <div id="mapRef" className={classes.map}></div>   
