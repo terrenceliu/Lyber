@@ -7,6 +7,7 @@ import { GoogleApiWrapper } from 'google-maps-react';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
 // Components
+import MainFrame from './components/MainFrame';
 import PlaceAutoComplete from './components/PlaceAutoComplete';
 import FareEstimator from './components/FareEstimator';
 import ToolBar from './components/ToolBar';
@@ -44,6 +45,7 @@ class App extends Component {
                     <div className="main">
                         <div className="container"> 
                             <ToolBar disableGutters="true"/>                
+                            <MainFrame/>
                             <PlaceAutoComplete google={this.props.google} setLoc={this.setLoc.bind(this)}/>
                             <FareEstimator deparLatLng={this.state.deparLatLng} destLatLng={this.state.destLatLng} />
                         </div>

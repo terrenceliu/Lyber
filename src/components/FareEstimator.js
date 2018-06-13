@@ -56,10 +56,10 @@ class FareEstimator extends Component {
 
         const uberAPI = `https://api.uber.com/v1.2/estimates/price?start_latitude=${deparLat}&start_longitude=${deparLng}&end_latitude=${destLat}&end_longitude=${destLng}`;
         const lyftAPI = `https://api.lyft.com/v1/cost?start_lat=${deparLat}&start_lng=${deparLng}&end_lat=${destLat}&end_lng=${destLng}`;
-        console.log(uberAPI);
-
-        // var uberURL = new URL(uberAPI);
-        // uberURL.search = new URLSearchParams(body);
+        const queryParam = `?depar_lat=${deparLat}&depar_lng=${deparLng}&dest_lat=${destLat}&dest_lng=${destLng}`;
+        // console.log(uberAPI);
+        // console.log(lyftAPI);
+        console.log(queryParam);
         
         /**
          * TODO: Get token from .env or .config. Hide from public.
@@ -93,7 +93,7 @@ class FareEstimator extends Component {
             console.log(data);
         });
     }
-
+    
     componentDidUpdate() {
         if (this.state.uberFare) {
             console.log(this.state.uberFare);
