@@ -302,6 +302,9 @@ class MainFrame extends Component {
         // console.log(lyftAPI);
         // console.log(queryParam);
         
+        console.log('Depar: ', deparLat, deparLng);
+        console.log('Dest: ', destLat, destLng);
+
         const uberData = fetch(uberAPI, {
             method: 'GET'
         })
