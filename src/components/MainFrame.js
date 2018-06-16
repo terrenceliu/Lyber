@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { relative } from 'path';
 
+// Component
+import ReqRideButton from './ReqRideButton';
+
 // UI
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -375,7 +378,13 @@ class MainFrame extends Component {
                                     const name = item.display_name;
                                     const estimate = item.low_estimate;
                                     const distance = item.distance;
+                                    const deparLat = this.state.req.deparLatLng.lat();
+                                    const deparLng = this.state.req.deparLatLng.lng();
+                                    const destLat = this.state.req.destLatLng.lat();
+                                    const destLng = this.state.req.destLatLng.lng();
                                     
+                                    console.log("Depar", deparLat, deparLng, "Dest", destLat, destLng);
+
                                     return (
                                         <Grid item>
                                             <Card className={classes.display_card}>
@@ -385,17 +394,18 @@ class MainFrame extends Component {
                                                     </Typography>
                                                     <Typography variant="headline" align="center" component="h2" className={classes.display_card_content}>
                                                         ${estimate}
-                                                    </Typography>
+                                                    </Typography>i
                                                 </CardContent>
                                                 <CardActions>
-                                                    <Button size="small" color="primary">
+                                                    <ReqRideButton deparLat={deparLat} deparLng={deparLng} destLat={destLat} destLng={destLng}/>
+                                                    {/* <Button size="small" color="primary">
                                                         Schedule
-                                                    </Button>
+                                                    </Button> */}
                                                 </CardActions>
                                             </Card>
                                         </Grid>
                                     );
-                                })
+                                }.bind(this))
                             }
                             {
                                 this.state.lyftData &&
