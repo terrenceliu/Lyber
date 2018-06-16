@@ -38,3 +38,23 @@ npm run start
 The `watch` script turns on the watch mode. Webpack will continue to watch for changes in any of the resolved files. 
 
 The `start` script will spawn a dev server which reloads the page when you save the files. The server runs at `http://localhost:8080` and will automatically open up.
+
+### Expose dev server to LAN
+
+
+To start a dev server that could be accessed from any devices on our local network (LAN), run
+```
+npm run start:lan
+```
+
+Then we could visit the dev server with the url `http://<local ip address>:8080`
+
+To look up the local ip address, run
+```
+ifconfig -a
+```
+
+
+
+
+
