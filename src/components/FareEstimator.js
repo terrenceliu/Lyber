@@ -2,7 +2,33 @@ import React, { Component } from 'react';
 import ReactDOM from "react-dom";
 import Button from '@material-ui/core/Button';
 
+// UI
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import Typography from '@material-ui/core/Typography';
+
+
+const styles = {
+    cardContainer: {
+        width: '260px',
+        height: '260px'
+    },
+    card: {
+    //   width: 275,
+    //   minWidth: 275
+    },
+    title: {
+      marginBottom: 16,
+      fontSize: 14,
+    },
+    pos: {
+      marginBottom: 12,
+    },
+};
 class FareEstimator extends Component {
+
+
     constructor() {
         super();
         this.state = {
@@ -30,10 +56,10 @@ class FareEstimator extends Component {
 
         const uberAPI = `https://api.uber.com/v1.2/estimates/price?start_latitude=${deparLat}&start_longitude=${deparLng}&end_latitude=${destLat}&end_longitude=${destLng}`;
         const lyftAPI = `https://api.lyft.com/v1/cost?start_lat=${deparLat}&start_lng=${deparLng}&end_lat=${destLat}&end_lng=${destLng}`;
-        console.log(uberAPI);
-
-        // var uberURL = new URL(uberAPI);
-        // uberURL.search = new URLSearchParams(body);
+        const queryParam = `?depar_lat=${deparLat}&depar_lng=${deparLng}&dest_lat=${destLat}&dest_lng=${destLng}`;
+        // console.log(uberAPI);
+        // console.log(lyftAPI);
+        console.log(queryParam);
         
         /**
          * TODO: Get token from .env or .config. Hide from public.
@@ -67,7 +93,7 @@ class FareEstimator extends Component {
             console.log(data);
         });
     }
-
+    
     componentDidUpdate() {
         if (this.state.uberFare) {
             console.log(this.state.uberFare);
@@ -75,15 +101,34 @@ class FareEstimator extends Component {
     }
 
     render() {
+        const { classes } = this.props;
+
         return (
             <div>
                 <Button varient="contained" color="primary" onClick={this.estimateFare.bind(this)}> Estimate Fare! </Button>
                 {
                     this.state.uberFare &&
-                    <div>
-                        <p>
+                    <div className={classes.cardContainer}>
+                        {/* <p>
                             Estimated Uber Fare: { this.state.uberFare.prices[0].estimate }
-                        </p>
+                        </p> */}
+
+                        <Card className={classes.card}>
+                            <Typography className={classes.title} color="textSecondary">
+                                {this.state.uberFare.prices[0].localized_display_name}
+                            </Typography>
+                            <Typography variant="headline" component="h2">
+                                ${this.state.uberFare.prices[0].low_estimate}
+                            </Typography>
+                            <Typography className={classes.pos} color="textSecondary">
+                                Low estimate
+                            </Typography>
+                            <Typography component="p">
+                                Distance: {this.state.uberFare.prices[0].distance} miles. <br/>
+                                Duration: {this.state.uberFare.prices[0].duration}
+                            </Typography>
+
+                        </Card>
                     </div>
                 }
                 {
@@ -99,4 +144,8 @@ class FareEstimator extends Component {
     }
 }
 
-export default FareEstimator;
+FareEstimator.propTypes = {
+    classes: PropTypes.object.isRequired
+}
+
+export default withStyles(styles)(FareEstimator);
