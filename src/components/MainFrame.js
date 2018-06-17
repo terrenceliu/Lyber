@@ -15,67 +15,83 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { CardActions } from "@material-ui/core";
+import { CardActions, IconButton } from "@material-ui/core";
+import withWidth from '@material-ui/core/withWidth';
 
+import Search from '@material-ui/icons/Search';
 
 const styles = theme => ({
     wrapper: {
-        height: '850px',
+        height: '100vh',
         // backgroundColor: 'grey',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        alignContent: 'center'
+        alignContent: 'center',
+        marginTop: '10px'
     },
     container: {
-        height: '85vh',
-        width: '1500px',
-        backgroundColor: 'white',
+        height: '100%',
+        width: '90vw',
+        // backgroundColor: 'cyan',
         alignItems: 'center',
         alignContent: 'center',
         justifyContent: 'center'
     },
     container_left: {
-        height: '100%',
-        width: '35%',
+        height: '30%',
+        width: '100%',
         // backgroundColor: 'yellow',
-        alignItems: 'center',
-        alignContent: 'center',
-        justifyContent: 'center',
-        boxShadow: '0px 13px 40px -13px rgba(0,0,0,0.75)'
+        // alignItems: 'center',
+        // alignContent: 'center',
+        // justifyContent: 'center',
+        boxShadow: '0px 10px 20px -10px rgba(0,0,0,0.75)'
+        // [theme.breakpoints.down('sm')]: {
+        //     backgroundColor: theme.palette.secondary.main,
+        // },
     },
     container_right: {
-        height: '100%',
-        width: '65%',
+        height: '70%',
+        width: '100%',
         // backgroundColor: 'red'
     },
     container_right_input: {
-        width: '100%',
-        height: '350px',
-        alignItems: 'center',
-        alignContent: 'center',
-        justifyContent: 'center'
+        // height: '50px',
+        // backgroundColor: "yellow",
+        // alignItems: 'center',
+        // alignContent: 'center',
+        // justifyContent: 'center'
+    },
+    container_right_item: {
+        // backgroundColor: "blue",
+        // width: '100%'
     },
     container_right_display: {
-        width: '100%',
-        height: 'calc(100% - 350px)',
+        // width: '100%',
+        // height: 'calc(100% - 350px)',
+    },
+    container_right_button: {
+        textAlign: 'center',
+        marginTop: '20px'
     },
     display_card_container: {
-        height: '100%',
-        alignItems: 'center',
-        alignContent: 'center',
-        justifyContent: 'center'
+        // height: '100%',
+        // alignItems: 'center',
+        // alignContent: 'center',
+        // justifyContent: 'center'
     },
+    
     textField: {
-        width: '650px',
+        // height: '20px',
+        width: '100%'
     },
     map: {
         width: '100%',
         height: '100%'
     },
     display_card: {
-        width: '150px',
-        height: '150px'
+        // width: '150px',
+        // height: '150px'
     },
     display_card_name: {
         marginBottom: 16
@@ -342,15 +358,22 @@ class MainFrame extends Component {
     render() {
         const { classes } = this.props;
 
+        const { width } = this.props;
+
+        const isMobile = width == "xs" || width == "sm" || width == "md"
+        
+        console.log("width", width);
+
+
         return (
             <div className={classes.wrapper}>
-                <Grid container className={classes.container}>
+                <Grid container direction="column" className={classes.container}>
                     <Grid item className={classes.container_left}>
                         <div id="mapRef" className={classes.map}></div> 
                     </Grid>
                     <Grid item className={classes.container_right}>
-                        <Grid container direction='column' spacing={24} className={classes.container_right_input}>
-                            <Grid item>    
+                        <Grid container direction='column' className={classes.container_right_input}>
+                            <Grid item xs={12} sm={12} className={classes.container_right_item}>    
                                 <TextField 
                                     id="deparRef"
                                     className={classes.textField}
@@ -358,7 +381,7 @@ class MainFrame extends Component {
                                     margin="normal"
                                     fullWidth />
                             </Grid>
-                            <Grid item>
+                            <Grid item xs={12} sm={12} className={classes.container_right_item}>
                                 <TextField
                                     id="destRef"
                                     className={classes.textField}
@@ -366,8 +389,11 @@ class MainFrame extends Component {
                                     margin="normal"
                                     fullWidth />
                             </Grid>
-                            <Grid item>
-                                <Button variant="contained" color="primary" onClick={this.estimateFare.bind(this)}> Estimate Fare! </Button>
+                            <Grid item xs={12} sm={12} className={classes.container_right_button} >
+                                {/* <Button variant="contained" color="primary" onClick={this.estimateFare.bind(this)}> Estimate Fare! </Button> */}
+                                <IconButton variant="contained" color="primary" onClick={this.estimateFare.bind(this)}>
+                                    <Search />
+                                </IconButton>
                             </Grid>
                         </Grid>
                         <div className={classes.container_right_display}>
@@ -394,7 +420,7 @@ class MainFrame extends Component {
                                                     </Typography>
                                                     <Typography variant="headline" align="center" component="h2" className={classes.display_card_content}>
                                                         ${estimate}
-                                                    </Typography>i
+                                                    </Typography>
                                                 </CardContent>
                                                 <CardActions>
                                                     <ReqRideButton deparLat={deparLat} deparLng={deparLng} destLat={destLat} destLng={destLng}/>
@@ -450,4 +476,4 @@ MainFrame.propTypes = {
 };
 
 
-export default withStyles(styles)(MainFrame);
+export default withWidth()(withStyles(styles)(MainFrame));

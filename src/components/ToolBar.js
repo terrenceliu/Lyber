@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import AcountBox from '@material-ui/icons/AccountBox'
 
 const styles = {
     root: {
@@ -14,11 +15,16 @@ const styles = {
     },
     flex: {
         flex: 1,
+        textAlign: "center"
     },
     menuButton: {
         marginLeft: -12,
         marginRight: 20,
     },
+    acountButton: {
+        marginRight: -12,
+        marginLeft: 20
+    }
 };
 
 function ButtonAppBar(props) {
@@ -33,7 +39,10 @@ function ButtonAppBar(props) {
                 <Typography variant="title" color="inherit" className={classes.flex}>
                     Lyber
                 </Typography>
-                <Button color="inherit">Login</Button>
+                {/* <Button color="inherit">Login</Button> */}
+                <IconButton className={classes.acountButton} color="inherit" aria-label="Menu">
+                    <AcountBox />
+                </IconButton>
                 </Toolbar>
             </AppBar>
         </div>
