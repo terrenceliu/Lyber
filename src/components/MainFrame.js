@@ -34,9 +34,9 @@ const styles = theme => ({
         height: '100%',
         width: '90vw',
         // backgroundColor: 'cyan',
-        alignItems: 'center',
-        alignContent: 'center',
-        justifyContent: 'center'
+        alignItems: 'flex-start',
+        alignContent: 'flex-start',
+        justifyContent: 'flex-start'
     },
     container_left: {
         height: '30%',
@@ -51,7 +51,7 @@ const styles = theme => ({
         // },
     },
     container_right: {
-        height: '70%',
+        // height: '35%',
         width: '100%',
         // backgroundColor: 'red'
     },
@@ -62,12 +62,10 @@ const styles = theme => ({
         // alignContent: 'center',
         // justifyContent: 'center'
     },
-    container_right_item: {
-        // backgroundColor: "blue",
-        // width: '100%'
-    },
-    container_right_display: {
-        // width: '100%',
+    container_cards: {
+        // height: '50%',
+        width: '100%',
+        // backgroundColor: 'blue'
         // height: 'calc(100% - 350px)',
     },
     container_right_button: {
@@ -89,15 +87,19 @@ const styles = theme => ({
         width: '100%',
         height: '100%'
     },
+    display_item: {
+        width: '100%',
+        // height: '150px'
+    },
     display_card: {
-        // width: '150px',
         // height: '150px'
     },
     display_card_name: {
-        marginBottom: 16
+        fontSize: 8,
+        // marginBottom: 8
     },
     display_card_content: {
-
+        fontSize: 24
     }
 });
 
@@ -364,15 +366,38 @@ class MainFrame extends Component {
         
         console.log("width", width);
 
+        var testCardsList = []
+
+        for (var i = 0; i < 1; i++) {
+            testCardsList.push(
+                <Grid item xs={4} className={classes.display_item}>
+                    <Card className={classes.display_card}>
+                        <CardContent>
+                            <Typography color="textSecondary" className={classes.display_card_name}>
+                                Test Card
+                            </Typography>
+                            <Typography variant="headline" align="center" component="p" className={classes.display_card_content}>
+                                $8 ~ $9
+                            </Typography>
+                        </CardContent>
+                        <CardActions>
+                            <ReqRideButton/>
+                        </CardActions>
+                    </Card>
+                </Grid>
+                
+            );
+        }
+
 
         return (
             <div className={classes.wrapper}>
-                <Grid container direction="column" className={classes.container}>
+                <Grid container direction="row" className={classes.container}>
                     <Grid item className={classes.container_left}>
                         <div id="mapRef" className={classes.map}></div> 
                     </Grid>
                     <Grid item className={classes.container_right}>
-                        <Grid container direction='column' className={classes.container_right_input}>
+                        <Grid container direction='row' className={classes.container_right_input}>
                             <Grid item xs={12} sm={12} className={classes.container_right_item}>    
                                 <TextField 
                                     id="deparRef"
@@ -396,74 +421,78 @@ class MainFrame extends Component {
                                 </IconButton>
                             </Grid>
                         </Grid>
-                        <div className={classes.container_right_display}>
-                            <Grid container spacing={24} className={classes.display_card_container}>
-                            {
-                                this.state.uberData &&
-                                this.state.uberData.prices.map(function(item, i) {
-                                    const name = item.display_name;
-                                    const estimate = item.low_estimate;
-                                    const distance = item.distance;
-                                    const deparLat = this.state.req.deparLatLng.lat();
-                                    const deparLng = this.state.req.deparLatLng.lng();
-                                    const destLat = this.state.req.destLatLng.lat();
-                                    const destLng = this.state.req.destLatLng.lng();
-                                    
-                                    console.log("Depar", deparLat, deparLng, "Dest", destLat, destLng);
+                    </Grid>
+                    <Grid item xs={12} sm={12} className={classes.container_cards}>
+                        <Grid container spacing={16} className={classes.display_card_container}>
+                        
+                        {
+                            testCardsList
+                        }
 
-                                    return (
-                                        <Grid item>
-                                            <Card className={classes.display_card}>
-                                                <CardContent>
-                                                    <Typography color="textSecondary" className={classes.display_card_name}>
-                                                        {name}
-                                                    </Typography>
-                                                    <Typography variant="headline" align="center" component="h2" className={classes.display_card_content}>
-                                                        ${estimate}
-                                                    </Typography>
-                                                </CardContent>
-                                                <CardActions>
-                                                    <ReqRideButton deparLat={deparLat} deparLng={deparLng} destLat={destLat} destLng={destLng}/>
-                                                    {/* <Button size="small" color="primary">
-                                                        Schedule
-                                                    </Button> */}
-                                                </CardActions>
-                                            </Card>
-                                        </Grid>
-                                    );
-                                }.bind(this))
-                            }
-                            {
-                                this.state.lyftData &&
-                                this.state.lyftData.cost_estimates.map(function(item, i) {
-                                    const name = item.display_name;
-                                    const estimate = item.estimated_cost_cents_min / 100.0;
-                                    const distance = item.estimated_distance_miles;
-                                    
-                                    return (
-                                        <Grid item>
-                                            <Card className={classes.display_card}>
-                                                <CardContent>
-                                                    <Typography color="textSecondary" className={classes.display_card_name}>
-                                                        {name}
-                                                    </Typography>
-                                                    <Typography variant="headline" align="center" component="h2" className={classes.display_card_content}>
-                                                        ${estimate}
-                                                    </Typography>
-                                                </CardContent>
-                                                <CardActions>
-                                                    <Button size="small" color="primary">
-                                                        Schedule
-                                                    </Button>
-                                                </CardActions>
-                                            </Card>
-                                        </Grid>
-                                    );
-                                })
-                            }
-                            </Grid>
-                        </div>
-
+                        {
+                            this.state.uberData &&
+                            this.state.uberData.prices.map(function(item, i) {
+                                const name = item.display_name;
+                                const estimate = item.low_estimate;
+                                const distance = item.distance;
+                                const deparLat = this.state.req.deparLatLng.lat();
+                                const deparLng = this.state.req.deparLatLng.lng();
+                                const destLat = this.state.req.destLatLng.lat();
+                                const destLng = this.state.req.destLatLng.lng();
+                                
+                                console.log("Depar", deparLat, deparLng, "Dest", destLat, destLng);
+                                
+                                return (
+                                    <Grid item xs={4} className={classes.display_card}>
+                                        <Card>
+                                            <CardContent>
+                                                <Typography color="textSecondary" className={classes.display_card_name}>
+                                                    {name}
+                                                </Typography>
+                                                <Typography variant="headline" align="center" component="h2" className={classes.display_card_content}>
+                                                    ${estimate}
+                                                </Typography>
+                                            </CardContent>
+                                            <CardActions>
+                                                <ReqRideButton deparLat={deparLat} deparLng={deparLng} destLat={destLat} destLng={destLng}/>
+                                                {/* <Button size="small" color="primary">
+                                                    Schedule
+                                                </Button> */}
+                                            </CardActions>
+                                        </Card>
+                                    </Grid>
+                                );
+                            }.bind(this))
+                        }
+                        {
+                            this.state.lyftData &&
+                            this.state.lyftData.cost_estimates.map(function(item, i) {
+                                const name = item.display_name;
+                                const estimate = item.estimated_cost_cents_min / 100.0;
+                                const distance = item.estimated_distance_miles;
+                                
+                                return (
+                                    <Grid item>
+                                        <Card className={classes.display_card}>
+                                            <CardContent>
+                                                <Typography color="textSecondary" className={classes.display_card_name}>
+                                                    {name}
+                                                </Typography>
+                                                <Typography variant="headline" align="center" component="h2" className={classes.display_card_content}>
+                                                    ${estimate}
+                                                </Typography>
+                                            </CardContent>
+                                            <CardActions>
+                                                <Button size="small" color="primary">
+                                                    Schedule
+                                                </Button>
+                                            </CardActions>
+                                        </Card>
+                                    </Grid>
+                                );
+                            })
+                        }
+                        </Grid>
                     </Grid>
                 </Grid>
             </div>
