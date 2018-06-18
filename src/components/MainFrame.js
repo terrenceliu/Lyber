@@ -19,6 +19,7 @@ import { CardActions, IconButton } from "@material-ui/core";
 import withWidth from '@material-ui/core/withWidth';
 
 import Search from '@material-ui/icons/Search';
+import DirectionsCar from '@material-ui/icons/DirectionsCar';
 
 const styles = theme => ({
     wrapper: {
@@ -62,15 +63,15 @@ const styles = theme => ({
         // alignContent: 'center',
         // justifyContent: 'center'
     },
-    container_cards: {
+    container_right_button: {
+        textAlign: 'center',
+        marginTop: '20px'
+    },
+    container_down: {
         // height: '50%',
         width: '100%',
         // backgroundColor: 'blue'
         // height: 'calc(100% - 350px)',
-    },
-    container_right_button: {
-        textAlign: 'center',
-        marginTop: '20px'
     },
     display_card_container: {
         // height: '100%',
@@ -87,19 +88,41 @@ const styles = theme => ({
         width: '100%',
         height: '100%'
     },
+
     display_item: {
         width: '100%',
-        // height: '150px'
+        height: '90px'
     },
     display_card: {
-        // height: '150px'
-    },
-    display_card_name: {
-        fontSize: 8,
-        // marginBottom: 8
+        height: '90%',
+        display: "flex",
+        flexDirection: "row",
+        alignContent: "center",
+        alignItems: "center"
+
     },
     display_card_content: {
-        fontSize: 24
+        width: "70%",
+        // flexDirection: "row",
+        // alignContent: "stretch",
+        // alignItems: "stretch"
+    },
+    display_card_icon: {
+        width: "10%"
+    },
+    display_card_name: {
+        fontSize: 12,
+        marginTop: 8
+    },
+    display_card_price: {
+        fontSize: 20
+        // marginButtom: 8
+    },
+    display_card_action: {
+        textAlign: "center",
+        // alignItems: "center",
+        // alignContent: "center"
+        // width: "30%"
     }
 });
 
@@ -122,7 +145,7 @@ class MainFrame extends Component {
             lyftData: undefined
         }
     }
-
+    
     loadAutoComplete() {
         if (this.props && this.props.google) {
             // Find props
@@ -368,21 +391,29 @@ class MainFrame extends Component {
 
         var testCardsList = []
 
-        for (var i = 0; i < 1; i++) {
+        for (var i = 0; i < 3; i++) {
             testCardsList.push(
-                <Grid item xs={4} className={classes.display_item}>
+                <Grid item key={i} className={classes.display_item}>
                     <Card className={classes.display_card}>
-                        <CardContent>
+                        <CardContent className={classes.display_card_icon}>
+                            <IconButton variant="contained" color="primary">
+                                <DirectionsCar />
+                            </IconButton>
+                        </CardContent>
+                        <CardContent className={classes.display_card_content}>
+                            <Typography variant="headline" component="p" className={classes.display_card_price}>
+                                $8 ~ $9
+                            </Typography>
                             <Typography color="textSecondary" className={classes.display_card_name}>
                                 Test Card
                             </Typography>
-                            <Typography variant="headline" align="center" component="p" className={classes.display_card_content}>
-                                $8 ~ $9
+                        </CardContent>
+                        <CardContent className={classes.display_card_action}>
+                            <ReqRideButton/>
+                            <Typography color="textSecondary" className={classes.display_card_name}>
+                                ETA: 3mins
                             </Typography>
                         </CardContent>
-                        <CardActions>
-                            <ReqRideButton/>
-                        </CardActions>
                     </Card>
                 </Grid>
                 
@@ -422,7 +453,7 @@ class MainFrame extends Component {
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item xs={12} sm={12} className={classes.container_cards}>
+                    <Grid item xs={12} sm={12} className={classes.container_down}>
                         <Grid container spacing={16} className={classes.display_card_container}>
                         
                         {
@@ -446,6 +477,9 @@ class MainFrame extends Component {
                                     <Grid item xs={4} className={classes.display_card}>
                                         <Card>
                                             <CardContent>
+                                                <IconButton variant="contained" color="primary" className={classes.display_card_icon}>
+                                                    <DirectionsCar />
+                                                </IconButton>
                                                 <Typography color="textSecondary" className={classes.display_card_name}>
                                                     {name}
                                                 </Typography>
