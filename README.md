@@ -8,6 +8,8 @@ Lyber is available on iOS. Project link: https://github.com/EdwardFeng523/Lyber-
 
 ## TODO
 
+- [ ] CLEAN UP THE CODE URGHHH ITS SO MESSY RN
+
 - "Current Position": 
 
 - [x] add button
