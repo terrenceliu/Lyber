@@ -142,33 +142,32 @@ class MainFrame extends Component {
     constructor() {
         super();
         this.state = {
+            map: undefined,
             deparAC: undefined,
             deparMarker: undefined,
             deparPlace: undefined,
+            deparLat: undefined,
+            deparLng: undefined,
             destAC: undefined,
             destMarker: undefined,
             destPlace: undefined,
-            req: {
-                deparLatLng: undefined,
-                destLatLng: undefined
-            },
+            destLat: undefined,
+            destLng: undefined,
             uberData: undefined,
             lyftData: undefined,
-            loading: false
+            loading: false,
+
         }
     }
     
     loadAutoComplete() {
         if (this.props && this.props.google) {
+
             // Find props
             const { google } = this.props;
             const maps = google.maps;
 
-            // Find ref hooks
-            // const mapRef = this.refs.mapRef;
-
             // Find hook nodes
-            // const mapNode = ReactDOM.findDOMNode(mapRef);
             const mapNode = document.getElementById('mapRef');
             const deparNode = document.getElementById('deparRef');
             const destNode = document.getElementById('destRef');
@@ -184,7 +183,7 @@ class MainFrame extends Component {
                 },
                 zoom: 13
             });
-            
+
             var deparMarker = new maps.Marker({
                 map: map,
                 anchorPoint: new maps.Point(0, 0),
@@ -217,31 +216,18 @@ class MainFrame extends Component {
 
                 if (place.geometry.viewport) {
                     const deparBounds = place.geometry.viewport.toJSON();
-
-                    /**
-                     * TODO: Includes depar & dest within viewport's bounds
-                     * Does the algorithm look right for calculating bounds???
-                     */
                     if (this.state.destPlace) {
-                        
                         const destBounds = this.state.destAC.getPlace().geometry.viewport.toJSON();
-                        
-                        // console.log('[ViewBounds]');
-                        // console.log(deparBounds);
-                        // console.log(destBounds);
-
                         const resBounds = {
                             south: Math.max(deparBounds.south, deparBounds.north, destBounds.south, destBounds.north),
                             west:  Math.min(deparBounds.east, deparBounds.west, destBounds.east, destBounds.west),
                             north:  Math.min(deparBounds.south, deparBounds.north, destBounds.south, destBounds.north),
                             east: Math.max(deparBounds.east, deparBounds.west, destBounds.east, destBounds.west),
                         }
-                        
                         map.fitBounds(resBounds);
                     } else {
                         map.fitBounds(deparBounds);
                     }
-
                 } else {
                     map.setCenter(place.geometry.location);
                     map.setZoom(16);
@@ -259,7 +245,6 @@ class MainFrame extends Component {
 
             destAC.addListener('place_changed', function() {
                 var place = destAC.getPlace();
-
                 destMarker.setVisible(false);
 
                 if (!place.geometry) {
@@ -271,23 +256,16 @@ class MainFrame extends Component {
                     const destBounds = place.geometry.viewport.toJSON();
                     if (this.state.deparPlace) {
                         const deparBounds = this.state.deparAC.getPlace().geometry.viewport.toJSON();
-                        
-                        // console.log('[ViewBounds]');
-                        // console.log(deparBounds);
-                        // console.log(destBounds);
-                        
                         const resBounds = {
                             south: Math.max(deparBounds.south, deparBounds.north, destBounds.south, destBounds.north),
                             west:  Math.min(deparBounds.east, deparBounds.west, destBounds.east, destBounds.west),
                             north:  Math.min(deparBounds.south, deparBounds.north, destBounds.south, destBounds.north),
                             east: Math.max(deparBounds.east, deparBounds.west, destBounds.east, destBounds.west),
-                        }
-                        
+                        }   
                         map.fitBounds(resBounds);
                     } else {
                         map.fitBounds(destBounds);
                     }
-
                 } else {
                     map.setCenter(place.geometry.location);
                     map.setZoom(16);
@@ -303,12 +281,12 @@ class MainFrame extends Component {
                 this.setLoc('dest', place.geometry.location);
             }.bind(this));
 
-
             this.setState({
                 deparAC: deparAC,
                 deparMarker: deparMarker,
                 destAC: destAC,
-                destMarker: destMarker
+                destMarker: destMarker,
+                map: map
             });
 
         }
@@ -316,22 +294,14 @@ class MainFrame extends Component {
 
     setLoc(tag, latlng) {
         if (tag == 'depar') {
-            this.setState(function(prevState, props) {
-                return {
-                    req: {
-                        destLatLng: prevState.req.destLatLng,
-                        deparLatLng: latlng
-                    }
-                }
+            this.setState({
+                deparLat: latlng.lat(),
+                deparLng: latlng.lng()
             });
         } else if (tag == 'dest') {
-            this.setState(function(prevState, props) {
-                return {
-                    req: {
-                        destLatLng: latlng,
-                        deparLatLng: prevState.req.deparLatLng
-                    }
-                }
+            this.setState({
+                destLat: latlng.lat(),
+                destLng: latlng.lng()
             });
         } else {
             console.log('[Err] Call back tag not found. Tag: ' + tag);
@@ -339,31 +309,25 @@ class MainFrame extends Component {
     }
 
     estimateFare() {
-        if (!this.state.req.deparLatLng || !this.state.req.destLatLng) {
+        if (!this.state.deparLat || !this.state.deparLng || !this.state.destLat || !this.state.destLng) {
             alert('Please set both departure address and destination address.');
             return;
         }
 
+        // Loading data from api
         this.setState({
             loading: true
         });
 
-        const deparLat = this.state.req.deparLatLng.lat();
-        const deparLng = this.state.req.deparLatLng.lng();
-        const destLat = this.state.req.destLatLng.lat();
-        const destLng = this.state.req.destLatLng.lng();
-
-        // const uberAPI = `https://api.uber.com/v1.2/estimates/price?start_latitude=${deparLat}&start_longitude=${deparLng}&end_latitude=${destLat}&end_longitude=${destLng}`;
-        // const lyftAPI = `https://api.lyft.com/v1/cost?start_lat=${deparLat}&start_lng=${deparLng}&end_lat=${destLat}&end_lng=${destLng}`;
+        const deparLat = this.state.deparLat;
+        const deparLng = this.state.deparLng;
+        const destLat = this.state.destLat;
+        const destLng = this.state.destLng;
         
         const queryParam = `?depar_lat=${deparLat}&depar_lng=${deparLng}&dest_lat=${destLat}&dest_lng=${destLng}`;
         const uberAPI = "https://lyber-server.herokuapp.com/api/uber" + queryParam;
         const lyftAPI = "https://lyber-server.herokuapp.com/api/lyft" + queryParam;
-        
-        // console.log(uberAPI);
-        // console.log(lyftAPI);
-        // console.log(queryParam);
-        
+
         console.log('Depar: ', deparLat, deparLng);
         console.log('Dest: ', destLat, destLng);
 
@@ -398,6 +362,58 @@ class MainFrame extends Component {
         });
     }
 
+    setCurrentPosition() {
+        // Find props
+        const { google } = this.props;
+        const maps = google.maps;
+        var map = this.state.map;
+        var deparMarker = this.state.deparMarker;
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = new maps.LatLng({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                });
+                
+                map.setCenter(pos);
+                var deparBounds = map.getBounds().toJSON();
+
+                deparMarker.setPosition(pos);
+                deparMarker.setVisible(true);
+                
+                // this.setState({
+                //     deparPlace: place
+                // })
+
+                // Fit view port
+                if (this.state.destPlace) {
+                    const destBounds = this.state.destAC.getPlace().geometry.viewport.toJSON();
+                    const resBounds = {
+                        south: Math.max(deparBounds.south, deparBounds.north, destBounds.south, destBounds.north),
+                        west:  Math.min(deparBounds.east, deparBounds.west, destBounds.east, destBounds.west),
+                        north:  Math.min(deparBounds.south, deparBounds.north, destBounds.south, destBounds.north),
+                        east: Math.max(deparBounds.east, deparBounds.west, destBounds.east, destBounds.west),
+                    }
+                    console.log("ResBounds", resBounds);
+                    map.fitBounds(resBounds);
+                } else {
+                    map.fitBounds(deparBounds);
+                }
+
+                this.setLoc('depar', pos);
+
+
+                }.bind(this), 
+                function() {
+                    console.log("Browser doesn't support Geolocation");
+                });
+          } else {
+            // Browser doesn't support Geolocation
+            console.log("Browser doesn't support Geolocation");
+          }
+    }
+
     componentDidMount() {
         this.loadAutoComplete();
     }
@@ -422,7 +438,6 @@ class MainFrame extends Component {
         const isMobile = width == "xs" || width == "sm" || width == "md"
         
         console.log("width", width);
-
 
         /**
          * Generate test cards for permanent display
@@ -484,6 +499,9 @@ class MainFrame extends Component {
                             </Grid>
                             <Grid item xs={12} sm={12} className={classes.container_right_button} >
                                 {/* <Button variant="contained" color="primary" onClick={this.estimateFare.bind(this)}> Estimate Fare! </Button> */}
+                                <Button variant="contained" color="primary" onClick={this.setCurrentPosition.bind(this)}>
+                                    Current Location
+                                </Button>
                                 {
                                     loading ? <CircularProgress size={32}/> :   
                                         <IconButton variant="contained" color="primary" onClick={this.estimateFare.bind(this)}>
@@ -508,10 +526,10 @@ class MainFrame extends Component {
                                 const name = item.display_name;
                                 const estimate = item.low_estimate;
                                 const distance = item.distance;
-                                const deparLat = this.state.req.deparLatLng.lat();
-                                const deparLng = this.state.req.deparLatLng.lng();
-                                const destLat = this.state.req.destLatLng.lat();
-                                const destLng = this.state.req.destLatLng.lng();
+                                const deparLat = this.state.deparLat;
+                                const deparLng = this.state.deparLng;
+                                const destLat = this.state.destLat;
+                                const destLng = this.state.destLng;
                                 
                                 console.log("Depar", deparLat, deparLng, "Dest", destLat, destLng);
                                 
@@ -572,10 +590,10 @@ class MainFrame extends Component {
                                 const estimate = item.estimated_cost_cents_min / 100.0;
                                 const distance = item.estimated_distance_miles;
 
-                                const deparLat = this.state.req.deparLatLng.lat();
-                                const deparLng = this.state.req.deparLatLng.lng();
-                                const destLat = this.state.req.destLatLng.lat();
-                                const destLng = this.state.req.destLatLng.lng();
+                                const deparLat = this.state.deparLat;
+                                const deparLng = this.state.deparLng;
+                                const destLat = this.state.destLat;
+                                const destLng = this.state.destLng;
                                 
                                 return (
                                     <Grid item key={i} className={classes.display_item}>
