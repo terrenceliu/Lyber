@@ -10,9 +10,11 @@ Lyber is available on iOS. Project link: https://github.com/EdwardFeng523/Lyber-
 
 - "Current Position": 
 
-- [ ] add button
+- [x] add button
 
-- [ ] get lat/lng
+- [x] get lat/lng
+
+- [ ] synchronize autocomplete w/ current pos
 
 - "Map"
 
