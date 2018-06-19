@@ -15,73 +15,125 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { CardActions } from "@material-ui/core";
+import { CardActions, IconButton } from "@material-ui/core";
+import withWidth from '@material-ui/core/withWidth';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
+import Search from '@material-ui/icons/Search';
+import DirectionsCar from '@material-ui/icons/DirectionsCar';
 
 const styles = theme => ({
+    searchButtonWrapper: {
+        position: 'relative',
+    },
+    searchProgress: {
+        // color: green[500],
+        position: 'absolute',
+        top: -6,
+        left: -6,
+        zIndex: 1,
+    },
     wrapper: {
-        height: '850px',
+        height: '100vh',
         // backgroundColor: 'grey',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        alignContent: 'center'
+        alignContent: 'center',
+        marginTop: '10px'
     },
     container: {
-        height: '85vh',
-        width: '1500px',
-        backgroundColor: 'white',
-        alignItems: 'center',
-        alignContent: 'center',
-        justifyContent: 'center'
+        height: '100%',
+        width: '90vw',
+        // backgroundColor: 'cyan',
+        alignItems: 'flex-start',
+        alignContent: 'flex-start',
+        justifyContent: 'flex-start'
     },
     container_left: {
-        height: '100%',
-        width: '35%',
+        height: '30%',
+        width: '100%',
         // backgroundColor: 'yellow',
-        alignItems: 'center',
-        alignContent: 'center',
-        justifyContent: 'center',
-        boxShadow: '0px 13px 40px -13px rgba(0,0,0,0.75)'
+        // alignItems: 'center',
+        // alignContent: 'center',
+        // justifyContent: 'center',
+        boxShadow: '0px 10px 20px -10px rgba(0,0,0,0.75)'
+        // [theme.breakpoints.down('sm')]: {
+        //     backgroundColor: theme.palette.secondary.main,
+        // },
     },
     container_right: {
-        height: '100%',
-        width: '65%',
+        // height: '35%',
+        width: '100%',
         // backgroundColor: 'red'
     },
     container_right_input: {
-        width: '100%',
-        height: '350px',
-        alignItems: 'center',
-        alignContent: 'center',
-        justifyContent: 'center'
+        // height: '50px',
+        // backgroundColor: "yellow",
+        // alignItems: 'center',
+        // alignContent: 'center',
+        // justifyContent: 'center'
     },
-    container_right_display: {
+    container_right_button: {
+        textAlign: 'center',
+        marginTop: '20px'
+    },
+    container_down: {
+        // height: '50%',
         width: '100%',
-        height: 'calc(100% - 350px)',
+        // backgroundColor: 'blue'
+        // height: 'calc(100% - 350px)',
     },
     display_card_container: {
-        height: '100%',
-        alignItems: 'center',
-        alignContent: 'center',
-        justifyContent: 'center'
+        // height: '100%',
+        // alignItems: 'center',
+        // alignContent: 'center',
+        // justifyContent: 'center'
     },
+    
     textField: {
-        width: '650px',
+        // height: '20px',
+        width: '100%'
     },
     map: {
         width: '100%',
         height: '100%'
     },
-    display_card: {
-        width: '150px',
-        height: '150px'
+
+    display_item: {
+        width: '100%',
+        height: '90px'
     },
-    display_card_name: {
-        marginBottom: 16
+    display_card: {
+        height: '90%',
+        display: "flex",
+        flexDirection: "row",
+        alignContent: "center",
+        alignItems: "center"
+
     },
     display_card_content: {
-
+        width: "70%",
+        // flexDirection: "row",
+        // alignContent: "stretch",
+        // alignItems: "stretch"
+    },
+    display_card_icon: {
+        width: "10%"
+    },
+    display_card_name: {
+        fontSize: 12,
+        marginTop: 8
+    },
+    display_card_price: {
+        fontSize: 20
+        // marginButtom: 8
+    },
+    display_card_action: {
+        textAlign: "center",
+        // alignItems: "center",
+        // alignContent: "center"
+        // width: "30%"
     }
 });
 
@@ -101,10 +153,11 @@ class MainFrame extends Component {
                 destLatLng: undefined
             },
             uberData: undefined,
-            lyftData: undefined
+            lyftData: undefined,
+            loading: false
         }
     }
-
+    
     loadAutoComplete() {
         if (this.props && this.props.google) {
             // Find props
@@ -134,11 +187,15 @@ class MainFrame extends Component {
             
             var deparMarker = new maps.Marker({
                 map: map,
-                anchorPoint: new maps.Point(0, 0)
+                anchorPoint: new maps.Point(0, 0),
+                title: "Departure",
+                draggable: true
             });
             var destMarker = new maps.Marker({
                 map: map,
-                anchorPoint: new maps.Point(0, )
+                anchorPoint: new maps.Point(0, 0),
+                title: "Destination",
+                draggable: true
             })
 
             /**
@@ -287,7 +344,9 @@ class MainFrame extends Component {
             return;
         }
 
-        var config = require('../../config.json');
+        this.setState({
+            loading: true
+        });
 
         const deparLat = this.state.req.deparLatLng.lat();
         const deparLng = this.state.req.deparLatLng.lng();
@@ -314,7 +373,14 @@ class MainFrame extends Component {
         .then(response => response.json())
         .then(data => this.setState({
             uberData: data
-        }));
+        }))
+        .then(() => {
+            if (this.state.lyftData) {
+                this.setState({
+                    loading: false
+                })
+            }
+        });
 
         const lyftData = fetch(lyftAPI, {
             method: 'GET'
@@ -322,7 +388,14 @@ class MainFrame extends Component {
         .then(resposne => resposne.json())
         .then(data => this.setState({
             lyftData: data
-        }));
+        }))
+        .then(() => {
+            if (this.state.uberData) {
+                this.setState({
+                    loading: false
+                });
+            }
+        });
     }
 
     componentDidMount() {
@@ -340,17 +413,60 @@ class MainFrame extends Component {
     }
 
     render() {
+        const { loading } = this.state;
+
         const { classes } = this.props;
+
+        const { width } = this.props;
+
+        const isMobile = width == "xs" || width == "sm" || width == "md"
+        
+        console.log("width", width);
+
+
+        /**
+         * Generate test cards for permanent display
+         */
+        // var testCardsList = []
+        // for (var i = 0; i < 2; i++) {
+        //     testCardsList.push(
+        //         <Grid item key={i} className={classes.display_item}>
+        //             <Card className={classes.display_card}>
+        //                 <CardContent className={classes.display_card_icon}>
+        //                     <IconButton variant="contained" color="primary">
+        //                         <DirectionsCar />
+        //                     </IconButton>
+        //                 </CardContent>
+        //                 <CardContent className={classes.display_card_content}>
+        //                     <Typography variant="headline" component="p" className={classes.display_card_price}>
+        //                         $8 ~ $9
+        //                     </Typography>
+        //                     <Typography color="textSecondary" className={classes.display_card_name}>
+        //                         Test Card
+        //                     </Typography>
+        //                 </CardContent>
+        //                 <CardContent className={classes.display_card_action}>
+        //                     <ReqRideButton/>
+        //                     <Typography color="textSecondary" className={classes.display_card_name}>
+        //                         ETA: 3mins
+        //                     </Typography>
+        //                 </CardContent>
+        //             </Card>
+        //         </Grid>
+                
+        //     );
+        // }
+
 
         return (
             <div className={classes.wrapper}>
-                <Grid container className={classes.container}>
+                <Grid container direction="row" className={classes.container}>
                     <Grid item className={classes.container_left}>
                         <div id="mapRef" className={classes.map}></div> 
                     </Grid>
                     <Grid item className={classes.container_right}>
-                        <Grid container direction='column' spacing={24} className={classes.container_right_input}>
-                            <Grid item>    
+                        <Grid container direction='row' className={classes.container_right_input}>
+                            <Grid item xs={12} sm={12} className={classes.container_right_item}>    
                                 <TextField 
                                     id="deparRef"
                                     className={classes.textField}
@@ -358,7 +474,7 @@ class MainFrame extends Component {
                                     margin="normal"
                                     fullWidth />
                             </Grid>
-                            <Grid item>
+                            <Grid item xs={12} sm={12} className={classes.container_right_item}>
                                 <TextField
                                     id="destRef"
                                     className={classes.textField}
@@ -366,78 +482,148 @@ class MainFrame extends Component {
                                     margin="normal"
                                     fullWidth />
                             </Grid>
-                            <Grid item>
-                                <Button variant="contained" color="primary" onClick={this.estimateFare.bind(this)}> Estimate Fare! </Button>
+                            <Grid item xs={12} sm={12} className={classes.container_right_button} >
+                                {/* <Button variant="contained" color="primary" onClick={this.estimateFare.bind(this)}> Estimate Fare! </Button> */}
+                                {
+                                    loading ? <CircularProgress size={32}/> :   
+                                        <IconButton variant="contained" color="primary" onClick={this.estimateFare.bind(this)}>
+                                            <Search />
+                                        </IconButton>
+                                    
+                                    
+                                }
                             </Grid>
                         </Grid>
-                        <div className={classes.container_right_display}>
-                            <Grid container spacing={24} className={classes.display_card_container}>
-                            {
-                                this.state.uberData &&
-                                this.state.uberData.prices.map(function(item, i) {
-                                    const name = item.display_name;
-                                    const estimate = item.low_estimate;
-                                    const distance = item.distance;
-                                    const deparLat = this.state.req.deparLatLng.lat();
-                                    const deparLng = this.state.req.deparLatLng.lng();
-                                    const destLat = this.state.req.destLatLng.lat();
-                                    const destLng = this.state.req.destLatLng.lng();
-                                    
-                                    console.log("Depar", deparLat, deparLng, "Dest", destLat, destLng);
+                    </Grid>
+                    <Grid item xs={12} sm={12} className={classes.container_down}>
+                        <Grid container spacing={16} className={classes.display_card_container}>
+                        
+                        {/* {
+                            testCardsList
+                        } */}
 
-                                    return (
-                                        <Grid item>
-                                            <Card className={classes.display_card}>
-                                                <CardContent>
-                                                    <Typography color="textSecondary" className={classes.display_card_name}>
-                                                        {name}
-                                                    </Typography>
-                                                    <Typography variant="headline" align="center" component="h2" className={classes.display_card_content}>
-                                                        ${estimate}
-                                                    </Typography>i
-                                                </CardContent>
-                                                <CardActions>
-                                                    <ReqRideButton deparLat={deparLat} deparLng={deparLng} destLat={destLat} destLng={destLng}/>
-                                                    {/* <Button size="small" color="primary">
-                                                        Schedule
-                                                    </Button> */}
-                                                </CardActions>
-                                            </Card>
-                                        </Grid>
-                                    );
-                                }.bind(this))
-                            }
-                            {
-                                this.state.lyftData &&
-                                this.state.lyftData.cost_estimates.map(function(item, i) {
-                                    const name = item.display_name;
-                                    const estimate = item.estimated_cost_cents_min / 100.0;
-                                    const distance = item.estimated_distance_miles;
-                                    
-                                    return (
-                                        <Grid item>
-                                            <Card className={classes.display_card}>
-                                                <CardContent>
-                                                    <Typography color="textSecondary" className={classes.display_card_name}>
-                                                        {name}
-                                                    </Typography>
-                                                    <Typography variant="headline" align="center" component="h2" className={classes.display_card_content}>
-                                                        ${estimate}
-                                                    </Typography>
-                                                </CardContent>
-                                                <CardActions>
-                                                    <Button size="small" color="primary">
-                                                        Schedule
-                                                    </Button>
-                                                </CardActions>
-                                            </Card>
-                                        </Grid>
-                                    );
-                                })
-                            }
-                            </Grid>
-                        </div>
+                        {
+                            this.state.uberData && this.state.lyftData &&
+                            this.state.uberData.prices.map(function(item, i) {
+                                const name = item.display_name;
+                                const estimate = item.low_estimate;
+                                const distance = item.distance;
+                                const deparLat = this.state.req.deparLatLng.lat();
+                                const deparLng = this.state.req.deparLatLng.lng();
+                                const destLat = this.state.req.destLatLng.lat();
+                                const destLng = this.state.req.destLatLng.lng();
+                                
+                                console.log("Depar", deparLat, deparLng, "Dest", destLat, destLng);
+                                
+                                return (
+                                    <Grid item key={i} className={classes.display_item}>
+                                        <Card className={classes.display_card}>
+                                            <CardContent className={classes.display_card_icon}>
+                                                <IconButton variant="contained" color="primary">
+                                                    <DirectionsCar />
+                                                </IconButton>
+                                            </CardContent>
+                                            <CardContent className={classes.display_card_content}>
+                                                <Typography variant="headline" component="p" className={classes.display_card_price}>
+                                                    ${estimate}
+                                                </Typography>
+                                                <Typography color="textSecondary" className={classes.display_card_name}>
+                                                    {name}
+                                                </Typography>
+                                            </CardContent>
+                                            <CardContent className={classes.display_card_action}>
+                                                <ReqRideButton company="uber" deparLat={deparLat} deparLng={deparLng} destLat={destLat} destLng={destLng} />
+                                                <Typography color="textSecondary" className={classes.display_card_name}>
+                                                    ETA: {distance}
+                                                </Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
 
+
+                                    // <Grid item xs={4} className={classes.display_card}>
+                                    //     <Card>
+                                    //         <CardContent>
+                                    //             <IconButton variant="contained" color="primary" className={classes.display_card_icon}>
+                                    //                 <DirectionsCar />
+                                    //             </IconButton>
+                                    //             <Typography color="textSecondary" className={classes.display_card_name}>
+                                    //                 {name}
+                                    //             </Typography>
+                                    //             <Typography variant="headline" align="center" component="h2" className={classes.display_card_content}>
+                                    //                 ${estimate}
+                                    //             </Typography>
+                                    //         </CardContent>
+                                    //         <CardActions>
+                                    //             <ReqRideButton deparLat={deparLat} deparLng={deparLng} destLat={destLat} destLng={destLng}/>
+                                    //             {/* <Button size="small" color="primary">
+                                    //                 Schedule
+                                    //             </Button> */}
+                                    //         </CardActions>
+                                    //     </Card>
+                                    // </Grid>
+                                );
+                            }.bind(this))
+                        }
+                        {
+                            this.state.lyftData && this.state.uberData && 
+                            this.state.lyftData.cost_estimates.map(function(item, i) {
+                                const name = item.display_name;
+                                const estimate = item.estimated_cost_cents_min / 100.0;
+                                const distance = item.estimated_distance_miles;
+
+                                const deparLat = this.state.req.deparLatLng.lat();
+                                const deparLng = this.state.req.deparLatLng.lng();
+                                const destLat = this.state.req.destLatLng.lat();
+                                const destLng = this.state.req.destLatLng.lng();
+                                
+                                return (
+                                    <Grid item key={i} className={classes.display_item}>
+                                        <Card className={classes.display_card}>
+                                            <CardContent className={classes.display_card_icon}>
+                                                <IconButton variant="contained" color="primary">
+                                                    <DirectionsCar />
+                                                </IconButton>
+                                            </CardContent>
+                                            <CardContent className={classes.display_card_content}>
+                                                <Typography variant="headline" component="p" className={classes.display_card_price}>
+                                                    ${estimate}
+                                                </Typography>
+                                                <Typography color="textSecondary" className={classes.display_card_name}>
+                                                    {name}
+                                                </Typography>
+                                            </CardContent>
+                                            <CardContent className={classes.display_card_action}>
+                                                <ReqRideButton company="lyft" deparLat={deparLat} deparLng={deparLng} destLat={destLat} destLng={destLng}/>
+                                                <Typography color="textSecondary" className={classes.display_card_name}>
+                                                    ETA: {distance}
+                                                </Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+
+
+                                    // <Grid item>
+                                    //     <Card className={classes.display_card}>
+                                    //         <CardContent>
+                                    //             <Typography color="textSecondary" className={classes.display_card_name}>
+                                    //                 {name}
+                                    //             </Typography>
+                                    //             <Typography variant="headline" align="center" component="h2" className={classes.display_card_content}>
+                                    //                 ${estimate}
+                                    //             </Typography>
+                                    //         </CardContent>
+                                    //         <CardActions>
+                                    //             <Button size="small" color="primary">
+                                    //                 Schedule
+                                    //             </Button>
+                                    //         </CardActions>
+                                    //     </Card>
+                                    // </Grid>
+                                );
+                            }.bind(this))
+                        }
+                        </Grid>
                     </Grid>
                 </Grid>
             </div>
@@ -450,4 +636,4 @@ MainFrame.propTypes = {
 };
 
 
-export default withStyles(styles)(MainFrame);
+export default withWidth()(withStyles(styles)(MainFrame));

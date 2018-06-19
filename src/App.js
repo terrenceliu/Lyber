@@ -2,15 +2,35 @@ import React, { Component } from 'react';
 
 import { GoogleApiWrapper } from 'google-maps-react';
 
-
 // MUI
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { createMuiTheme } from '@material-ui/core/styles';
 
 // Components
 import MainFrame from './components/MainFrame';
 import PlaceAutoComplete from './components/PlaceAutoComplete';
 import FareEstimator from './components/FareEstimator';
 import ToolBar from './components/ToolBar';
+
+const theme = createMuiTheme({
+    palette: {
+        // primary: {
+        //     // light: will be calculated from palette.primary.main,
+        //     main: '#03A9F4',
+        //     // dark: will be calculated from palette.primary.main,
+        //     // contrastText: will be calculated to contast with palette.primary.main
+        //   },
+        //   secondary: {
+        //     light: '#0066ff',
+        //     main: '#352384',
+        //     // dark: will be calculated from palette.secondary.main,
+        //     contrastText: '#000000',
+        //   },
+        //   // error: will use the default color
+
+        type: 'light'
+    }
+});
 
 class App extends Component {
     constructor() {
@@ -40,18 +60,20 @@ class App extends Component {
 
     render() {
         return (
-            <MuiThemeProvider>
-                <div className="wrapper">
-                    <div className="main">
-                        <div className="container"> 
-                            <ToolBar disableGutters="true"/>                
-                            <MainFrame google={this.props.google} />
-                            {/* <PlaceAutoComplete google={this.props.google} setLoc={this.setLoc.bind(this)}/> */}
-                            {/* <FareEstimator deparLatLng={this.state.deparLatLng} destLatLng={this.state.destLatLng} /> */}
+            <div className="appContainer">
+                <MuiThemeProvider theme={theme}>
+                    <div className="wrapper">
+                        <div className="main">
+                            <div className="container"> 
+                                <ToolBar disableGutters="true"/>                
+                                <MainFrame google={this.props.google} />
+                                {/* <PlaceAutoComplete google={this.props.google} setLoc={this.setLoc.bind(this)}/> */}
+                                {/* <FareEstimator deparLatLng={this.state.deparLatLng} destLatLng={this.state.destLatLng} /> */}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </MuiThemeProvider>
+                </MuiThemeProvider>
+            </div>
         )
     }
 }

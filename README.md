@@ -6,6 +6,30 @@
 Lyber is available on iOS. Project link: https://github.com/EdwardFeng523/Lyber-ios
 
 
+## TODO
+
+- "Current Position": 
+
+[ ] add button
+
+[ ] get lat/lng
+
+- "Map"
+[ ] Drag/Pin to select location
+
+[ ] Update address info in autocomplete after dragging the marker
+
+[ ] Display estiamted routes
+
+- "Item card":
+
+[ ] Display available drivers nearby/wait time
+
+[ ] Display ETA
+
+[ ] Format card components
+
+
 ## Getting Started
 
 
