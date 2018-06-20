@@ -47,7 +47,7 @@ class FareEstimator extends Component {
             return;
         }
 
-        var config = require('../../config.json');
+        var config = require('../../../config.json');
 
         const deparLat = this.props.deparLatLng.lat();
         const deparLng = this.props.deparLatLng.lng();

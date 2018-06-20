@@ -8,8 +8,8 @@ import { createMuiTheme } from '@material-ui/core/styles';
 
 // Components
 import MainFrame from './components/MainFrame';
-import PlaceAutoComplete from './components/PlaceAutoComplete';
-import FareEstimator from './components/FareEstimator';
+import PlaceAutoComplete from './components/stale/PlaceAutoComplete';
+import FareEstimator from './components/stale/FareEstimator';
 import ToolBar from './components/ToolBar';
 
 const theme = createMuiTheme({

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --mode development --open --content-base src",
-    "start:lan" : "webpack-dev-server --host 0.0.0.0 --mode development --open --content-base src",
+    "start:lan": "webpack-dev-server --host 0.0.0.0 --mode development --open --content-base src",
     "build": "webpack --mode production",
     "watch": "webpack --watch --mode development"
   },
