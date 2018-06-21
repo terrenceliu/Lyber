@@ -16,12 +16,16 @@ import { CardActions, IconButton } from "@material-ui/core";
 import DirectionsCar from '@material-ui/icons/DirectionsCar';
 
 const styles = theme => ({
-    container: {
+    wrapper: {
+        width: '100%',
+        
+    },
+    grid_item: {
         width: '100%',
         height: '90px'
     },
     card: {
-        height: '90%',
+        height: '100%',
         display: "flex",
         flexDirection: "row",
         alignContent: "center",
@@ -56,15 +60,15 @@ class CardTable extends Component {
         const { classes } = this.props;
 
         const testCard = (
-            <Grid item className={classes.container}>
-                <Card classname={classes.card}>
+            <Grid item className={classes.grid_item} >
+                <Card className={classes.card}>
                     <CardContent className={classes.icon} >
                         <IconButton variant="contained" color="primary">
                             <DirectionsCar />
                         </IconButton>
                     </CardContent>
                     <CardContent className={classes.content} >
-                        <Typography variant="headline" component="p" classname={classes.price} >
+                        <Typography variant="headline" component="p" className={classes.price} >
                             $8 ~ $9
                         </Typography>
                         <Typography color="textSecondary" className={classes.name} >
@@ -82,7 +86,7 @@ class CardTable extends Component {
         );
 
         return (
-            <Grid item>
+            <Grid item className={classes.wrapper}>
                 <Grid container spacing={16}>
                 {
                     testCard
