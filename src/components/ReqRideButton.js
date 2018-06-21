@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 class ReqRideButton extends Component {
     
     handleReq() {
+        // TODO: Move the logic upwards to 'App.js'
         var deepLink = undefined;
         if (this.props.company && this.props.deparLat && this.props.deparLng && this.props.destLat && this.props.destLng) {
             if (this.props.company == "uber") {
