@@ -11,15 +11,18 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Search from '@material-ui/icons/Search';
 
 const styles = theme => ({
-
+    container: {
+        width: '100%',
+        textAlign: 'center'
+    }
 });
 
 function SearchButton (props) {
     const { classes } = props;
-
+    console.log("SearchButtonProps", props);
     return (
-        <Grid item>
-            <IconButton variant="contained" color="primary">
+        <Grid item className={classes.container} >
+            <IconButton variant="contained" color="primary" onClick = { props.onClick } >
                 <Search />
             </IconButton>
         </Grid>
@@ -27,7 +30,8 @@ function SearchButton (props) {
 }
 
 SearchButton.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    onClick: PropTypes.func.isRequired
 }
 
 export default withStyles(styles)(SearchButton);

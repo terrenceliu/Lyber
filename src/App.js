@@ -72,10 +72,12 @@ class App extends Component {
         this.state = {
             deparLat: undefined,
             deparLng: undefined,
-            deparPlace: undefined,
+            deparAddr: undefined,
             destLat: undefined,
             destLng: undefined,
-            destPlace: undefined
+            deparAddr: undefined,
+            uberData: undefined,
+            lyftData: undefined
         }
     }
 
@@ -85,31 +87,44 @@ class App extends Component {
      * 
      * Doc: {@link  https://developers.google.com/maps/documentation/javascript/reference/3/places-service#PlaceResult}
      * 
-     * @param {String} tag      Tag of endpoint. `depar || dest`
-     * @param {Object} place    google.maps.places.PlaceResult
+     * @param {String} tag              Tag of endpoint. `depar || dest`
+     * @param {Object} location         {lat: , lng: }
+     * @param {String} [displayName]    Address / Nickname of the location displayed on the text field
      */
-    updateLocation = (tag, place) => {
-        if (tag == "depar" && place) {
-            if (place.geometry) {
+    updateLocation = (tag, location, displayName) => {
+        console.log(tag, location, displayName);
+
+        // Optional Param
+        displayName = displayName || undefined;
+        
+        if (tag == "depar" && location) {
+            if (displayName) {
                 this.setState({
-                    deparLat: place.geometry.location.lat(), 
-                    deparLng: place.geometry.location.lng(),
-                    deparPlace: place
+                    deparLat: location.lat, 
+                    deparLng: location.lng,
+                    deparAddr: displayName
                 });
             } else {
-                // TODO: Back to default position
+                // TODO: Reverse location lookup
                 this.setState({
-                    deparLat: undefined,
-                    deparLat: undefined,
-                    deparPlace: undefined
-                })
+                    deparLat: location.lat, 
+                    deparLng: location.lng,
+                });
             }
-        } else if (tag == "dest" && place) {
-            this.setState({
-                destLat: place.geometry.location.lat(),
-                destLng: place.geometry.location.lng(),
-                destPlace: place
-            });
+        } else if (tag == "dest" && location) {
+            if (displayName) {
+                this.setState({
+                    destLat: location.lat, 
+                    destLng: location.lng,
+                    destAddr: displayName
+                });
+            } else {
+                // TODO: Reverse location lookup
+                this.setState({
+                    destLat: location.lat, 
+                    destLng: location.lng,
+                });
+            }
         } else {
             console.log("[Err] Undefined tag/place");
         }
@@ -118,12 +133,57 @@ class App extends Component {
     setCurrentLocation = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
-                this.setState({
-                    deparLat: position.coords.latitude,
-                    deparLng: position.coords.longitude
-                })
+                this.updateLocation("depar", { lat: position.coords.latitude, lng: position.coords.longitude });
             });
         }
+    }
+
+    searchFare = () => {
+        if (!this.state.deparLat || !this.state.deparLng || !this.state.destLat || !this.state.destLng) {
+            alert('Please set both departure address and destination address.');
+            return;
+        }
+
+        const deparLat = this.state.deparLat;
+        const deparLng = this.state.deparLng;
+        const destLat = this.state.destLat;
+        const destLng = this.state.destLng;
+
+        const queryParam = `?depar_lat=${deparLat}&depar_lng=${deparLng}&dest_lat=${destLat}&dest_lng=${destLng}`;
+        const uberAPI = "https://lyber-server.herokuapp.com/api/uber" + queryParam;
+        const lyftAPI = "https://lyber-server.herokuapp.com/api/lyft" + queryParam;
+
+        // TODO: 
+        const uberData = fetch(uberAPI, {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => this.setState({
+            uberData: data
+        }))
+        // .then(() => {
+        //     if (this.state.lyftData) {
+        //         this.setState({
+        //             loading: false
+        //         })
+        //     }
+        // });
+
+        // TODO: 
+        const lyftData = fetch(lyftAPI, {
+            method: 'GET'
+        })
+        .then(resposne => resposne.json())
+        .then(data => this.setState({
+            lyftData: data
+        }))
+        // .then(() => {
+        //     if (this.state.uberData) {
+        //         this.setState({
+        //             loading: false
+        //         });
+        //     }
+        // });
     }
 
     render() {
@@ -152,8 +212,13 @@ class App extends Component {
                                 google={this.props.google} 
                                 updateLocation={this.updateLocation}
                             />
-                            <SearchButton />
-                            <CardTable />
+                            <SearchButton 
+                                onClick={ this.searchFare.bind(this) }
+                            />
+                            <CardTable 
+                                uberData={ this.state.uberData }
+                                lyftData={ this.state.lyftData }
+                            />
                         </Grid>
                     </div>                
                     {/* <MainFrame google={this.props.google} /> */}
