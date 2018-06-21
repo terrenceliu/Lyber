@@ -16,7 +16,33 @@ import { CardActions, IconButton } from "@material-ui/core";
 import DirectionsCar from '@material-ui/icons/DirectionsCar';
 
 const styles = theme => ({
-
+    container: {
+        width: '100%',
+        height: '90px'
+    },
+    card: {
+        height: '90%',
+        display: "flex",
+        flexDirection: "row",
+        alignContent: "center",
+        alignItems: "center"
+    },
+    icon: {
+        width: "10%"
+    },
+    content: {
+        width: "70%",
+    },
+    price: {
+        fontSize: 20
+    },
+    name: {
+        fontSize: 12,
+        marginTop: 8
+    },
+    request: {
+        textAlign: "center",
+    }
 });
 
 class CardTable extends Component {
@@ -30,22 +56,22 @@ class CardTable extends Component {
         const { classes } = this.props;
 
         const testCard = (
-            <Grid item>
-                <Card>
-                    <CardContent>
+            <Grid item className={classes.container}>
+                <Card classname={classes.card}>
+                    <CardContent className={classes.icon} >
                         <IconButton variant="contained" color="primary">
                             <DirectionsCar />
                         </IconButton>
                     </CardContent>
-                    <CardContent>
-                        <Typography variant="headline" component="p">
+                    <CardContent className={classes.content} >
+                        <Typography variant="headline" component="p" classname={classes.price} >
                             $8 ~ $9
                         </Typography>
-                        <Typography color="textSecondary">
+                        <Typography color="textSecondary" className={classes.name} >
                             Test Card
                         </Typography>
                     </CardContent>
-                    <CardContent>
+                    <CardContent className={classes.request} >
                         <ReqRideButton/>
                         <Typography color="textSecondary">
                             ETA: 3mins
