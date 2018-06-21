@@ -38,8 +38,8 @@ class InputField extends Component {
             deparAC.addListener('place_changed', () => {
                 var place = deparAC.getPlace();
 
-                console.log("Format address", place.formatted_address);
-                console.log("Name", place.name);
+                // console.log("Format address", place.formatted_address);
+                // console.log("Name", place.name);
                 
                 if (!place.geometry) {
                     alert("Details unavailable for input: " + place.name + ".");
@@ -60,8 +60,6 @@ class InputField extends Component {
                     // return;
                 }
 
-                console.log("destPlace", place);
-
                 if (this.props.updateLocation) {
                     this.props.updateLocation("dest", place.geometry.location.toJSON(), place.name);
                 }
@@ -81,8 +79,7 @@ class InputField extends Component {
             const deparNode = document.getElementById('deparRef');
             // deparNode.props.value = displayName
             // deparNode.props.value = "Update depar tf."
-            console.log("DeparNode", deparNode);
-
+            // console.log("DeparNode", deparNode);
             
 
         } else if (tag == "dest") {
@@ -96,7 +93,6 @@ class InputField extends Component {
     }
 
     componentDidMount = () => {
-        console.log("InputField mount");
         this.loadAutoComplete();
     }
 
@@ -105,7 +101,7 @@ class InputField extends Component {
 
         const { deparAddr, destAddr } = this.props;
 
-        console.log("Address", deparAddr, destAddr);
+        // console.log("Address", deparAddr, destAddr);
 
         // if (deparAddr) {
         //     this.updateInputField("depar", deparAddr);

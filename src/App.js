@@ -75,7 +75,9 @@ class App extends Component {
             deparAddr: undefined,
             destLat: undefined,
             destLng: undefined,
-            deparAddr: undefined
+            deparAddr: undefined,
+            uberData: undefined,
+            lyftData: undefined
         }
     }
 
@@ -136,6 +138,54 @@ class App extends Component {
         }
     }
 
+    searchFare = () => {
+        if (!this.state.deparLat || !this.state.deparLng || !this.state.destLat || !this.state.destLng) {
+            alert('Please set both departure address and destination address.');
+            return;
+        }
+
+        const deparLat = this.state.deparLat;
+        const deparLng = this.state.deparLng;
+        const destLat = this.state.destLat;
+        const destLng = this.state.destLng;
+
+        const queryParam = `?depar_lat=${deparLat}&depar_lng=${deparLng}&dest_lat=${destLat}&dest_lng=${destLng}`;
+        const uberAPI = "https://lyber-server.herokuapp.com/api/uber" + queryParam;
+        const lyftAPI = "https://lyber-server.herokuapp.com/api/lyft" + queryParam;
+
+        // TODO: 
+        const uberData = fetch(uberAPI, {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => this.setState({
+            uberData: data
+        }))
+        // .then(() => {
+        //     if (this.state.lyftData) {
+        //         this.setState({
+        //             loading: false
+        //         })
+        //     }
+        // });
+
+        // TODO: 
+        const lyftData = fetch(lyftAPI, {
+            method: 'GET'
+        })
+        .then(resposne => resposne.json())
+        .then(data => this.setState({
+            lyftData: data
+        }))
+        // .then(() => {
+        //     if (this.state.uberData) {
+        //         this.setState({
+        //             loading: false
+        //         });
+        //     }
+        // });
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -162,8 +212,13 @@ class App extends Component {
                                 google={this.props.google} 
                                 updateLocation={this.updateLocation}
                             />
-                            <SearchButton />
-                            <CardTable />
+                            <SearchButton 
+                                onClick={ this.searchFare.bind(this) }
+                            />
+                            <CardTable 
+                                uberData={ this.state.uberData }
+                                lyftData={ this.state.lyftData }
+                            />
                         </Grid>
                     </div>                
                     {/* <MainFrame google={this.props.google} /> */}

@@ -68,10 +68,10 @@ class CardTable extends Component {
                         const name = item.display_name;
                         const estimate = item.low_estimate;
                         const distance = item.distance;
-                        const deparLat = this.state.deparLat;
-                        const deparLng = this.state.deparLng;
-                        const destLat = this.state.destLat;
-                        const destLng = this.state.destLng;
+                        const deparLat = this.props.deparLat;
+                        const deparLng = this.props.deparLng;
+                        const destLat = this.props.destLat;
+                        const destLng = this.props.destLng;
                         
                         console.log("Depar", deparLat, deparLng, "Dest", destLat, destLng);
                         
@@ -100,7 +100,7 @@ class CardTable extends Component {
                                 </Card>
                             </Grid>
                         );
-                    })
+                    }.bind(this))
                 }
                 
                 </Grid>
