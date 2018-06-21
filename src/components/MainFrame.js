@@ -206,7 +206,7 @@ class MainFrame extends Component {
 
             deparAC.addListener('place_changed', function() {
                 var place = deparAC.getPlace();
-
+                
                 deparMarker.setVisible(false);
 
                 if (!place.geometry) {
