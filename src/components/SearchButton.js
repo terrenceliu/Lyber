@@ -19,7 +19,6 @@ const styles = theme => ({
 
 function SearchButton (props) {
     const { classes } = props;
-    console.log("SearchButtonProps", props);
     return (
         <Grid item className={classes.container} >
             <IconButton variant="contained" color="primary" onClick = { props.onClick } >

@@ -54,10 +54,94 @@ class CardTable extends Component {
         super();
     }
 
+    /**
+     * 
+     */
+    requestRide = (company, product_name, product_id) => {
+        
+        const deparLat = this.props.deparLat;
+        const deparLng = this.props.deparLng;
+        const destLat = this.props.destLat;
+        const destLng = this.props.destLng;
+        const deparAddr = this.props.deparAddr;
+        const destAddr = this.props.destAddr;
+
+        var deepLink = undefined;
+        if (company && deparLat && deparLng && destLat && destLng) {
+            if (company == "uber") {
+                deepLink = "uber://?client_id=jOOUs484dDpd5ZtVxT5A8cp9CEknN5sz&action=setPickup" + 
+                    `&pickup[latitude]=${deparLat}&pickup[longitude]=${deparLng}&pickup[nickname]=${deparAddr}` +   // Pick Up location
+                    `&dropoff[latitude]=${destLat}&dropoff[longitude]=${destLng}&dropoff[nickname]=${destAddr}` + // Drop off location
+                    `&product_id=${product_id}`;
+            } else if (company == "lyft") {
+                deepLink = "lyft://ridetype?id=lyft&&partner=WX_vIhcHWEdw" + 
+                    `pickup[latitude]=${deparLat}&pickup[longitude]=${deparLng}`+
+                    `&destination[latitude]=${destLat}&destination[longitude]=${destLng}`;
+            }
+        }
+        
+        console.log(product_name, deepLink);
+
+        window.location = deepLink;
+    }
+
+    cardFactory = (classes, company, priceData) => {
+        return (
+            priceData.map((item, i) => {
+                
+                console.log(item);
+
+                var name = undefined;
+                var estimate = undefined;
+                var distance = undefined;
+                if (company == "uber") {
+                    name = item.display_name;
+                    estimate = item.low_estimate;
+                    distance = item.distance;
+                } else {
+                    name = item.display_name;
+                    estimate = item.estimated_cost_cents_min / 100.0;
+                    distance = item.estimated_distance_miles;
+                }
+                
+                return (
+                    <Grid item className={classes.grid_item} key={i}>
+                        <Card className={classes.card}>
+                            <CardContent className={classes.icon} >
+                                <IconButton variant="contained" color="primary">
+                                    <DirectionsCar />
+                                </IconButton>
+                            </CardContent>
+                            <CardContent className={classes.content} >
+                                <Typography variant="headline" component="p" className={classes.price} >
+                                    ${estimate}
+                                </Typography>
+                                <Typography color="textSecondary" className={classes.name} >
+                                    {name}
+                                </Typography>
+                            </CardContent>
+                            <CardContent className={classes.request} >
+                                <Button size="small" color="primary" 
+                                    onClick={ () => this.requestRide(company, item.display_name, item.product_id) }>
+                                    Schedule
+                                </Button>
+                                <Typography color="textSecondary">
+                                ETA: {distance}
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                );
+            })
+        );
+    }
+
     render() {
         const { uberData, lyftData } = this.props;
 
         const { classes } = this.props;
+
+        // const uberCard = this.cardFactory()
 
         const testCard = (
             <Grid item className={classes.grid_item} >
@@ -76,7 +160,11 @@ class CardTable extends Component {
                         </Typography>
                     </CardContent>
                     <CardContent className={classes.request} >
-                        <ReqRideButton/>
+                        {/* <ReqRideButton onClick={ this.requestRide } /> */}
+                        <Button size="small" color="primary" 
+                            onClick={ () => this.requestRide("Tag") }>
+                            Schedule
+                        </Button>
                         <Typography color="textSecondary">
                             ETA: 3mins
                         </Typography>
@@ -89,48 +177,12 @@ class CardTable extends Component {
             <Grid item className={classes.wrapper}>
                 <Grid container spacing={16}>
                 {
-                    testCard
+                    uberData &&
+                    this.cardFactory(classes, "uber", uberData.prices)
                 }
                 {
-                    uberData && lyftData &&
-                    uberData.prices.map(function(item, i) {
-                        // TODO: Fix pass LatLng / call back
-                        const name = item.display_name;
-                        const estimate = item.low_estimate;
-                        const distance = item.distance;
-                        const deparLat = this.props.deparLat;
-                        const deparLng = this.props.deparLng;
-                        const destLat = this.props.destLat;
-                        const destLng = this.props.destLng;
-                        
-                        console.log("Depar", deparLat, deparLng, "Dest", destLat, destLng);
-                        
-                        return (
-                            <Grid item key={i} className={classes.display_item}>
-                                <Card className={classes.display_card}>
-                                    <CardContent className={classes.display_card_icon}>
-                                        <IconButton variant="contained" color="primary">
-                                            <DirectionsCar />
-                                        </IconButton>
-                                    </CardContent>
-                                    <CardContent className={classes.display_card_content}>
-                                        <Typography variant="headline" component="p" className={classes.display_card_price}>
-                                            ${estimate}
-                                        </Typography>
-                                        <Typography color="textSecondary" className={classes.display_card_name}>
-                                            {name}
-                                        </Typography>
-                                    </CardContent>
-                                    <CardContent className={classes.display_card_action}>
-                                        <ReqRideButton company="uber" deparLat={deparLat} deparLng={deparLng} destLat={destLat} destLng={destLng} />
-                                        <Typography color="textSecondary" className={classes.display_card_name}>
-                                            ETA: {distance}
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                        );
-                    }.bind(this))
+                    lyftData &&
+                    this.cardFactory(classes, "lyft", lyftData.cost_estimates)
                 }
                 
                 </Grid>

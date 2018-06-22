@@ -205,19 +205,25 @@ class App extends Component {
                                 destViewPort={this.state.destPlac ? this.state.destPlace.geometry.viewport : undefined} 
                                 // updateLocation={this.updateLocation}
                             />
-                            <Button onClick={this.setCurrentLocation}>
-                                Current Loc
-                            </Button>
                             <InputField 
                                 google={this.props.google} 
                                 updateLocation={this.updateLocation}
                             />
+                            <Button onClick={this.setCurrentLocation} color="primary" style={{width: '100%', textAlign: "center"}}>
+                                Current Loc
+                            </Button>
                             <SearchButton 
                                 onClick={ this.searchFare.bind(this) }
                             />
                             <CardTable 
                                 uberData={ this.state.uberData }
                                 lyftData={ this.state.lyftData }
+                                deparLat={this.state.deparLat} 
+                                deparLng={this.state.deparLng}
+                                destLat={this.state.destLat}
+                                destLng={this.state.destLng}
+                                deparAddr={this.state.deparAddr}
+                                destAddr={this.state.destAddr}
                             />
                         </Grid>
                     </div>                

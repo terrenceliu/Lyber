@@ -91,7 +91,7 @@ class Map extends Component {
         deparViewPort = deparViewPort || undefined;
         destViewPort = destViewPort || undefined;
         
-        console.log(deparLat, deparLng, destLat, destLng, deparViewPort, destViewPort);
+        // console.log(deparLat, deparLng, destLat, destLng, deparViewPort, destViewPort);
 
         const maps = this.maps;
 
@@ -168,7 +168,6 @@ class Map extends Component {
 
         const { deparLat, deparLng, destLat, destLng, deparViewPort, destViewPort } = this.props;
 
-        console.log("Redner map");
 
         this.updateMarker(deparLat, deparLng, destLat, destLng, deparViewPort, destViewPort);
 
