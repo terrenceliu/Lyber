@@ -85,24 +85,24 @@ class CardTable extends Component {
         window.location = deepLink;
     }
 
-    cardFactory = (classes, company, priceData) => {
+    /**
+     * 
+     * @param {object} classes  
+     * @param {object} priceData
+     */
+    cardFactory = (classes, data) => {
+        var priceData = data.slice();
+
+        priceData.sort(function(a, b) {
+            return (a.min_estimate - b.min_estimate);
+        });
+
+        console.log(priceData);
+        
         return (
             priceData.map((item, i) => {
                 
                 console.log(item);
-
-                var name = undefined;
-                var estimate = undefined;
-                var distance = undefined;
-                if (company == "uber") {
-                    name = item.display_name;
-                    estimate = item.low_estimate;
-                    distance = item.distance;
-                } else {
-                    name = item.display_name;
-                    estimate = item.estimated_cost_cents_min / 100.0;
-                    distance = item.estimated_distance_miles;
-                }
                 
                 return (
                     <Grid item className={classes.grid_item} key={i}>
@@ -114,19 +114,19 @@ class CardTable extends Component {
                             </CardContent>
                             <CardContent className={classes.content} >
                                 <Typography variant="headline" component="p" className={classes.price} >
-                                    ${estimate}
+                                    ${item.min_estimate} - ${item.max_estimate}
                                 </Typography>
                                 <Typography color="textSecondary" className={classes.name} >
-                                    {name}
+                                    {item.display_name}
                                 </Typography>
                             </CardContent>
                             <CardContent className={classes.request} >
                                 <Button size="small" color="primary" 
-                                    onClick={ () => this.requestRide(company, item.display_name, item.product_id) }>
+                                    onClick={ () => this.requestRide(item.company, item.display_name, item.product_id) }>
                                     Schedule
                                 </Button>
                                 <Typography color="textSecondary">
-                                ETA: {distance}
+                                ETA: {item.distance}
                                 </Typography>
                             </CardContent>
                         </Card>
@@ -137,11 +137,13 @@ class CardTable extends Component {
     }
 
     render() {
-        const { uberData, lyftData } = this.props;
-
+        const { estData } = this.props;
+        
         const { classes } = this.props;
 
         // const uberCard = this.cardFactory()
+
+        console.log("estData", estData);
 
         const testCard = (
             <Grid item className={classes.grid_item} >
@@ -177,14 +179,9 @@ class CardTable extends Component {
             <Grid item className={classes.wrapper}>
                 <Grid container spacing={16}>
                 {
-                    uberData &&
-                    this.cardFactory(classes, "uber", uberData.prices)
+                    estData &&
+                    this.cardFactory(classes, estData)
                 }
-                {
-                    lyftData &&
-                    this.cardFactory(classes, "lyft", lyftData.cost_estimates)
-                }
-                
                 </Grid>
             </Grid>
         );

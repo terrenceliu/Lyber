@@ -76,8 +76,8 @@ class App extends Component {
             destLat: undefined,
             destLng: undefined,
             deparAddr: undefined,
-            uberData: undefined,
-            lyftData: undefined
+            estData: undefined,
+            loading: true
         }
     }
 
@@ -144,46 +144,37 @@ class App extends Component {
             return;
         }
 
+        // Set loading status
+        this.setState({
+            loading: true
+        });
+
+        // Set query param
         const deparLat = this.state.deparLat;
         const deparLng = this.state.deparLng;
         const destLat = this.state.destLat;
         const destLng = this.state.destLng;
-
+        
         const queryParam = `?depar_lat=${deparLat}&depar_lng=${deparLng}&dest_lat=${destLat}&dest_lng=${destLng}`;
-        const uberAPI = "https://lyber-server.herokuapp.com/api/uber" + queryParam;
-        const lyftAPI = "https://lyber-server.herokuapp.com/api/lyft" + queryParam;
+        // const uberAPI = "https://lyber-server.herokuapp.com/api/uber" + queryParam;
+        // const lyftAPI = "https://lyber-server.herokuapp.com/api/lyft" + queryParam;
 
-        // TODO: 
-        const uberData = fetch(uberAPI, {
+        const estimateAPI = "http://localhost:8000/api/estimate" + queryParam;
+
+        console.log(estimateAPI);
+
+        fetch(estimateAPI, {
             method: 'GET'
         })
         .then(response => response.json())
-        .then(data => this.setState({
-            uberData: data
-        }))
-        // .then(() => {
-        //     if (this.state.lyftData) {
-        //         this.setState({
-        //             loading: false
-        //         })
-        //     }
-        // });
+        .then(data => {
+            console.log(data);
+            this.setState({
+            estData: data.prices,
+            loading: false
+            });
+        });
 
-        // TODO: 
-        const lyftData = fetch(lyftAPI, {
-            method: 'GET'
-        })
-        .then(resposne => resposne.json())
-        .then(data => this.setState({
-            lyftData: data
-        }))
-        // .then(() => {
-        //     if (this.state.uberData) {
-        //         this.setState({
-        //             loading: false
-        //         });
-        //     }
-        // });
     }
 
     render() {
@@ -216,8 +207,7 @@ class App extends Component {
                                 onClick={ this.searchFare.bind(this) }
                             />
                             <CardTable 
-                                uberData={ this.state.uberData }
-                                lyftData={ this.state.lyftData }
+                                estData={this.state.estData}
                                 deparLat={this.state.deparLat} 
                                 deparLng={this.state.deparLng}
                                 destLat={this.state.destLat}
