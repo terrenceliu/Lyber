@@ -68,9 +68,9 @@ class Map extends Component {
             this.deparMarker.addListener('dragend', () => {
                 // TODO: Update `InputField` formatted address.
                 
-                // if (this.props.updateLocation) {
-
-                // }
+                if (this.props.updateLocation) {
+                    console.log(this.props.updateLocation);
+                }
             });
         }
     }

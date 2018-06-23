@@ -31,9 +31,9 @@ class ButtonAppBar extends Component {
     constructor() {
         super();
     }
-
+    
     handleLogIn = () => {
-        const authURL = "http://localhost:8000/auth/login";
+        const authURL = "https://lyber-server.herokuapp.com/auth/login";
     
         window.location = authURL;
     }

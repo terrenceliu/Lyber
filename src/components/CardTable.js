@@ -96,7 +96,7 @@ class CardTable extends Component {
         priceData.sort(function(a, b) {
             return (a.min_estimate - b.min_estimate);
         });
-
+        
         console.log(priceData);
         
         return (
