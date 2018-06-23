@@ -53,7 +53,7 @@ class CardTable extends Component {
     constructor() {
         super();
     }
-
+    
     /**
      * 
      */
@@ -74,7 +74,7 @@ class CardTable extends Component {
                     `&dropoff[latitude]=${destLat}&dropoff[longitude]=${destLng}&dropoff[nickname]=${destAddr}` + // Drop off location
                     `&product_id=${product_id}`;
             } else if (company == "lyft") {
-                deepLink = "lyft://ridetype?id=lyft&&partner=WX_vIhcHWEdw" + 
+                deepLink = `lyft://ridetype?id=${product_id}&&partner=WX_vIhcHWEdw` + 
                     `pickup[latitude]=${deparLat}&pickup[longitude]=${deparLng}`+
                     `&destination[latitude]=${destLat}&destination[longitude]=${destLng}`;
             }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import queryString from 'query-string';
 import { GoogleApiWrapper } from 'google-maps-react';
 
 // MUI
@@ -7,6 +7,7 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import { createMuiTheme } from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
 import PropTypes from 'prop-types';
+import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
 // Components
@@ -18,6 +19,7 @@ import Map from './components/Map';
 import InputField from './components/InputField';
 import SearchButton from './components/SearchButton';
 import CardTable from './components/CardTable';
+
 
 // UI
 import Grid from '@material-ui/core/Grid';
@@ -77,7 +79,8 @@ class App extends Component {
             destLng: undefined,
             deparAddr: undefined,
             estData: undefined,
-            loading: true
+            loading: true,
+            userProfile: undefined
         }
     }
 
@@ -177,6 +180,35 @@ class App extends Component {
 
     }
 
+    /**
+     * Life Cycle Hooks
+     */
+    componentDidMount() {
+        let parsed = queryString.parse(window.location.search);
+        let accessToken = parsed.access_token;
+        
+        if (!accessToken) {
+            return;
+        }
+
+        console.log("AccessToken", accessToken);
+
+        fetch("https://api.uber.com/v1.2/me", {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+                'Accept-Language': 'en_U',
+                'Content-Type': 'application/json'
+            }
+        }).then(res => res.json())
+        .then(data => this.setState({
+            userProfile: data
+        }))
+        .then(() => console.log(this.state.userProfile))
+        .catch(e => console.log(e));
+
+
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -184,7 +216,12 @@ class App extends Component {
             <div className="appContainer">
                 <MuiThemeProvider theme={theme}> 
                     <ToolBar disableGutters="true"/>
-
+                    {
+                        this.state.userProfile &&
+                        <Typography variant="body1" color="inherit" className={classes.flex}>
+                            Hello, {this.state.userProfile.first_name} {this.state.userProfile.last_name}
+                        </Typography>
+                    }
                     <div className={classes.wrapper}>
                         <Grid container direction="row" className={classes.container}>
                             <Map google={this.props.google} 
