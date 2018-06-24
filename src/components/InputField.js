@@ -100,17 +100,7 @@ class InputField extends Component {
         const { classes } = this.props;
 
         const { deparAddr, destAddr } = this.props;
-
-        // console.log("Address", deparAddr, destAddr);
-
-        // if (deparAddr) {
-        //     this.updateInputField("depar", deparAddr);
-        // }
-
-        // if (destAddr) {
-        //     this.updateInputField("dest", destAddr);
-        // }
-
+        
         return (
             <Grid item className={classes.wrapper}>
                 <Grid container direction='row' className={classes.container}>

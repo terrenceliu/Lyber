@@ -144,7 +144,7 @@ class App extends Component {
         const queryParam = `?depar_lat=${deparLat}&depar_lng=${deparLng}&dest_lat=${destLat}&dest_lng=${destLng}`;
 
         const estimateAPI = "https://lyber-server.herokuapp.com/api/estimate" + queryParam;
-        
+
         fetch(estimateAPI, {
             method: 'GET'
         })
@@ -183,8 +183,6 @@ class App extends Component {
         }))
         .then(() => console.log(this.state.userProfile))
         .catch(e => console.log(e));
-
-
     }
 
     render() {
@@ -238,7 +236,13 @@ class App extends Component {
     }
 }
 
-var googleToken = process.env.googleToken || require('../config.json').googleToken;
+var googleToken = undefined;
+if (process.env.googleToken) {
+    googleToken = process.env.googleToken
+} else {
+    googleToken = require('../config.json').googleToken;
+}
+
 export default GoogleApiWrapper({
     apiKey: googleToken,
   })(withStyles(styles)(App));

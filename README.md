@@ -20,7 +20,7 @@ Lyber is available on iOS. Project link: https://github.com/EdwardFeng523/Lyber-
 
 - "Map"
 
-- [ ] Drag/Pin to select location
+- [x] Drag/Pin to select location
 
 - [ ] Update address info in autocomplete after dragging the marker
 
@@ -32,7 +32,7 @@ Lyber is available on iOS. Project link: https://github.com/EdwardFeng523/Lyber-
 
 - [ ] Display ETA
 
-- [ ] Format card components
+- [X] Format card components (ummm sort of)
 
 
 ## Getting Started

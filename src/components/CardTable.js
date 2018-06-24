@@ -141,8 +141,6 @@ class CardTable extends Component {
         
         const { classes } = this.props;
 
-        // const uberCard = this.cardFactory()
-
         console.log("estData", estData);
 
         const testCard = (
