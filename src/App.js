@@ -11,9 +11,6 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
 // Components
-import MainFrame from './components/MainFrame';
-import PlaceAutoComplete from './components/stale/PlaceAutoComplete';
-import FareEstimator from './components/stale/FareEstimator';
 import ToolBar from './components/ToolBar';
 import Map from './components/Map';
 import InputField from './components/InputField';
@@ -28,20 +25,6 @@ import { Button } from '@material-ui/core';
 
 const theme = createMuiTheme({
     palette: {
-        // primary: {
-        //     // light: will be calculated from palette.primary.main,
-        //     main: '#03A9F4',
-        //     // dark: will be calculated from palette.primary.main,
-        //     // contrastText: will be calculated to contast with palette.primary.main
-        //   },
-        //   secondary: {
-        //     light: '#0066ff',
-        //     main: '#352384',
-        //     // dark: will be calculated from palette.secondary.main,
-        //     contrastText: '#000000',
-        //   },
-        //   // error: will use the default color
-
         type: 'light'
     }
 });
@@ -132,7 +115,7 @@ class App extends Component {
             console.log("[Err] Undefined tag/place");
         }
     }
-
+    
     setCurrentLocation = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
@@ -159,13 +142,9 @@ class App extends Component {
         const destLng = this.state.destLng;
         
         const queryParam = `?depar_lat=${deparLat}&depar_lng=${deparLng}&dest_lat=${destLat}&dest_lng=${destLng}`;
-        // const uberAPI = "https://lyber-server.herokuapp.com/api/uber" + queryParam;
-        // const lyftAPI = "https://lyber-server.herokuapp.com/api/lyft" + queryParam;
 
-        const estimateAPI = "http://localhost:8000/api/estimate" + queryParam;
-
-        console.log(estimateAPI);
-
+        const estimateAPI = "https://lyber-server.herokuapp.com/api/estimate" + queryParam;
+        
         fetch(estimateAPI, {
             method: 'GET'
         })
@@ -177,7 +156,6 @@ class App extends Component {
             loading: false
             });
         });
-
     }
 
     /**
@@ -253,17 +231,14 @@ class App extends Component {
                                 destAddr={this.state.destAddr}
                             />
                         </Grid>
-                    </div>                
-                    {/* <MainFrame google={this.props.google} /> */}
-                    {/* <PlaceAutoComplete google={this.props.google} setLoc={this.setLoc.bind(this)}/> */}
-                    {/* <FareEstimator deparLatLng={this.state.deparLatLng} destLatLng={this.state.destLatLng} /> */}
+                    </div>
                 </MuiThemeProvider>
             </div>
         )
     }
 }
 
-var config = require('../config.json');
+var googleToken = process.env.googleToken || require('../config.json').googleToken;
 export default GoogleApiWrapper({
-    apiKey: config.googleToken,
+    apiKey: googleToken,
   })(withStyles(styles)(App));
