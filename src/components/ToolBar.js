@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -27,26 +27,47 @@ const styles = {
     }
 };
 
-function ButtonAppBar(props) {
-    const { classes } = props;
-    return (
-        <div className={classes.root}>
-            <AppBar position="static">
-                <Toolbar>
-                <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-                    <MenuIcon />
-                </IconButton>
-                <Typography variant="title" color="inherit" className={classes.flex}>
-                    Lyber
-                </Typography>
-                {/* <Button color="inherit">Login</Button> */}
-                <IconButton className={classes.acountButton} color="inherit" aria-label="Menu">
-                    <AcountBox />
-                </IconButton>
-                </Toolbar>
-            </AppBar>
-        </div>
-    );
+class ButtonAppBar extends Component {
+    constructor() {
+        super();
+    }
+    
+    handleLogIn = () => {
+        const authURL = undefined;
+
+        // if (process.env.production) {
+        //     authURL = "https://lyber-server.herokuapp.com/auth/login";
+        // } else {
+        //     authURL = "http://localhost:8000/auth/login";
+        // }
+        authURL = "https://lyber-server.herokuapp.com/auth/login";
+
+        console.log("AuthURL", authURL);
+        
+        // window.location = authURL;
+    }
+    
+    render() {
+        const { classes } = this.props;
+        return (
+            <div className={classes.root}>
+                <AppBar position="static">
+                    <Toolbar>
+                    <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography variant="title" color="inherit" className={classes.flex}>
+                        Lyber
+                    </Typography>
+                    {/* <Button color="inherit">Login</Button> */}
+                    <IconButton className={classes.acountButton} color="inherit" aria-label="Menu" onClick={this.handleLogIn}>
+                        <AcountBox />
+                    </IconButton>
+                    </Toolbar>
+                </AppBar>
+            </div>
+        );
+    }
 }
 
 ButtonAppBar.propTypes = {
