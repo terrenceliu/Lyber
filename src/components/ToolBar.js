@@ -33,7 +33,7 @@ class ButtonAppBar extends Component {
     }
     
     handleLogIn = () => {
-        const authURL = undefined;
+        var authURL = undefined;
 
         if (process.env.production) {
             authURL = "https://lyber-server.herokuapp.com/auth/login";
