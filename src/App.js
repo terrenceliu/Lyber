@@ -79,7 +79,7 @@ class App extends Component {
      */
     updateLocation = (tag, location, displayName) => {
         console.log(tag, location, displayName);
-
+        
         // Optional Param
         displayName = displayName || undefined;
         
@@ -242,6 +242,7 @@ if (process.env.googleToken) {
 } else {
     googleToken = require('../config.json').googleToken;
 }
+
 
 export default GoogleApiWrapper({
     apiKey: googleToken,

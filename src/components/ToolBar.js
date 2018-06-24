@@ -33,16 +33,17 @@ class ButtonAppBar extends Component {
     }
     
     handleLogIn = () => {
-        var authURL = undefined;
-        
-        if (process.env.production) {
-            authURL = "https://lyber-server.herokuapp.com/auth/login";
-        } else {
-            authURL = "http://localhost:8000/auth/login";
-        }
+        const authURL = undefined;
+
+        // if (process.env.production) {
+        //     authURL = "https://lyber-server.herokuapp.com/auth/login";
+        // } else {
+        //     authURL = "http://localhost:8000/auth/login";
+        // }
+        authURL = "https://lyber-server.herokuapp.com/auth/login";
 
         console.log("AuthURL", authURL);
-    
+        
         // window.location = authURL;
     }
     
