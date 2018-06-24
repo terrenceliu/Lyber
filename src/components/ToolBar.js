@@ -40,8 +40,10 @@ class ButtonAppBar extends Component {
         } else {
             authURL = "http://localhost:8000/auth/login";
         }
+
+        console.log("AuthURL", authURL);
     
-        window.location = authURL;
+        // window.location = authURL;
     }
     
     render() {
