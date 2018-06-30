@@ -91,6 +91,8 @@ class Map extends Component {
         
         // console.log(deparLat, deparLng, destLat, destLng, deparViewPort, destViewPort);
 
+        console.log("Depar", deparLat, deparLng)
+
         const maps = this.maps;
 
         if (deparLat && deparLng) {
@@ -112,6 +114,7 @@ class Map extends Component {
 
             // console.log(this.deparMarker, this.destMarker);
         } else {
+            console.log("clear marker");
             if (this.deparMarker) {
                 this.deparMarker.setVisible(false);
             }

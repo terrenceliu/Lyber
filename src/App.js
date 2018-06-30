@@ -88,35 +88,53 @@ class App extends Component {
         // Optional Param
         displayName = displayName || undefined;
         
-        if (tag == "depar" && location) {
-            if (displayName) {
-                this.setState({
-                    deparLat: location.lat, 
-                    deparLng: location.lng,
-                    deparAddr: displayName
-                });
-            } else {
-                // TODO: Reverse location lookup
+        if (tag == "depar") {
+            if (location) {
+                // Set location
+                if (displayName) {
+                    this.setState({
+                        deparLat: location.lat, 
+                        deparLng: location.lng,
+                        deparAddr: displayName
+                    });
+                } else {
+                    // TODO: Reverse location lookup
 
-                this.geocodeLatLng("deparAddr", location);
-                this.setState({
-                    deparLat: location.lat, 
-                    deparLng: location.lng,
-                });
-            }
-        } else if (tag == "dest" && location) {
-            if (displayName) {
-                this.setState({
-                    destLat: location.lat, 
-                    destLng: location.lng,
-                    destAddr: displayName
-                });
+                    this.geocodeLatLng("deparAddr", location);
+                    this.setState({
+                        deparLat: location.lat, 
+                        deparLng: location.lng,
+                    });
+                }
             } else {
-                // TODO: Reverse location lookup
-                this.geocodeLatLng("destAddr", location);
+                // Clear location
                 this.setState({
-                    destLat: location.lat, 
-                    destLng: location.lng,
+                    deparLat: undefined,
+                    deparLng: undefined,
+                    deparAddr: undefined
+                })
+            }
+        } else if (tag == "dest") {
+            if (location) {
+                if (displayName) {
+                    this.setState({
+                        destLat: location.lat, 
+                        destLng: location.lng,
+                        destAddr: displayName
+                    });
+                } else {
+                    // TODO: Reverse location lookup
+                    this.geocodeLatLng("destAddr", location);
+                    this.setState({
+                        destLat: location.lat, 
+                        destLng: location.lng,
+                    });
+                }
+            } else {
+                this.setState({
+                    destLat: undefined,
+                    destLng: undefined,
+                    destAddr: undefined
                 });
             }
         } else {

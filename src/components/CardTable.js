@@ -82,10 +82,10 @@ const styles = theme => ({
 
     // GridList
     gridList: {
-        flexWrap: 'nowrap',
-        flexDirection: 'column',
-        // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-        transform: 'translateZ(0)',
+        // flexWrap: 'nowrap',
+        // flexDirection: 'column',
+        // // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+        // transform: 'translateZ(0)',
     },
 
     icon: {
@@ -113,7 +113,7 @@ class CardTable extends Component {
             value: 0
         }
     }
-
+    
     handleChange = (event, value) => {
         this.setState({ value });
     };
@@ -159,6 +159,11 @@ class CardTable extends Component {
      * @param {object} priceData
      */
     cardFactory = (classes, theme, data) => {
+        console.log(data);
+        if (!data) {
+            data = []
+        }
+
         var priceData = data.slice();
 
         priceData.sort(function (a, b) {
@@ -207,13 +212,20 @@ class CardTable extends Component {
      * @param {object} estData
      */
     tabFactory = (classes, theme, data) => {
+        var data = data || [];
+
         // // Sort Data
-        // var priceData = data.slice();
-        
-        // priceData.sort(function (a, b) {
-        //     return (a.min_estimate - b.min_estimate);
-        // });
-        var priceData = [0, 1, 2, 3];
+        var priceData = data.slice();
+
+        var timeData = data.slice();
+
+        priceData.sort(function (a, b) {
+            return (a.min_estimate - b.min_estimate);
+        });
+
+        timeData.sort(function (a, b) {
+            return (a.eta - b.eta);
+        });
 
         // UI
         const transitionDuration = {
@@ -259,8 +271,8 @@ class CardTable extends Component {
                     onChangeIndex={this.handleChangeIndex}
                 >   
                     <TabContainer dir={theme.direction}>
-                        <GridList className={classes.gridList} cols={3} cellHeight="auto">
-                            {   priceData.map(d => <GridListTile key={d}>
+                        <GridList className={classes.gridList} cols={1} cellHeight="auto">
+                            {   priceData.map(item => <GridListTile key={item.product_id}>
                                     <Card className={classes.card}>
                                         <CardContent className={classes.icon} >
                                             <IconButton variant="contained" color="primary">
@@ -269,21 +281,21 @@ class CardTable extends Component {
                                         </CardContent>
                                         <CardContent className={classes.content} >
                                             <Typography variant="headline" component="p" className={classes.price} >
-                                                $8 ~ $9
-                                    </Typography>
+                                                ${item.min_estimate} - ${item.max_estimate}
+                                            </Typography>
                                             <Typography color="textSecondary" className={classes.name} >
-                                                Test Card
-                                    </Typography>
+                                                {item.display_name}
+                                            </Typography>
                                         </CardContent>
                                         <CardContent className={classes.request} >
                                             {/* <ReqRideButton onClick={ this.requestRide } /> */}
                                             <Button size="small" color="primary"
-                                                onClick={() => this.requestRide("Tag")}>
+                                                onClick={() => this.requestRide(item.company, item.display_name, item.product_id)}>
                                                 Schedule
-                                    </Button>
-                                            <Typography color="textSecondary">
-                                                ETA: 3mins
-                                    </Typography>
+                                            </Button>
+                                            <Typography color="textSecondary" noWrap>
+                                                {item.eta / 60} mins away
+                                            </Typography>
                                         </CardContent>
                                     </Card>
                                 </GridListTile>
@@ -292,24 +304,40 @@ class CardTable extends Component {
                             
                         </GridList>
                     </TabContainer>
-                    <TabContainer dir={theme.direction}>Item Two</TabContainer>
-                    <TabContainer dir={theme.direction}>Item Three</TabContainer>
+                    <TabContainer dir={theme.direction}>
+                        <GridList className={classes.gridList} cols={1} cellHeight="auto">
+                            {   timeData.map(item => <GridListTile key={item.product_id}>
+                                    <Card className={classes.card}>
+                                        <CardContent className={classes.icon} >
+                                            <IconButton variant="contained" color="primary">
+                                                <DirectionsCar />
+                                            </IconButton>
+                                        </CardContent>
+                                        <CardContent className={classes.content} >
+                                            <Typography variant="headline" component="p" className={classes.price} >
+                                                ${item.min_estimate} - ${item.max_estimate}
+                                            </Typography>
+                                            <Typography color="textSecondary" className={classes.name} >
+                                                {item.display_name}
+                                            </Typography>
+                                        </CardContent>
+                                        <CardContent className={classes.request} >
+                                            {/* <ReqRideButton onClick={ this.requestRide } /> */}
+                                            <Button size="small" color="primary"
+                                                onClick={() => this.requestRide(item.company, item.display_name, item.product_id)}>
+                                                Schedule
+                                    </Button>
+                                            <Typography color="textSecondary" noWrap>
+                                                {item.eta / 60} mins away
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </GridListTile>
+                                )
+                            }    
+                        </GridList>
+                    </TabContainer>
                 </SwipeableViews>
-                {/* {fabs.map((fab, index) => (
-                    <Zoom
-                        key={fab.color}
-                        in={this.state.value === index}
-                        timeout={transitionDuration}
-                        style={{
-                            transitionDelay: this.state.value === index ? transitionDuration.exit : 0,
-                        }}
-                        unmountOnExit
-                    >
-                        <Button variant="fab" className={fab.className} color={fab.color}>
-                            {fab.icon}
-                        </Button>
-                    </Zoom>
-                ))} */}
             </div>
         );
     }
@@ -353,8 +381,7 @@ class CardTable extends Component {
             <Grid item className={classes.wrapper}>
                 <Grid container spacing={16}>
                     {
-                        // estData &&
-                        // this.cardFactory(classes, estData)
+                        estData && 
                         this.tabFactory(classes, theme, estData)
                     }
                 </Grid>

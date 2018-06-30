@@ -91,7 +91,7 @@ class InputField extends Component {
             });
         }
     }
-
+    
     /**
      * 
      */
@@ -130,14 +130,30 @@ class InputField extends Component {
 
     handleChange = name => event => {
         this.setState({
-            [name]: event.target.value,
+            [name]: event.target.value
         });
 
+        // Detach current loc state
         if (name == "deparText") {
             this.setState({
                 currentLoc: false
             })
         }
+
+        if (!event.target.value) {
+            // Update location
+            let tag;
+            if (name == "deparText") {
+                tag = "depar";
+            } else {
+                tag = "dest";
+            }
+            this.props.updateLocation(tag, undefined);
+        }
+    }
+
+    handleFocus = () => {
+        console.log("Focus!!");
     }
 
     componentDidMount = () => {
@@ -191,7 +207,7 @@ class InputField extends Component {
                             {   this.state.currentLoc
                                 ? <InputLabel
                                     id="inputLabel"
-                                    shrink="true">
+                                    shrink={true}>
                                     Departure
                                 </InputLabel>
 
@@ -218,7 +234,8 @@ class InputField extends Component {
                                             </InputAdornment>
                                 }
                                 value={this.state.deparText}
-                                onChange={this.handleChange("deparText")}
+                                onChange={this.handleChange}
+                                
                             />
                         </FormControl>
                     </Grid>
