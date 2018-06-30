@@ -33,25 +33,25 @@ class ButtonAppBar extends Component {
     }
     
     handleLogIn = () => {
-        const authURL = undefined;
+        // var authURL = undefined;
 
         // if (process.env.production) {
         //     authURL = "https://lyber-server.herokuapp.com/auth/login";
         // } else {
         //     authURL = "http://localhost:8000/auth/login";
         // }
-        authURL = "https://lyber-server.herokuapp.com/auth/login";
+        var authURL = "https://lyber-server.herokuapp.com/auth/login";
 
-        console.log("AuthURL", authURL);
+        // console.log("AuthURL", authURL);
         
-        // window.location = authURL;
+        window.location = authURL;
     }
     
     render() {
         const { classes } = this.props;
         return (
             <div className={classes.root}>
-                <AppBar position="static">
+                <AppBar position="fixed">
                     <Toolbar>
                     <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
                         <MenuIcon />

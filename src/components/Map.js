@@ -9,9 +9,10 @@ import Grid from '@material-ui/core/Grid';
 
 const styles = theme => ({
     container: {
-        height: '30%',
+        marginTop: '65px',
+        height: '50%',
         width: '100%',
-        boxShadow: '0px 10px 20px -10px rgba(0,0,0,0.75)'
+        boxShadow: '0px 5px 10px -5px rgba(0,0,0,0.75)'
     },
     map: {
         width: '100%',
@@ -115,7 +116,7 @@ class Map extends Component {
                 this.deparMarker.setVisible(false);
             }
         }
-
+        
         if (destLat && destLng) {
             var latLng = new maps.LatLng({
                 lat: destLat,
@@ -155,11 +156,11 @@ class Map extends Component {
             this.map.fitBounds(bounds);
         }
     }
-
+    
     componentDidMount = () => {
         this.loadMap();
     }
-
+    
     render() {
         const { classes } = this.props;
 

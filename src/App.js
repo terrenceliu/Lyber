@@ -46,6 +46,11 @@ const styles = theme => ({
         alignItems: 'flex-start',
         alignContent: 'flex-start',
         justifyContent: 'flex-start'
+    },
+    padding: {
+        height: '15px',
+        width: '100%',
+        // backgroundColor: 'grey'
     }
 });
 
@@ -78,7 +83,7 @@ class App extends Component {
      * @param {String} [displayName]    Address / Nickname of the location displayed on the text field
      */
     updateLocation = (tag, location, displayName) => {
-        console.log(tag, location, displayName);
+        // console.log(tag, location, displayName);
         
         // Optional Param
         displayName = displayName || undefined;
@@ -92,6 +97,8 @@ class App extends Component {
                 });
             } else {
                 // TODO: Reverse location lookup
+
+                this.geocodeLatLng("deparAddr", location);
                 this.setState({
                     deparLat: location.lat, 
                     deparLng: location.lng,
@@ -106,6 +113,7 @@ class App extends Component {
                 });
             } else {
                 // TODO: Reverse location lookup
+                this.geocodeLatLng("destAddr", location);
                 this.setState({
                     destLat: location.lat, 
                     destLng: location.lng,
@@ -115,15 +123,41 @@ class App extends Component {
             console.log("[Err] Undefined tag/place");
         }
     }
+
+    geocodeLatLng(name, latlng) {
+        var { google } = this.props;
+        var geocoder = new google.maps.Geocoder;
+
+        geocoder.geocode({'location': latlng}, function (results, status) {
+            this.setState({
+                [name]: results[0]
+            })
+        }.bind(this));
+    }
     
-    setCurrentLocation = () => {
+    setCurrentLocation() {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                this.updateLocation("depar", { lat: position.coords.latitude, lng: position.coords.longitude });
-            });
+            // TODO: Hanlde failed case
+            // var res = undefined
+            // navigator.geolocation.getCurrentPosition((position) => {
+            //     this.updateLocation("depar", { lat: position.coords.latitude, lng: position.coords.longitude });
+            //     res =  { lat: position.coords.latitude, lng: position.coords.longitude }
+            // });
+            
+            var getPosition = new Promise(function (resolve, reject) {
+                    navigator.geolocation.getCurrentPosition(resolve, reject);
+                }).then((position) => {
+                    this.updateLocation("depar", { lat: position.coords.latitude, lng: position.coords.longitude });
+                    return position;
+                });
+            
+            return getPosition;
+
+        } else {
+            return "";
         }
     }
-
+    
     searchFare = () => {
         if (!this.state.deparLat || !this.state.deparLng || !this.state.destLat || !this.state.destLng) {
             alert('Please set both departure address and destination address.');
@@ -200,7 +234,8 @@ class App extends Component {
                     }
                     <div className={classes.wrapper}>
                         <Grid container direction="row" className={classes.container}>
-                            <Map google={this.props.google} 
+                            <Map
+                                google={this.props.google} 
                                 deparLat={this.state.deparLat} 
                                 deparLng={this.state.deparLng}
                                 destLat={this.state.destLat}
@@ -209,15 +244,16 @@ class App extends Component {
                                 destViewPort={this.state.destPlac ? this.state.destPlace.geometry.viewport : undefined} 
                                 // updateLocation={this.updateLocation}
                             />
-                            <InputField 
+                            <div className={classes.padding}>
+                            </div>
+                            <InputField
+                                className={classes.inputField} 
                                 google={this.props.google} 
                                 updateLocation={this.updateLocation}
-                            />
-                            <Button onClick={this.setCurrentLocation} color="primary" style={{width: '100%', textAlign: "center"}}>
-                                Current Loc
-                            </Button>
-                            <SearchButton 
-                                onClick={ this.searchFare.bind(this) }
+                                handleCurrentLocation={this.setCurrentLocation.bind(this)}
+                                handleSearch={this.searchFare.bind(this)}
+                                deparAddr={this.state.deparAddr}
+                                destAddr={this.state.destAddr}
                             />
                             <CardTable 
                                 estData={this.state.estData}
@@ -228,6 +264,27 @@ class App extends Component {
                                 deparAddr={this.state.deparAddr}
                                 destAddr={this.state.destAddr}
                             />
+                                
+                            {/* {
+                                this.state.estData
+                                ? <CardTable 
+                                    estData={this.state.estData}
+                                    deparLat={this.state.deparLat} 
+                                    deparLng={this.state.deparLng}
+                                    destLat={this.state.destLat}
+                                    destLng={this.state.destLng}
+                                    deparAddr={this.state.deparAddr}
+                                    destAddr={this.state.destAddr}
+                                />
+                                : <InputField
+                                    className={classes.inputField} 
+                                    google={this.props.google} 
+                                    updateLocation={this.updateLocation}
+                                    handleCurrentLocation={this.setCurrentLocation}
+                                    handleSearch={this.searchFare.bind(this)}
+                                />
+                                
+                            } */}
                         </Grid>
                     </div>
                 </MuiThemeProvider>

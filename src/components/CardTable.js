@@ -15,10 +15,42 @@ import Typography from '@material-ui/core/Typography';
 import { CardActions, IconButton } from "@material-ui/core";
 import DirectionsCar from '@material-ui/icons/DirectionsCar';
 
+// Tab Related
+import classNames from 'classnames';
+import SwipeableViews from 'react-swipeable-views';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Zoom from '@material-ui/core/Zoom';
+import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/ModeEdit';
+import UpIcon from '@material-ui/icons/KeyboardArrowUp';
+import green from '@material-ui/core/colors/green';
+
+// GridList
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+
+function TabContainer(props) {
+    const { children, dir } = props;
+
+    return (
+        <Typography component="div" dir={dir} style={{ padding: 8 * 3 }}>
+            {children}
+        </Typography>
+    );
+}
+
+TabContainer.propTypes = {
+    children: PropTypes.node.isRequired,
+    dir: PropTypes.string.isRequired,
+};
+
 const styles = theme => ({
     wrapper: {
+        height: '40%',
         width: '100%',
-        
+
     },
     grid_item: {
         width: '100%',
@@ -31,6 +63,31 @@ const styles = theme => ({
         alignContent: "center",
         alignItems: "center"
     },
+
+    root: {
+        backgroundColor: theme.palette.background.paper,
+        width: '100%',
+        position: 'relative',
+        minHeight: '40%',
+    },
+    fab: {
+        position: 'absolute',
+        bottom: theme.spacing.unit * 2,
+        right: theme.spacing.unit * 2,
+    },
+    fabGreen: {
+        color: theme.palette.common.white,
+        backgroundColor: green[500],
+    },
+
+    // GridList
+    gridList: {
+        flexWrap: 'nowrap',
+        flexDirection: 'column',
+        // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+        transform: 'translateZ(0)',
+    },
+
     icon: {
         width: "10%"
     },
@@ -52,13 +109,24 @@ const styles = theme => ({
 class CardTable extends Component {
     constructor() {
         super();
+        this.state = {
+            value: 0
+        }
     }
+
+    handleChange = (event, value) => {
+        this.setState({ value });
+    };
     
+    handleChangeIndex = index => {
+        this.setState({ value: index });
+    };
+
     /**
      * 
      */
     requestRide = (company, product_name, product_id) => {
-        
+
         const deparLat = this.props.deparLat;
         const deparLng = this.props.deparLng;
         const destLat = this.props.destLat;
@@ -69,17 +137,17 @@ class CardTable extends Component {
         var deepLink = undefined;
         if (company && deparLat && deparLng && destLat && destLng) {
             if (company == "uber") {
-                deepLink = "uber://?client_id=jOOUs484dDpd5ZtVxT5A8cp9CEknN5sz&action=setPickup" + 
+                deepLink = "uber://?client_id=jOOUs484dDpd5ZtVxT5A8cp9CEknN5sz&action=setPickup" +
                     `&pickup[latitude]=${deparLat}&pickup[longitude]=${deparLng}&pickup[nickname]=${deparAddr}` +   // Pick Up location
                     `&dropoff[latitude]=${destLat}&dropoff[longitude]=${destLng}&dropoff[nickname]=${destAddr}` + // Drop off location
                     `&product_id=${product_id}`;
             } else if (company == "lyft") {
-                deepLink = `lyft://ridetype?id=${product_id}&&partner=WX_vIhcHWEdw` + 
-                    `pickup[latitude]=${deparLat}&pickup[longitude]=${deparLng}`+
+                deepLink = `lyft://ridetype?id=${product_id}&&partner=WX_vIhcHWEdw` +
+                    `pickup[latitude]=${deparLat}&pickup[longitude]=${deparLng}` +
                     `&destination[latitude]=${destLat}&destination[longitude]=${destLng}`;
             }
         }
-        
+
         console.log(product_name, deepLink);
 
         window.location = deepLink;
@@ -90,20 +158,17 @@ class CardTable extends Component {
      * @param {object} classes  
      * @param {object} priceData
      */
-    cardFactory = (classes, data) => {
+    cardFactory = (classes, theme, data) => {
         var priceData = data.slice();
 
-        priceData.sort(function(a, b) {
+        priceData.sort(function (a, b) {
             return (a.min_estimate - b.min_estimate);
         });
-        
+
         console.log(priceData);
-        
+
         return (
             priceData.map((item, i) => {
-                
-                console.log(item);
-                
                 return (
                     <Grid item className={classes.grid_item} key={i}>
                         <Card className={classes.card}>
@@ -121,12 +186,12 @@ class CardTable extends Component {
                                 </Typography>
                             </CardContent>
                             <CardContent className={classes.request} >
-                                <Button size="small" color="primary" 
-                                    onClick={ () => this.requestRide(item.company, item.display_name, item.product_id) }>
+                                <Button size="small" color="primary"
+                                    onClick={() => this.requestRide(item.company, item.display_name, item.product_id)}>
                                     Schedule
                                 </Button>
                                 <Typography color="textSecondary">
-                                ETA: {item.distance}
+                                    ETA: {item.distance}
                                 </Typography>
                             </CardContent>
                         </Card>
@@ -136,12 +201,123 @@ class CardTable extends Component {
         );
     }
 
+    /**
+     * 
+     * @param {obejct} classes
+     * @param {object} estData
+     */
+    tabFactory = (classes, theme, data) => {
+        // // Sort Data
+        // var priceData = data.slice();
+        
+        // priceData.sort(function (a, b) {
+        //     return (a.min_estimate - b.min_estimate);
+        // });
+        var priceData = [0, 1, 2, 3];
+
+        // UI
+        const transitionDuration = {
+            enter: theme.transitions.duration.enteringScreen,
+            exit: theme.transitions.duration.leavingScreen,
+        };
+
+        const fabs = [
+            {
+                color: 'primary',
+                className: classes.fab,
+                icon: <AddIcon />,
+            },
+            {
+                color: 'secondary',
+                className: classes.fab,
+                icon: <EditIcon />,
+            },
+            {
+                color: 'inherit',
+                className: classNames(classes.fab, classes.fabGreen),
+                icon: <UpIcon />,
+            },
+        ];
+        
+        return (
+            <div className={classes.root}>
+                <AppBar position="static" color="default">
+                    <Tabs
+                        value={this.state.value}
+                        onChange={this.handleChange}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        fullWidth
+                    >
+                        <Tab label="Price" />
+                        <Tab label="Time" />
+                    </Tabs>
+                </AppBar>
+                <SwipeableViews
+                    axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                    index={this.state.value}
+                    onChangeIndex={this.handleChangeIndex}
+                >   
+                    <TabContainer dir={theme.direction}>
+                        <GridList className={classes.gridList} cols={3} cellHeight="auto">
+                            {   priceData.map(d => <GridListTile key={d}>
+                                    <Card className={classes.card}>
+                                        <CardContent className={classes.icon} >
+                                            <IconButton variant="contained" color="primary">
+                                                <DirectionsCar />
+                                            </IconButton>
+                                        </CardContent>
+                                        <CardContent className={classes.content} >
+                                            <Typography variant="headline" component="p" className={classes.price} >
+                                                $8 ~ $9
+                                    </Typography>
+                                            <Typography color="textSecondary" className={classes.name} >
+                                                Test Card
+                                    </Typography>
+                                        </CardContent>
+                                        <CardContent className={classes.request} >
+                                            {/* <ReqRideButton onClick={ this.requestRide } /> */}
+                                            <Button size="small" color="primary"
+                                                onClick={() => this.requestRide("Tag")}>
+                                                Schedule
+                                    </Button>
+                                            <Typography color="textSecondary">
+                                                ETA: 3mins
+                                    </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </GridListTile>
+                                )
+                            }    
+                            
+                        </GridList>
+                    </TabContainer>
+                    <TabContainer dir={theme.direction}>Item Two</TabContainer>
+                    <TabContainer dir={theme.direction}>Item Three</TabContainer>
+                </SwipeableViews>
+                {/* {fabs.map((fab, index) => (
+                    <Zoom
+                        key={fab.color}
+                        in={this.state.value === index}
+                        timeout={transitionDuration}
+                        style={{
+                            transitionDelay: this.state.value === index ? transitionDuration.exit : 0,
+                        }}
+                        unmountOnExit
+                    >
+                        <Button variant="fab" className={fab.className} color={fab.color}>
+                            {fab.icon}
+                        </Button>
+                    </Zoom>
+                ))} */}
+            </div>
+        );
+    }
+
     render() {
         const { estData } = this.props;
-        
-        const { classes } = this.props;
 
-        console.log("estData", estData);
+        const { classes, theme } = this.props;
 
         const testCard = (
             <Grid item className={classes.grid_item} >
@@ -161,8 +337,8 @@ class CardTable extends Component {
                     </CardContent>
                     <CardContent className={classes.request} >
                         {/* <ReqRideButton onClick={ this.requestRide } /> */}
-                        <Button size="small" color="primary" 
-                            onClick={ () => this.requestRide("Tag") }>
+                        <Button size="small" color="primary"
+                            onClick={() => this.requestRide("Tag")}>
                             Schedule
                         </Button>
                         <Typography color="textSecondary">
@@ -176,10 +352,11 @@ class CardTable extends Component {
         return (
             <Grid item className={classes.wrapper}>
                 <Grid container spacing={16}>
-                {
-                    estData &&
-                    this.cardFactory(classes, estData)
-                }
+                    {
+                        // estData &&
+                        // this.cardFactory(classes, estData)
+                        this.tabFactory(classes, theme, estData)
+                    }
                 </Grid>
             </Grid>
         );
@@ -190,4 +367,4 @@ CardTable.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(CardTable);
+export default withStyles(styles, { withTheme: true })(CardTable);
