@@ -318,7 +318,7 @@ class App extends Component {
 //     googleToken = require('../config.json').googleToken;
 // }
 
-googleToken = process.env.googleToken
+var googleToken = process.env.googleToken
 
 export default GoogleApiWrapper({
     apiKey: googleToken,
