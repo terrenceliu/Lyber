@@ -83,11 +83,12 @@ class App extends Component {
      * @param {String} [displayName]    Address / Nickname of the location displayed on the text field
      */
     updateLocation = (tag, location, displayName) => {
-        // console.log(tag, location, displayName);
         
         // Optional Param
         displayName = displayName || undefined;
         
+        // console.log("[UpdateLocation]", tag, location, displayName);
+
         if (tag == "depar") {
             if (location) {
                 // Set location
@@ -98,8 +99,6 @@ class App extends Component {
                         deparAddr: displayName
                     });
                 } else {
-                    // TODO: Reverse location lookup
-
                     this.geocodeLatLng("deparAddr", location);
                     this.setState({
                         deparLat: location.lat, 
@@ -123,7 +122,6 @@ class App extends Component {
                         destAddr: displayName
                     });
                 } else {
-                    // TODO: Reverse location lookup
                     this.geocodeLatLng("destAddr", location);
                     this.setState({
                         destLat: location.lat, 
@@ -145,11 +143,17 @@ class App extends Component {
     geocodeLatLng(name, latlng) {
         var { google } = this.props;
         var geocoder = new google.maps.Geocoder;
-
+        
         geocoder.geocode({'location': latlng}, function (results, status) {
-            this.setState({
-                [name]: results[0]
-            })
+            if (status === 'OK') {
+                // console.log("[GeoCoding]");
+                this.setState({
+                    [name]: results[0].formatted_address
+                })
+            } else {
+                return;
+            }
+            
         }.bind(this));
     }
     
@@ -167,10 +171,11 @@ class App extends Component {
                 }).then((position) => {
                     this.updateLocation("depar", { lat: position.coords.latitude, lng: position.coords.longitude });
                     return position;
+                }, (reject) => {
+                   return undefined;
                 });
             
             return getPosition;
-
         } else {
             return "";
         }
@@ -213,28 +218,35 @@ class App extends Component {
     /**
      * Life Cycle Hooks
      */
-    componentDidMount() {
-        let parsed = queryString.parse(window.location.search);
-        let accessToken = parsed.access_token;
-        
-        if (!accessToken) {
-            return;
+    componentDidUpdate(prevProps, prevState) {
+        if (!this.state.deparLat && !this.state.deparLng && !this.state.destLat && !this.state.destLng) {
+            // console.log("Cleared departure & destination!");
+
         }
+    }
+    
+    componentDidMount() {
+        // let parsed = queryString.parse(window.location.search);
+        // let accessToken = parsed.access_token;
+        
+        // if (!accessToken) {
+        //     return;
+        // }
 
-        console.log("AccessToken", accessToken);
+        // console.log("AccessToken", accessToken);
 
-        fetch("https://api.uber.com/v1.2/me", {
-            headers: {
-                'Authorization': 'Bearer ' + accessToken,
-                'Accept-Language': 'en_U',
-                'Content-Type': 'application/json'
-            }
-        }).then(res => res.json())
-        .then(data => this.setState({
-            userProfile: data
-        }))
-        .then(() => console.log(this.state.userProfile))
-        .catch(e => console.log(e));
+        // fetch("https://api.uber.com/v1.2/me", {
+        //     headers: {
+        //         'Authorization': 'Bearer ' + accessToken,
+        //         'Accept-Language': 'en_U',
+        //         'Content-Type': 'application/json'
+        //     }
+        // }).then(res => res.json())
+        // .then(data => this.setState({
+        //     userProfile: data
+        // }))
+        // .then(() => console.log(this.state.userProfile))
+        // .catch(e => console.log(e));
     }
 
     render() {
@@ -260,7 +272,7 @@ class App extends Component {
                                 destLng={this.state.destLng}
                                 deparViewPort={this.state.deparPlace ? this.state.deparPlace.geometry.viewport : undefined}
                                 destViewPort={this.state.destPlac ? this.state.destPlace.geometry.viewport : undefined} 
-                                // updateLocation={this.updateLocation}
+                                updateLocation={this.updateLocation}
                             />
                             <div className={classes.padding}>
                             </div>

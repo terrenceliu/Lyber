@@ -55,11 +55,12 @@ class InputField extends Component {
             deparAC.addListener('place_changed', () => {
                 var place = deparAC.getPlace();
                 
-                console.log(place);
+                // console.log(place);
 
                 // TODO: smarter way to set deparVal lol
                 this.setState({
-                    deparText: this.parsePlaceName(place.address_components)
+                    // deparText: this.parsePlaceName(place.address_components)
+                    deparText: place.formatted_address
                 });
 
                 if (!place.geometry) {
@@ -76,8 +77,11 @@ class InputField extends Component {
             destAC.addListener('place_changed', () => {
                 var place = destAC.getPlace();
 
+                console.log(place);
+
                 this.setState({
-                    destText: this.parsePlaceName(place.address_components)
+                    // destText: this.parsePlaceName(place.address_components)
+                    destText: place.formatted_address
                 })
 
                 if (!place.geometry) {
@@ -104,28 +108,6 @@ class InputField extends Component {
         var country = place[6].short_name;
         return streetNumber + " " + route +", " + locality + ", " + admin_area_lv1 + ", " + country;
 
-    }
-
-    /**
-     * 
-     * @param {String} tag              `depar` || `dest`
-     * @param {String} displayName      Display name to be put on the text field
-     */
-    updateInputField = (tag, displayName) => {
-        if (tag == "depar") {
-            // Find hook nodes
-            const deparNode = document.getElementById('deparRef');
-            // deparNode.props.value = displayName
-            // deparNode.props.value = "Update depar tf."
-            // console.log("DeparNode", deparNode);
-            
-        } else if (tag == "dest") {
-            const destNode = document.getElementById('destRef');
-
-        } else {
-            // TODO: handle err
-
-        }
     }
 
     handleChange = name => event => {
@@ -156,10 +138,6 @@ class InputField extends Component {
         console.log("Focus!!");
     }
 
-    componentDidMount = () => {
-        this.loadAutoComplete();
-    }
-
     getCurrentLocation = () => {
         const { handleCurrentLocation } = this.props;
 
@@ -171,6 +149,10 @@ class InputField extends Component {
 
         var res = handleCurrentLocation();  // A Promise
         res.then((position) => {
+            if (!position) {
+                alert("Location access denied.");
+                return;
+            }
 
             var latlng = {
                 lat: position.coords.latitude,
@@ -181,7 +163,7 @@ class InputField extends Component {
             const inputNode = document.getElementById('inputLabel');
             
             geocoder.geocode({'location': latlng}, function (results, status) {
-                console.log(results);
+                // console.log(results);
                 this.setState({
                     deparText: results[0].formatted_address,
                     currentLoc: true
@@ -190,12 +172,48 @@ class InputField extends Component {
         });
     }
 
+
+    /**
+     * Life Cycle methods
+     */
+    componentDidMount = () => {
+        this.loadAutoComplete();
+        this.getCurrentLocation();
+    }
+
+    componentDidUpdate(prevProps, prevStates) {
+        const { deparAddr, destAddr } = this.props;
+        // console.log("[InputField] Update Addr", deparAddr, prevStates.deparText, destAddr, prevStates.destText);
+        
+        if (deparAddr != this.state.deparText) {
+            
+            this.setState({
+                deparText: deparAddr
+            })
+        }
+
+        // if (destAddr != this.state.destText) {
+        //     console.log("[DestAddr]", destAddr, this.state.destText);
+        //     this.setState({
+        //         destText: destAddr
+        //     })
+        // }
+    }
+    
     render() {
         const { classes } = this.props;
 
         const { handleCurrentLocation, handleSearch } = this.props;
         
         const { deparAddr, destAddr } = this.props;
+
+        // console.log("[InputField] Update Addr", deparAddr, this.state.deparText, destAddr, this.state.destText);
+
+        // if (deparAddr != this.state.deparText) {
+        //     this.setState({
+        //         deparText: deparAddr
+        //     })
+        // }
 
         return (
             <Grid item className={classes.wrapper}>
@@ -234,7 +252,7 @@ class InputField extends Component {
                                             </InputAdornment>
                                 }
                                 value={this.state.deparText}
-                                onChange={this.handleChange}
+                                onChange={this.handleChange("deparText")}
                                 
                             />
                         </FormControl>
