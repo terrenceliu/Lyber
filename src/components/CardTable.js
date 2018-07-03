@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
+import scrollToComponent from 'react-scroll-to-component';
+
 // Component
 import ReqRideButton from './ReqRideButton';
 
@@ -155,6 +157,7 @@ class CardTable extends Component {
 
     /**
      * 
+     * @deprecated
      * @param {object} classes  
      * @param {object} priceData
      */
@@ -342,8 +345,19 @@ class CardTable extends Component {
         );
     }
 
+    // LifeCycel Hooks
+
+    componentDidUpdate(prevProps, prevState) {
+        // if (prevProps.estData) {
+        //     console.log("Scrollll");
+        //     scrollToComponent(this.cardTable);
+        // }
+    }
+
     render() {
         const { estData } = this.props;
+
+        const { loading } = this.props;
 
         const { classes, theme } = this.props;
 
@@ -376,9 +390,9 @@ class CardTable extends Component {
                 </Card>
             </Grid>
         );
-
+        
         return (
-            <Grid item className={classes.wrapper}>
+            <Grid item className={classes.wrapper} ref={(section) => { this.cardTable = section; }}>
                 <Grid container spacing={16}>
                     {
                         estData && 

@@ -102,15 +102,13 @@ class Map extends Component {
                 let updateLocation = this.props.updateLocation;
                 updateLocation("depar", newPosition);                
             });
-
+            
             this.destMarker.addListener('dragend', () => {
                 // TODO: Update `InputField` formatted address.
-                let newPosition = this.destMarker.getPosition();
+                let newPosition = this.destMarker.getPosition().toJSON();
                 let updateLocation = this.props.updateLocation;
                 updateLocation("dest", newPosition);  
             });
-
-            
         }
     }
 

@@ -21,6 +21,8 @@ import CardTable from './components/CardTable';
 // UI
 import Grid from '@material-ui/core/Grid';
 import { Button } from '@material-ui/core';
+import LinearProgress from '@material-ui/core/LinearProgress';
+
 
 
 const theme = createMuiTheme({
@@ -67,7 +69,7 @@ class App extends Component {
             destLng: undefined,
             deparAddr: undefined,
             estData: undefined,
-            loading: true,
+            loading: false,
             userProfile: undefined
         }
     }
@@ -151,6 +153,7 @@ class App extends Component {
                     [name]: results[0].formatted_address
                 })
             } else {
+                console.log("Failed to retrieve information");
                 return;
             }
             
@@ -207,7 +210,6 @@ class App extends Component {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             this.setState({
             estData: data.prices,
             loading: false
@@ -285,15 +287,23 @@ class App extends Component {
                                 deparAddr={this.state.deparAddr}
                                 destAddr={this.state.destAddr}
                             />
-                            <CardTable 
-                                estData={this.state.estData}
-                                deparLat={this.state.deparLat} 
-                                deparLng={this.state.deparLng}
-                                destLat={this.state.destLat}
-                                destLng={this.state.destLng}
-                                deparAddr={this.state.deparAddr}
-                                destAddr={this.state.destAddr}
-                            />
+                            {
+                                this.state.loading
+                                ? <Grid item style={{
+                                    width: '100%',
+                                }}>
+                                    <LinearProgress />
+                                </Grid>
+                                : <CardTable 
+                                    estData={this.state.estData}
+                                    deparLat={this.state.deparLat} 
+                                    deparLng={this.state.deparLng}
+                                    destLat={this.state.destLat}
+                                    destLng={this.state.destLng}
+                                    deparAddr={this.state.deparAddr}
+                                    destAddr={this.state.destAddr}
+                                />
+                            }
                                 
                             {/* {
                                 this.state.estData

@@ -55,13 +55,9 @@ class InputField extends Component {
             deparAC.addListener('place_changed', () => {
                 var place = deparAC.getPlace();
                 
-                // console.log(place);
+                console.log(place);
 
-                // TODO: smarter way to set deparVal lol
-                this.setState({
-                    // deparText: this.parsePlaceName(place.address_components)
-                    deparText: place.formatted_address
-                });
+               
 
                 if (!place.geometry) {
                     alert("Details unavailable for input: " + place.name + ".");
@@ -70,8 +66,13 @@ class InputField extends Component {
                 }
 
                 if (this.props.updateLocation) {
-                    this.props.updateLocation("depar", place.geometry.location.toJSON(), place.name);
+                    this.props.updateLocation("depar", place.geometry.location.toJSON(), place.formatted_address);
                 }
+
+                 // TODO: smarter way to set deparVal lol
+                 this.setState({
+                    deparText: place.formatted_address
+                });
             });
 
             destAC.addListener('place_changed', () => {
@@ -79,19 +80,20 @@ class InputField extends Component {
 
                 console.log(place);
 
-                this.setState({
-                    // destText: this.parsePlaceName(place.address_components)
-                    destText: place.formatted_address
-                })
-
                 if (!place.geometry) {
                     alert("Details unavailable for input: " + place.name + ".");
                     // return;
                 }
 
                 if (this.props.updateLocation) {
-                    this.props.updateLocation("dest", place.geometry.location.toJSON(), place.name);
+                    console.log("[dest]",  place.geometry.location.toJSON());
+                    this.props.updateLocation("dest", place.geometry.location.toJSON(), place.formatted_address);
                 }
+
+                this.setState({
+                    // destText: this.parsePlaceName(place.address_components)
+                    destText: place.formatted_address
+                })
             });
         }
     }
@@ -182,22 +184,42 @@ class InputField extends Component {
     }
 
     componentDidUpdate(prevProps, prevStates) {
+        /** 
+         * FIXME: 
+         * Two-ways update
+         * - From input textfield (AutoComplete onChange)
+         * - From parent state (Map marker dragend)
+        */
         const { deparAddr, destAddr } = this.props;
-        // console.log("[InputField] Update Addr", deparAddr, prevStates.deparText, destAddr, prevStates.destText);
+        console.log("[InputField] Update Addr", deparAddr, prevStates.deparText, destAddr, prevStates.destText);
         
+        let deparFlag = false;
+        let destFlag = false;
         if (deparAddr != this.state.deparText) {
             
-            this.setState({
-                deparText: deparAddr
-            })
+            deparFlag = true;
+
+            // this.setState({
+            //     deparText: deparAddr
+            // })
+        }
+        
+        if (destAddr != this.state.destText) {
+            
+            destFlag = true;
+
+            // console.log("destAddr", destAddr);
+            // this.setState({
+            //     destText: destAddr
+            // })
         }
 
-        // if (destAddr != this.state.destText) {
-        //     console.log("[DestAddr]", destAddr, this.state.destText);
-        //     this.setState({
-        //         destText: destAddr
-        //     })
-        // }
+        if (deparFlag || destFlag) {
+            this.setState({
+                deparText: deparAddr,
+                destText: destAddr
+            })
+        }
     }
     
     render() {
