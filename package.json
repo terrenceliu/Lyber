@@ -36,6 +36,7 @@
     "query-string": "^6.1.0",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
+    "react-scroll-to-component": "^1.0.2",
     "react-swipeable-views": "^0.12.14"
   },
   "engines": {
