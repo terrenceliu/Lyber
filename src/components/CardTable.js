@@ -347,11 +347,12 @@ class CardTable extends Component {
 
     // LifeCycel Hooks
 
-    componentDidUpdate(prevProps, prevState) {
-        // if (prevProps.estData) {
-        //     console.log("Scrollll");
-        //     scrollToComponent(this.cardTable);
-        // }
+    componentDidMount() {
+        console.log("CardTable mounted");
+        scrollToComponent(this.cardTable, {
+            align: 'top',
+            offset: -100
+        });
     }
 
     render() {

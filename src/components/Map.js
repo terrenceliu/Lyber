@@ -31,7 +31,6 @@ class Map extends Component {
         this.directionsService = undefined;
         this.directionsDisplay = undefined;
     }
-
     
     loadMap = () => {
         if (this.props && this.props.google) {
@@ -92,6 +91,16 @@ class Map extends Component {
                 }
                 this.locMarker.setPosition(currentPosition)
                 this.locMarker.setVisible(true);
+            })
+
+            this.deparMarker.addListener('click', () => {
+                this.map.panTo(this.deparMarker.getPosition());
+                this.map.setZoom(16);
+            })
+
+            this.destMarker.addListener('click', () => {
+                this.map.panTo(this.destMarker.getPosition());
+                this.map.setZoom(16);
             })
 
             // Draggable Marker Listener
