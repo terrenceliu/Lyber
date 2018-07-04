@@ -138,8 +138,11 @@ class InputField extends Component {
         }
     }
 
-    handleFocus = () => {
-        console.log("Focus!!");
+    handleClick = (e) => {
+        /**
+         * Select all text field when clicked.
+         */
+        e.target.select();
     }
 
     getCurrentLocation = () => {
@@ -281,6 +284,8 @@ class InputField extends Component {
                                 }
                                 value={this.state.deparText}
                                 onChange={this.handleChange("deparText")}
+                                // onKeyDown={this.handleKeyDown()}
+                                onClick={(e) => this.handleClick(e)}
                                 
                             />
                         </FormControl>
@@ -307,6 +312,7 @@ class InputField extends Component {
                             }}
                             value={this.state.destText}
                             onChange={this.handleChange("destText")}
+                            onClick={(e) => this.handleClick(e)}
                         />
                     </Grid>
                 </Grid>

@@ -16,6 +16,9 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { CardActions, IconButton } from "@material-ui/core";
 import DirectionsCar from '@material-ui/icons/DirectionsCar';
+import Avatar from '@material-ui/core/Avatar';
+import SvgIcon from '@material-ui/core/SvgIcon';
+
 
 // Tab Related
 import classNames from 'classnames';
@@ -105,6 +108,10 @@ const styles = theme => ({
     },
     request: {
         textAlign: "center",
+    },
+    avatar: {
+        // width: 30,
+        // height: 30
     }
 });
 
@@ -278,9 +285,18 @@ class CardTable extends Component {
                             {   priceData.map(item => <GridListTile key={item.product_id}>
                                     <Card className={classes.card}>
                                         <CardContent className={classes.icon} >
-                                            <IconButton variant="contained" color="primary">
+                                            {/* <IconButton variant="contained" color="primary">
                                                 <DirectionsCar />
-                                            </IconButton>
+                                            </IconButton> */}
+                                            <Avatar
+                                                // className={classes.avatar}
+                                                alt="company"
+                                                src={
+                                                    (item.company == "uber") 
+                                                    ? "/static/images/uber_rides_api_icon_1x_64px.png"
+                                                    : "/static/images/Lyft_Logo_Pink.png"
+                                                }
+                                            />
                                         </CardContent>
                                         <CardContent className={classes.content} >
                                             <Typography variant="headline" component="p" className={classes.price} >
@@ -312,9 +328,18 @@ class CardTable extends Component {
                             {   timeData.map(item => <GridListTile key={item.product_id}>
                                     <Card className={classes.card}>
                                         <CardContent className={classes.icon} >
-                                            <IconButton variant="contained" color="primary">
+                                            {/* <IconButton variant="contained" color="primary">
                                                 <DirectionsCar />
-                                            </IconButton>
+                                            </IconButton> */}
+                                            <Avatar
+                                                // className={classes.avatar}
+                                                alt="company"
+                                                src={
+                                                    (item.company == "uber") 
+                                                    ? "/static/images/uber_rides_api_icon_1x_64px.png"
+                                                    : "/static/images/Lyft_Logo_Pink.png"
+                                                }
+                                            />
                                         </CardContent>
                                         <CardContent className={classes.content} >
                                             <Typography variant="headline" component="p" className={classes.price} >
@@ -366,9 +391,16 @@ class CardTable extends Component {
             <Grid item className={classes.grid_item} >
                 <Card className={classes.card}>
                     <CardContent className={classes.icon} >
-                        <IconButton variant="contained" color="primary">
-                            <DirectionsCar />
-                        </IconButton>
+                        <Avatar
+                            alt="Uber"
+                            src="/static/images/uber_rides_api_icon_2x_70px.png"
+                            className={classes.avatar}
+                        />
+                        {/* <SvgIcon
+                            component={
+                                
+                            }
+                        /> */}
                     </CardContent>
                     <CardContent className={classes.content} >
                         <Typography variant="headline" component="p" className={classes.price} >
