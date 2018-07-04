@@ -30,7 +30,9 @@ class InputField extends Component {
         this.state = {
             currentLoc: false,
             deparText: undefined,
-            destText: undefined
+            destText: undefined,
+            parentDeparText: undefined,
+            parentDestText: undefined
         }
     }
 
@@ -185,41 +187,45 @@ class InputField extends Component {
 
     componentDidUpdate(prevProps, prevStates) {
         /** 
-         * FIXME: 
+         * (Fixed) 
          * Two-ways update
          * - From input textfield (AutoComplete onChange)
          * - From parent state (Map marker dragend)
         */
         const { deparAddr, destAddr } = this.props;
-        console.log("[InputField] Update Addr", deparAddr, prevStates.deparText, destAddr, prevStates.destText);
-        
-        let deparFlag = false;
-        let destFlag = false;
-        if (deparAddr != this.state.deparText) {
-            
+        // console.log("[InputField] Update Addr", deparAddr, prevStates.deparText, destAddr, prevStates.destText);
+        // console.log("[prop.depar]", deparAddr, "[prevState.depar]", prevStates.deparText);
+
+        var deparFlag = false;
+        var destFlag = false;
+
+        if (prevStates.parentDeparText != deparAddr) {
             deparFlag = true;
-
-            // this.setState({
-            //     deparText: deparAddr
-            // })
         }
-        
-        if (destAddr != this.state.destText) {
-            
+
+        if (prevStates.parentDestText != destAddr) {
             destFlag = true;
-
-            // console.log("destAddr", destAddr);
-            // this.setState({
-            //     destText: destAddr
-            // })
         }
 
-        if (deparFlag || destFlag) {
+        if (deparFlag && destFlag) {
             this.setState({
                 deparText: deparAddr,
-                destText: destAddr
+                parentDeparText: deparAddr,
+                destText: destAddr,
+                parentDestText: destAddr
+            });
+        } else if (deparFlag) {
+            this.setState({
+                deparText: deparAddr,
+                parentDeparText: deparAddr
+            })
+        } else if (destFlag) {
+            this.setState({
+                destText: destAddr,
+                parentDestText: destAddr
             })
         }
+        
     }
     
     render() {
