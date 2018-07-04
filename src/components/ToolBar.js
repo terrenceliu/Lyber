@@ -53,16 +53,16 @@ class ButtonAppBar extends Component {
             <div className={classes.root}>
                 <AppBar position="fixed">
                     <Toolbar>
-                    <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="title" color="inherit" className={classes.flex}>
-                        Lyber
-                    </Typography>
-                    {/* <Button color="inherit">Login</Button> */}
-                    <IconButton className={classes.acountButton} color="inherit" aria-label="Menu" onClick={this.handleLogIn}>
-                        <AcountBox />
-                    </IconButton>
+                        {/* <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+                            <MenuIcon />
+                        </IconButton> */}
+                        <Typography variant="title" color="inherit" className={classes.flex}>
+                            Lyber
+                        </Typography>
+                        {/* <Button color="inherit">Login</Button> */}
+                        {/* <IconButton className={classes.acountButton} color="inherit" aria-label="Menu" onClick={this.handleLogIn}>
+                            <AcountBox />
+                        </IconButton> */}
                     </Toolbar>
                 </AppBar>
             </div>

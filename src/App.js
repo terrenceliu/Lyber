@@ -332,14 +332,14 @@ class App extends Component {
     }
 }
 
-var googleToken = undefined;
-if (process.env.googleToken) {
-    googleToken = process.env.googleToken
-} else {
-    googleToken = require('../config.json').googleToken;
-}
+// var googleToken = undefined;
+// if (process.env.googleToken) {
+//     googleToken = process.env.googleToken
+// } else {
+//     googleToken = require('../config.json').googleToken;
+// }
 
-// var googleToken = process.env.googleToken
+var googleToken = process.env.googleToken
 
 export default GoogleApiWrapper({
     apiKey: googleToken,
