@@ -9,9 +9,10 @@ import Grid from '@material-ui/core/Grid';
 
 const styles = theme => ({
     container: {
-        height: '30%',
+        marginTop: '65px',
+        height: '50%',
         width: '100%',
-        boxShadow: '0px 10px 20px -10px rgba(0,0,0,0.75)'
+        boxShadow: '0px 5px 10px -5px rgba(0,0,0,0.75)'
     },
     map: {
         width: '100%',
@@ -26,8 +27,10 @@ class Map extends Component {
         this.deparMarker = undefined;
         this.destMarker = undefined;
         this.maps = undefined;
+        this.locMarker = undefined;
+        this.directionsService = undefined;
+        this.directionsDisplay = undefined;
     }
-
     
     loadMap = () => {
         if (this.props && this.props.google) {
@@ -50,24 +53,70 @@ class Map extends Component {
                 zoom: 13
             })
 
+            // Set up service & display
+            this.directionsService = new maps.DirectionsService();
+            this.directionsDisplay = new maps.DirectionsRenderer();
+
+            this.locMarker = new maps.Marker({
+                map: this.map,
+                anchorPoing: new maps.Point(0, 0),
+                title: "Current Location",
+                icon: "https://www.materialui.co/materialIcons/maps/my_location_black_24x24.png",
+                
+            })
+
             this.deparMarker = new maps.Marker({
                 map: this.map,
                 anchorPoint: new maps.Point(0, 0),
                 title: "Departure",
-                draggable: true
+                draggable: true,
+                icon: 'https://www.materialui.co/materialIcons/communication/location_on_black_48x48.png',
+                animation: maps.Animation.DROP
             });
 
             this.destMarker = new maps.Marker({
                 map: this.map,
                 anchorPoint: new maps.Point(0, 0),
                 title: "Destination",
-                draggable: true
+                draggable: true,
+                icon: 'https://www.materialui.co/materialIcons/communication/location_on_black_48x48.png',
+                animation: maps.Animation.DROP
+            })
+
+            // Get current location
+            navigator.geolocation.getCurrentPosition((position) => {
+                var currentPosition = { 
+                    lat: position.coords.latitude, 
+                    lng: position.coords.longitude 
+                }
+                this.locMarker.setPosition(currentPosition)
+                this.locMarker.setVisible(true);
+            })
+
+            this.deparMarker.addListener('click', () => {
+                this.map.panTo(this.deparMarker.getPosition());
+                this.map.setZoom(16);
+            })
+
+            this.destMarker.addListener('click', () => {
+                this.map.panTo(this.destMarker.getPosition());
+                this.map.setZoom(16);
             })
 
             // Draggable Marker Listener
             this.deparMarker.addListener('dragend', () => {
                 // TODO: Update `InputField` formatted address.
-                
+                // Update location
+                let newPosition = this.deparMarker.getPosition().toJSON();
+                let updateLocation = this.props.updateLocation;
+                updateLocation("depar", newPosition);                
+            });
+            
+            this.destMarker.addListener('dragend', () => {
+                // TODO: Update `InputField` formatted address.
+                let newPosition = this.destMarker.getPosition().toJSON();
+                let updateLocation = this.props.updateLocation;
+                updateLocation("dest", newPosition);  
             });
         }
     }
@@ -101,12 +150,12 @@ class Map extends Component {
             this.deparMarker.setVisible(false);
             this.deparMarker.setPosition(latLng);
             this.deparMarker.setVisible(true);
-            
+
             if (deparViewPort) {
                 this.map.fitBounds(deparViewPort);
             } else {
-                this.map.setCenter(latLng);
-                this.map.setZoom(16);
+                this.map.setZoom(15.5);
+                this.map.panTo(latLng);
             }
 
             // console.log(this.deparMarker, this.destMarker);
@@ -115,7 +164,7 @@ class Map extends Component {
                 this.deparMarker.setVisible(false);
             }
         }
-
+        
         if (destLat && destLng) {
             var latLng = new maps.LatLng({
                 lat: destLat,
@@ -126,15 +175,19 @@ class Map extends Component {
             this.destMarker.setPosition(latLng);
             this.destMarker.setVisible(true);
             // this.map.setCenter(latLng);
-
+            
             if (destViewPort) {
                 this.map.fitBounds(destViewPort);
             } else {
-                this.map.setCenter(latLng);
-                this.map.setZoom(16);
+                this.map.setZoom(15.5);
+                this.map.panTo(latLng);
             }
 
             // console.log(this.deparMarker, this.destMarker);
+        }  else {
+            if (this.destMarker) {
+                this.destMarker.setVisible(false);
+            }
         }
 
         if (deparLat && deparLng && destLat && destLng) {
@@ -154,17 +207,68 @@ class Map extends Component {
 
             this.map.fitBounds(bounds);
         }
+
+        // this.drawRoute(deparLat, deparLng, destLat, destLng);
     }
 
+    drawRoute = (deparLat, deparLng, destLat, destLng) => {
+        const { google } = this.props;
+        const maps = google.maps;
+        const map = this.map;
+        var directionsDisplay = this.directionsDisplay;
+        var directionsService = this.directionsService;
+
+        
+        
+        if (deparLat && deparLng && destLat && destLng) {
+            // Draw routes if both departure and destination have been set
+
+            directionsDisplay.setMap(map);
+
+            // Marker options
+            directionsDisplay.setOptions({
+                dragable: true,
+                markerOptions: {
+                    icon: 'https://www.materialui.co/materialIcons/communication/location_on_black_48x48.png',
+                    // draggable: true
+                }
+            });
+
+            // Disable markers
+            this.deparMarker.setVisible(false);
+            this.destMarker.setVisible(false);
+
+            var request = {
+                origin: this.deparMarker.getPosition(),
+                destination: this.destMarker.getPosition(),
+                travelMode: google.maps.TravelMode.DRIVING
+            };
+
+            directionsService.route(request, function (response, status) {
+                if (status == google.maps.DirectionsStatus.OK) {
+                    directionsDisplay.setDirections(response);
+                    directionsDisplay.setMap(map);
+                } else {
+                    alert("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) + " failed: " + status);
+                }
+            });
+        } else {
+            // Clear routes
+            // console.log("[Route] Clear routes!");
+            if (directionsDisplay) {
+                directionsDisplay.setMap(null);
+            }
+        }
+    }
+    
     componentDidMount = () => {
         this.loadMap();
     }
-
+    
     render() {
         const { classes } = this.props;
 
         const { deparLat, deparLng, destLat, destLng, deparViewPort, destViewPort } = this.props;
-
 
         this.updateMarker(deparLat, deparLng, destLat, destLng, deparViewPort, destViewPort);
 

@@ -21,6 +21,8 @@ import CardTable from './components/CardTable';
 // UI
 import Grid from '@material-ui/core/Grid';
 import { Button } from '@material-ui/core';
+import LinearProgress from '@material-ui/core/LinearProgress';
+
 
 
 const theme = createMuiTheme({
@@ -46,6 +48,11 @@ const styles = theme => ({
         alignItems: 'flex-start',
         alignContent: 'flex-start',
         justifyContent: 'flex-start'
+    },
+    padding: {
+        height: '15px',
+        width: '100%',
+        // backgroundColor: 'grey'
     }
 });
 
@@ -62,7 +69,7 @@ class App extends Component {
             destLng: undefined,
             deparAddr: undefined,
             estData: undefined,
-            loading: true,
+            loading: false,
             userProfile: undefined
         }
     }
@@ -78,52 +85,105 @@ class App extends Component {
      * @param {String} [displayName]    Address / Nickname of the location displayed on the text field
      */
     updateLocation = (tag, location, displayName) => {
-        console.log(tag, location, displayName);
         
         // Optional Param
         displayName = displayName || undefined;
         
-        if (tag == "depar" && location) {
-            if (displayName) {
-                this.setState({
-                    deparLat: location.lat, 
-                    deparLng: location.lng,
-                    deparAddr: displayName
-                });
+        // console.log("[UpdateLocation]", tag, location, displayName);
+
+        if (tag == "depar") {
+            if (location) {
+                // Set location
+                if (displayName) {
+                    this.setState({
+                        deparLat: location.lat, 
+                        deparLng: location.lng,
+                        deparAddr: displayName
+                    });
+                } else {
+                    this.geocodeLatLng("deparAddr", location);
+                    this.setState({
+                        deparLat: location.lat, 
+                        deparLng: location.lng,
+                    });
+                }
             } else {
-                // TODO: Reverse location lookup
+                // Clear location
                 this.setState({
-                    deparLat: location.lat, 
-                    deparLng: location.lng,
-                });
+                    deparLat: undefined,
+                    deparLng: undefined,
+                    deparAddr: undefined
+                })
             }
-        } else if (tag == "dest" && location) {
-            if (displayName) {
-                this.setState({
-                    destLat: location.lat, 
-                    destLng: location.lng,
-                    destAddr: displayName
-                });
+        } else if (tag == "dest") {
+            if (location) {
+                if (displayName) {
+                    this.setState({
+                        destLat: location.lat, 
+                        destLng: location.lng,
+                        destAddr: displayName
+                    });
+                } else {
+                    this.geocodeLatLng("destAddr", location);
+                    this.setState({
+                        destLat: location.lat, 
+                        destLng: location.lng,
+                    });
+                }
             } else {
-                // TODO: Reverse location lookup
                 this.setState({
-                    destLat: location.lat, 
-                    destLng: location.lng,
+                    destLat: undefined,
+                    destLng: undefined,
+                    destAddr: undefined
                 });
             }
         } else {
             console.log("[Err] Undefined tag/place");
         }
     }
+
+    geocodeLatLng(name, latlng) {
+        var { google } = this.props;
+        var geocoder = new google.maps.Geocoder;
+        
+        geocoder.geocode({'location': latlng}, function (results, status) {
+            if (status === 'OK') {
+                // console.log("[GeoCoding]");
+                this.setState({
+                    [name]: results[0].formatted_address
+                })
+            } else {
+                console.log("Failed to retrieve information");
+                return;
+            }
+            
+        }.bind(this));
+    }
     
-    setCurrentLocation = () => {
+    setCurrentLocation() {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                this.updateLocation("depar", { lat: position.coords.latitude, lng: position.coords.longitude });
-            });
+            // TODO: Hanlde failed case
+            // var res = undefined
+            // navigator.geolocation.getCurrentPosition((position) => {
+            //     this.updateLocation("depar", { lat: position.coords.latitude, lng: position.coords.longitude });
+            //     res =  { lat: position.coords.latitude, lng: position.coords.longitude }
+            // });
+            
+            var getPosition = new Promise(function (resolve, reject) {
+                    navigator.geolocation.getCurrentPosition(resolve, reject);
+                }).then((position) => {
+                    this.updateLocation("depar", { lat: position.coords.latitude, lng: position.coords.longitude });
+                    return position;
+                }, (reject) => {
+                   return undefined;
+                });
+            
+            return getPosition;
+        } else {
+            return "";
         }
     }
-
+    
     searchFare = () => {
         if (!this.state.deparLat || !this.state.deparLng || !this.state.destLat || !this.state.destLng) {
             alert('Please set both departure address and destination address.');
@@ -150,7 +210,6 @@ class App extends Component {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             this.setState({
             estData: data.prices,
             loading: false
@@ -161,28 +220,34 @@ class App extends Component {
     /**
      * Life Cycle Hooks
      */
-    componentDidMount() {
-        let parsed = queryString.parse(window.location.search);
-        let accessToken = parsed.access_token;
-        
-        if (!accessToken) {
-            return;
+    componentDidUpdate(prevProps, prevState) {
+        if (!this.state.deparLat && !this.state.deparLng && !this.state.destLat && !this.state.destLng) {
+            // console.log("Cleared departure & destination!");
         }
+    }
+    
+    componentDidMount() {
+        // let parsed = queryString.parse(window.location.search);
+        // let accessToken = parsed.access_token;
+        
+        // if (!accessToken) {
+        //     return;
+        // }
 
-        console.log("AccessToken", accessToken);
+        // console.log("AccessToken", accessToken);
 
-        fetch("https://api.uber.com/v1.2/me", {
-            headers: {
-                'Authorization': 'Bearer ' + accessToken,
-                'Accept-Language': 'en_U',
-                'Content-Type': 'application/json'
-            }
-        }).then(res => res.json())
-        .then(data => this.setState({
-            userProfile: data
-        }))
-        .then(() => console.log(this.state.userProfile))
-        .catch(e => console.log(e));
+        // fetch("https://api.uber.com/v1.2/me", {
+        //     headers: {
+        //         'Authorization': 'Bearer ' + accessToken,
+        //         'Accept-Language': 'en_U',
+        //         'Content-Type': 'application/json'
+        //     }
+        // }).then(res => res.json())
+        // .then(data => this.setState({
+        //     userProfile: data
+        // }))
+        // .then(() => console.log(this.state.userProfile))
+        // .catch(e => console.log(e));
     }
 
     render() {
@@ -200,34 +265,65 @@ class App extends Component {
                     }
                     <div className={classes.wrapper}>
                         <Grid container direction="row" className={classes.container}>
-                            <Map google={this.props.google} 
+                            <Map
+                                google={this.props.google} 
                                 deparLat={this.state.deparLat} 
                                 deparLng={this.state.deparLng}
                                 destLat={this.state.destLat}
                                 destLng={this.state.destLng}
                                 deparViewPort={this.state.deparPlace ? this.state.deparPlace.geometry.viewport : undefined}
                                 destViewPort={this.state.destPlac ? this.state.destPlace.geometry.viewport : undefined} 
-                                // updateLocation={this.updateLocation}
-                            />
-                            <InputField 
-                                google={this.props.google} 
                                 updateLocation={this.updateLocation}
                             />
-                            <Button onClick={this.setCurrentLocation} color="primary" style={{width: '100%', textAlign: "center"}}>
-                                Current Loc
-                            </Button>
-                            <SearchButton 
-                                onClick={ this.searchFare.bind(this) }
-                            />
-                            <CardTable 
-                                estData={this.state.estData}
-                                deparLat={this.state.deparLat} 
-                                deparLng={this.state.deparLng}
-                                destLat={this.state.destLat}
-                                destLng={this.state.destLng}
+                            <div className={classes.padding}>
+                            </div>
+                            <InputField
+                                className={classes.inputField} 
+                                google={this.props.google} 
+                                updateLocation={this.updateLocation}
+                                handleCurrentLocation={this.setCurrentLocation.bind(this)}
+                                handleSearch={this.searchFare.bind(this)}
                                 deparAddr={this.state.deparAddr}
                                 destAddr={this.state.destAddr}
                             />
+                            {
+                                this.state.loading
+                                ? <Grid item style={{
+                                    width: '100%',
+                                }}>
+                                    <LinearProgress />
+                                </Grid>
+                                : <CardTable 
+                                    estData={this.state.estData}
+                                    deparLat={this.state.deparLat} 
+                                    deparLng={this.state.deparLng}
+                                    destLat={this.state.destLat}
+                                    destLng={this.state.destLng}
+                                    deparAddr={this.state.deparAddr}
+                                    destAddr={this.state.destAddr}
+                                />
+                            }
+                                
+                            {/* {
+                                this.state.estData
+                                ? <CardTable 
+                                    estData={this.state.estData}
+                                    deparLat={this.state.deparLat} 
+                                    deparLng={this.state.deparLng}
+                                    destLat={this.state.destLat}
+                                    destLng={this.state.destLng}
+                                    deparAddr={this.state.deparAddr}
+                                    destAddr={this.state.destAddr}
+                                />
+                                : <InputField
+                                    className={classes.inputField} 
+                                    google={this.props.google} 
+                                    updateLocation={this.updateLocation}
+                                    handleCurrentLocation={this.setCurrentLocation}
+                                    handleSearch={this.searchFare.bind(this)}
+                                />
+                                
+                            } */}
                         </Grid>
                     </div>
                 </MuiThemeProvider>
@@ -236,13 +332,14 @@ class App extends Component {
     }
 }
 
-var googleToken = undefined;
-if (process.env.googleToken) {
-    googleToken = process.env.googleToken
-} else {
-    googleToken = require('../config.json').googleToken;
-}
+// var googleToken = undefined;
+// if (process.env.googleToken) {
+//     googleToken = process.env.googleToken
+// } else {
+//     googleToken = require('../config.json').googleToken;
+// }
 
+var googleToken = process.env.googleToken
 
 export default GoogleApiWrapper({
     apiKey: googleToken,
