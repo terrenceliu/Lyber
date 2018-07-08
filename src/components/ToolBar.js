@@ -86,15 +86,17 @@ class ButtonAppBar extends Component {
         // } else {
         //     authURL = "http://localhost:8000/auth/login";
         // }
-        var authURL = "https://lyber-server.herokuapp.com/auth/login";
 
-        // console.log("AuthURL", authURL);
+        var authURL = "https://lyber-server.herokuapp.com/auth/login";
         
+        // var authURL = "http://localhost:8000/auth/login";
+
         window.location = authURL;
+        // alert("We are still working on account authorization :) Keep an eye out")
     }
     
     render() {
-        const { classes } = this.props;
+        const { classes } = this.props; 
         return (
             <div className={classes.root}>
                 <AppBar position="fixed">

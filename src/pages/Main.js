@@ -203,6 +203,7 @@ class Main extends Component {
         const queryParam = `?depar_lat=${deparLat}&depar_lng=${deparLng}&dest_lat=${destLat}&dest_lng=${destLng}`;
 
         const estimateAPI = "https://lyber-server.herokuapp.com/api/estimate" + queryParam;
+        // const estimateAPI = "http://localhost:8000/api/estimate" + queryParam;
 
         fetch(estimateAPI, {
             method: 'GET'
@@ -210,12 +211,12 @@ class Main extends Component {
         .then(response => response.json())
         .then(data => {
             this.setState({
-            estData: data.prices,
-            loading: false
+                estData: data.prices,
+                loading: false
             });
         });
     }
-
+    
     /**
      * Life Cycle Hooks
      */
@@ -323,15 +324,14 @@ class Main extends Component {
     }
 }
 
-// var googleToken = process.env.googleToken
+var googleToken = process.env.googleToken
 
-var googleToken = undefined;
-
-if (process.env.googleToken) {
-    googleToken = process.env.googleToken
-} else {
-    googleToken = require('../../config.json').googleToken;
-}
+// var googleToken = undefined;
+// if (process.env.googleToken) {
+//     googleToken = process.env.googleToken
+// } else {
+//     googleToken = require('../../config.json').googleToken;
+// }
 
 
 export default GoogleApiWrapper({
