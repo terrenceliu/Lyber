@@ -21,7 +21,7 @@ function SearchButton (props) {
     const { classes } = props;
     return (
         <Grid item className={classes.container} >
-            <IconButton variant="contained" color="primary" onClick = { props.onClick } >
+            <IconButton variant="contained" color="primary" onClick = { props.handleSearch } >
                 <Search />
             </IconButton>
         </Grid>

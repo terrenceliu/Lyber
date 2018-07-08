@@ -13,11 +13,17 @@ import LocationOn from '@material-ui/icons/LocationOn';
 import Search from '@material-ui/icons/Search';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
     wrapper: {
         height: "30%",
         width: "100%"
+    },
+    searchButton: {
+        marginTop: '20px',
+        textAlign: 'center'
     }
 });
 
@@ -297,25 +303,37 @@ class InputField extends Component {
                             label="Destination"
                             margin="normal"
                             fullWidth
-                            InputProps= {{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            variant="contained" 
-                                            color="primary" 
-                                            onClick={handleSearch} >
+                            // InputProps= {{
+                            //     endAdornment: (
+                            //         <InputAdornment position="end">
+                            //             <IconButton
+                            //                 variant="contained" 
+                            //                 color="primary" 
+                            //                 onClick={handleSearch} >
                                             
-                                            <Search />
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                            }}
+                            //                 <Search />
+                            //             </IconButton>
+                            //         </InputAdornment>
+                            //     ),
+                            // }}
                             value={this.state.destText}
                             onChange={this.handleChange("destText")}
                             onClick={(e) => this.handleClick(e)}
                         />
                     </Grid>
+                    <Grid item xs={12} sm={12} className={classes.searchButton}>
+                        <Button  
+                            variant="contained" 
+                            color="primary" 
+                            onClick={handleSearch} >
+                            <Search />
+                            {/* <Typography> */}
+                                Search
+                            {/* </Typography> */}
+                        </Button>
+                    </Grid>
                 </Grid>
+                
             </Grid>
         );
     };

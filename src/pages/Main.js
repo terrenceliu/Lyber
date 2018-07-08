@@ -285,7 +285,8 @@ class Main extends Component {
                                 }}>
                                     <LinearProgress />
                                 </Grid>
-                                : <CardTable 
+                                :
+                                <CardTable 
                                     estData={this.state.estData}
                                     deparLat={this.state.deparLat} 
                                     deparLng={this.state.deparLng}
