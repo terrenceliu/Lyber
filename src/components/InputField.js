@@ -101,15 +101,12 @@ class InputField extends Component {
             destAC.addListener('place_changed', () => {
                 var place = destAC.getPlace();
 
-                console.log(place);
-
                 if (!place.geometry) {
                     alert("Details unavailable for input: " + place.name + ".");
                     // return;
                 }
 
                 if (this.props.updateLocation) {
-                    console.log("[dest]",  place.geometry.location.toJSON());
                     this.props.updateLocation("dest", place.geometry.location.toJSON(), place.formatted_address);
                 }
 

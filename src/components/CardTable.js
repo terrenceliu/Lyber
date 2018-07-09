@@ -135,7 +135,7 @@ class CardTable extends Component {
     /**
      * 
      */
-    requestRide = (company, product_name, product_id, price_min, price_max, eta) => {
+    requestRide = (company, product_name, product_id, price_min, price_max, eta, priority) => {
 
         const deparLat = this.props.deparLat;
         const deparLng = this.props.deparLng;
@@ -158,8 +158,6 @@ class CardTable extends Component {
             }
         }
 
-        console.log(product_name, deepLink);
-
         var data = {
             deparLat: deparLat,
             deparLng: deparLng,
@@ -169,7 +167,8 @@ class CardTable extends Component {
             productName: product_name,
             priceMin: price_min,
             priceMax: price_max,
-            eta: eta
+            eta: eta,
+            priority: priority
         }
 
         /**
@@ -188,7 +187,7 @@ class CardTable extends Component {
             body: JSON.stringify(data)
         })
         .then(response => {
-            console.log("[ReqLog] Response", response);
+            // console.log("[ReqLog] Response", response);
         })
         .catch(error => {
             console.log("[ReqLog] Error", error);
@@ -269,7 +268,11 @@ class CardTable extends Component {
         var timeData = data.slice();
 
         priceData.sort(function (a, b) {
-            return (a.min_estimate - b.min_estimate);
+            if (a.min_estimate != b.min_estimate) {
+                return (a.min_estimate - b.min_estimate);
+            } else {
+                return (a.max_estimate - b.max_estimate);
+            }  
         });
 
         timeData.sort(function (a, b) {
@@ -348,7 +351,7 @@ class CardTable extends Component {
                                         <CardContent className={classes.request} >
                                             {/* <ReqRideButton onClick={ this.requestRide } /> */}
                                             <Button size="small" color="primary"
-                                                onClick={() => this.requestRide(item.company, item.display_name, item.product_id, item.min_estimate, item.max_estimate, item.eta)}>
+                                                onClick={() => this.requestRide(item.company, item.display_name, item.product_id, item.min_estimate, item.max_estimate, item.eta, "price")}>
                                                 Schedule
                                             </Button>
                                             <Typography color="textSecondary" noWrap>
@@ -391,7 +394,7 @@ class CardTable extends Component {
                                         <CardContent className={classes.request} >
                                             {/* <ReqRideButton onClick={ this.requestRide } /> */}
                                             <Button size="small" color="primary"
-                                                onClick={() => this.requestRide(item.company, item.display_name, item.product_id)}>
+                                                onClick={() => this.requestRide(item.company, item.display_name, item.product_id, item.min_estimate, item.max_estimate, item.eta, "time")}>
                                                 Schedule
                                     </Button>
                                             <Typography color="textSecondary" noWrap>
@@ -412,7 +415,6 @@ class CardTable extends Component {
     // LifeCycel Hooks
 
     componentDidMount() {
-        console.log("CardTable mounted");
         scrollToComponent(this.cardTable, {
             align: 'top',
             offset: -100
