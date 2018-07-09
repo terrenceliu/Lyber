@@ -307,14 +307,14 @@ class Main extends Component {
     }
 }
 
-// const googleToken = process.env.googleToken;
+const googleToken = require('../../config.json').googleToken;
 
-var googleToken = undefined;
-if (process.env.googleToken) {
-    googleToken = process.env.googleToken
-} else {
-    googleToken = require('../../config.json').googleToken;
-}
+// var googleToken = undefined;
+// if (process.env.googleToken) {
+//     googleToken = process.env.googleToken
+// } else {
+//     googleToken = 
+// }
 
 export default GoogleApiWrapper({
     apiKey: googleToken,
