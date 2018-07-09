@@ -42,7 +42,7 @@ const styles = theme => ({
     },
     container: {
         height: '100%',
-        width: '90vw',
+        width: '93vw',
         // backgroundColor: 'cyan',
         alignItems: 'flex-start',
         alignContent: 'flex-start',
@@ -210,6 +210,7 @@ class Main extends Component {
         })
         .then(response => response.json())
         .then(data => {
+            console.log("[EstData]", data);
             this.setState({
                 estData: data.prices,
                 loading: false
@@ -277,15 +278,17 @@ class Main extends Component {
                                 handleSearch={this.searchFare.bind(this)}
                                 deparAddr={this.state.deparAddr}
                                 destAddr={this.state.destAddr}
+                                loading={this.state.loading}
                             />
                             {
-                                this.state.loading
-                                ? <Grid item style={{
-                                    width: '100%',
-                                }}>
-                                    <LinearProgress />
-                                </Grid>
-                                :
+                                // this.state.loading
+                                // ? <Grid item style={{
+                                //     width: '100%',
+                                // }}>
+                                //     <LinearProgress />
+                                // </Grid>
+                                // :
+                                this.state.estData &&
                                 <CardTable 
                                     estData={this.state.estData}
                                     deparLat={this.state.deparLat} 
@@ -296,27 +299,6 @@ class Main extends Component {
                                     destAddr={this.state.destAddr}
                                 />
                             }
-                                
-                            {/* {
-                                this.state.estData
-                                ? <CardTable 
-                                    estData={this.state.estData}
-                                    deparLat={this.state.deparLat} 
-                                    deparLng={this.state.deparLng}
-                                    destLat={this.state.destLat}
-                                    destLng={this.state.destLng}
-                                    deparAddr={this.state.deparAddr}
-                                    destAddr={this.state.destAddr}
-                                />
-                                : <InputField
-                                    className={classes.inputField} 
-                                    google={this.props.google} 
-                                    updateLocation={this.updateLocation}
-                                    handleCurrentLocation={this.setCurrentLocation}
-                                    handleSearch={this.searchFare.bind(this)}
-                                />
-                                
-                            } */}
                         </Grid>
                     </div>
 

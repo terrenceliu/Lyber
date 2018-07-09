@@ -15,6 +15,7 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = theme => ({
     wrapper: {
@@ -22,9 +23,23 @@ const styles = theme => ({
         width: "100%"
     },
     searchButton: {
-        marginTop: '20px',
+        marginTop: '15px',
         textAlign: 'center'
-    }
+    },
+    buttonWrapper: {
+        position: 'relative'
+    },
+    buttonProgress: {
+        color: 'primary',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
+    },
+    // lightColor: {
+    //     color: theme.palette.dark
+    // }
 });
 
 class InputField extends Component {
@@ -244,6 +259,7 @@ class InputField extends Component {
         
         const { deparAddr, destAddr } = this.props;
 
+        const { loading } = this.props;
         // console.log("[InputField] Update Addr", deparAddr, this.state.deparText, destAddr, this.state.destText);
 
         // if (deparAddr != this.state.deparText) {
@@ -322,15 +338,19 @@ class InputField extends Component {
                         />
                     </Grid>
                     <Grid item xs={12} sm={12} className={classes.searchButton}>
-                        <Button  
-                            variant="contained" 
-                            color="primary" 
-                            onClick={handleSearch} >
-                            <Search />
-                            {/* <Typography> */}
-                                Search
-                            {/* </Typography> */}
-                        </Button>
+                        <div className={classes.buttonWrapper}>
+                            <Button  
+                                variant="contained" 
+                                color="primary"
+                                disabled={loading} 
+                                onClick={handleSearch} >
+                                <Search />
+                                {/* <Typography> */}
+                                    Search
+                                {/* </Typography> */}
+                            </Button>
+                            {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                        </div>
                     </Grid>
                 </Grid>
                 
