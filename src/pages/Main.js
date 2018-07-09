@@ -309,6 +309,8 @@ class Main extends Component {
 
 var googleToken = process.env.googleToken
 
+console.log("googleToken = ", googleToken);
+
 // var googleToken = undefined;
 // if (process.env.googleToken) {
 //     googleToken = process.env.googleToken
