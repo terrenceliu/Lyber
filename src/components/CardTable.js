@@ -36,6 +36,7 @@ import green from '@material-ui/core/colors/green';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 
+
 function TabContainer(props) {
     const { children, dir } = props;
 
@@ -55,7 +56,7 @@ const styles = theme => ({
     wrapper: {
         height: '40%',
         width: '100%',
-
+        marginTop: '30px'
     },
     grid_item: {
         width: '100%',
@@ -134,7 +135,7 @@ class CardTable extends Component {
     /**
      * 
      */
-    requestRide = (company, product_name, product_id) => {
+    requestRide = (company, product_name, product_id, price_min, price_max, eta, priority) => {
 
         const deparLat = this.props.deparLat;
         const deparLng = this.props.deparLng;
@@ -157,9 +158,46 @@ class CardTable extends Component {
             }
         }
 
-        console.log(product_name, deepLink);
+        var data = {
+            deparLat: deparLat,
+            deparLng: deparLng,
+            destLat: destLat,
+            destLng: destLng,
+            company: company,
+            productName: product_name,
+            priceMin: price_min,
+            priceMax: price_max,
+            eta: eta,
+            priority: priority
+        }
+
+        /**
+         * Log request
+         */
+        // const logAddr = 'http://localhost:8000/log/request'
+        const logAddr = 'https://lyber-server.herokuapp.com/log/request';
+        
+        fetch(logAddr, {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            headers: {
+                "Content-Type": "application/json; charset=utf-8"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            // console.log("[ReqLog] Response", response);
+        })
+        .catch(error => {
+            console.log("[ReqLog] Error", error);
+        })
+
 
         window.location = deepLink;
+
+        
+
     }
 
     /**
@@ -168,53 +206,53 @@ class CardTable extends Component {
      * @param {object} classes  
      * @param {object} priceData
      */
-    cardFactory = (classes, theme, data) => {
-        console.log(data);
-        if (!data) {
-            data = []
-        }
+    // cardFactory = (classes, theme, data) => {
+    //     console.log(data);
+    //     if (!data) {
+    //         data = []
+    //     }
 
-        var priceData = data.slice();
+    //     var priceData = data.slice();
 
-        priceData.sort(function (a, b) {
-            return (a.min_estimate - b.min_estimate);
-        });
+    //     priceData.sort(function (a, b) {
+    //         return (a.min_estimate - b.min_estimate);
+    //     });
 
-        console.log(priceData);
+    //     console.log(priceData);
 
-        return (
-            priceData.map((item, i) => {
-                return (
-                    <Grid item className={classes.grid_item} key={i}>
-                        <Card className={classes.card}>
-                            <CardContent className={classes.icon} >
-                                <IconButton variant="contained" color="primary">
-                                    <DirectionsCar />
-                                </IconButton>
-                            </CardContent>
-                            <CardContent className={classes.content} >
-                                <Typography variant="headline" component="p" className={classes.price} >
-                                    ${item.min_estimate} - ${item.max_estimate}
-                                </Typography>
-                                <Typography color="textSecondary" className={classes.name} >
-                                    {item.display_name}
-                                </Typography>
-                            </CardContent>
-                            <CardContent className={classes.request} >
-                                <Button size="small" color="primary"
-                                    onClick={() => this.requestRide(item.company, item.display_name, item.product_id)}>
-                                    Schedule
-                                </Button>
-                                <Typography color="textSecondary">
-                                    ETA: {item.distance}
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                );
-            })
-        );
-    }
+    //     return (
+    //         priceData.map((item, i) => {
+    //             return (
+    //                 <Grid item className={classes.grid_item} key={i}>
+    //                     <Card className={classes.card}>
+    //                         <CardContent className={classes.icon} >
+    //                             <IconButton variant="contained" color="primary">
+    //                                 <DirectionsCar />
+    //                             </IconButton>
+    //                         </CardContent>
+    //                         <CardContent className={classes.content} >
+    //                             <Typography variant="headline" component="p" className={classes.price} >
+    //                                 ${item.min_estimate} - ${item.max_estimate}
+    //                             </Typography>
+    //                             <Typography color="textSecondary" className={classes.name} >
+    //                                 {item.display_name}
+    //                             </Typography>
+    //                         </CardContent>
+    //                         <CardContent className={classes.request} >
+    //                             <Button size="small" color="primary"
+    //                                 onClick={() => this.requestRide(item.company, item.display_name, item.product_id, item.min_estimate, item.max_estimate, item.distance)}>
+    //                                 Schedule
+    //                             </Button>
+    //                             <Typography color="textSecondary">
+    //                                 ETA: {item.distance}
+    //                             </Typography>
+    //                         </CardContent>
+    //                     </Card>
+    //                 </Grid>
+    //             );
+    //         })
+    //     );
+    // }
 
     /**
      * 
@@ -230,7 +268,11 @@ class CardTable extends Component {
         var timeData = data.slice();
 
         priceData.sort(function (a, b) {
-            return (a.min_estimate - b.min_estimate);
+            if (a.min_estimate != b.min_estimate) {
+                return (a.min_estimate - b.min_estimate);
+            } else {
+                return (a.max_estimate - b.max_estimate);
+            }  
         });
 
         timeData.sort(function (a, b) {
@@ -309,7 +351,7 @@ class CardTable extends Component {
                                         <CardContent className={classes.request} >
                                             {/* <ReqRideButton onClick={ this.requestRide } /> */}
                                             <Button size="small" color="primary"
-                                                onClick={() => this.requestRide(item.company, item.display_name, item.product_id)}>
+                                                onClick={() => this.requestRide(item.company, item.display_name, item.product_id, item.min_estimate, item.max_estimate, item.eta, "price")}>
                                                 Schedule
                                             </Button>
                                             <Typography color="textSecondary" noWrap>
@@ -352,7 +394,7 @@ class CardTable extends Component {
                                         <CardContent className={classes.request} >
                                             {/* <ReqRideButton onClick={ this.requestRide } /> */}
                                             <Button size="small" color="primary"
-                                                onClick={() => this.requestRide(item.company, item.display_name, item.product_id)}>
+                                                onClick={() => this.requestRide(item.company, item.display_name, item.product_id, item.min_estimate, item.max_estimate, item.eta, "time")}>
                                                 Schedule
                                     </Button>
                                             <Typography color="textSecondary" noWrap>
@@ -373,7 +415,6 @@ class CardTable extends Component {
     // LifeCycel Hooks
 
     componentDidMount() {
-        console.log("CardTable mounted");
         scrollToComponent(this.cardTable, {
             align: 'top',
             offset: -100
