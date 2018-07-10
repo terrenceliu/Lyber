@@ -222,8 +222,16 @@ class Main extends Component {
      * Life Cycle Hooks
      */
     componentDidUpdate(prevProps, prevState) {
-        if (!this.state.deparLat && !this.state.deparLng && !this.state.destLat && !this.state.destLng) {
-            // console.log("Cleared departure & destination!");
+        /**
+         * FIXME: 
+         * Delete estData when tap either pick up or drop off
+         */
+        if (this.state.estData && 
+            ((!this.state.deparLat && !this.state.deparLng && !this.state.deparAddr) ||
+            (!this.state.destLat && !this.state.destLat && !this.state.destAddr))) {
+            this.setState({
+                estData: undefined
+            });
         }
     }
     

@@ -78,8 +78,7 @@ class InputField extends Component {
             deparAC.addListener('place_changed', () => {
                 var place = deparAC.getPlace();
                 
-                console.log(place);
-
+                console.log("[Depar]", place.place_id, place.geometry.location.toJSON());
                
 
                 if (!place.geometry) {
@@ -100,6 +99,8 @@ class InputField extends Component {
 
             destAC.addListener('place_changed', () => {
                 var place = destAC.getPlace();
+                
+                console.log("[Dest]", place.place_id, place.geometry.location.toJSON());
 
                 if (!place.geometry) {
                     alert("Details unavailable for input: " + place.name + ".");
@@ -276,12 +277,12 @@ class InputField extends Component {
                                 ? <InputLabel
                                     id="inputLabel"
                                     shrink={true}>
-                                    Departure
+                                    Pick Up
                                 </InputLabel>
 
                                 : <InputLabel
                                     id="inputLabel">
-                                    Departure
+                                    Pick Up
                                 </InputLabel>
                             }
                             <Input
@@ -313,7 +314,7 @@ class InputField extends Component {
                         <TextField
                             id="destRef"
                             className={classes.textField}
-                            label="Destination"
+                            label="Drop Off"
                             margin="normal"
                             fullWidth
                             // InputProps= {{
