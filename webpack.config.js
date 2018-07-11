@@ -22,8 +22,9 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: {
-          loader: "babel-loader"
+        loader: "babel-loader",
+        query: {
+          plugins: ['transform-class-properties']
         }
       },
       {
@@ -48,7 +49,7 @@ module.exports = {
   },
   plugins: [htmlPlugin],
   output: {
-    filename: './dist/[name].bundle.js',
-    path: path.resolve(__dirname,)
+    filename: './[name].bundle.js',
+    path: path.resolve(__dirname, './dist')
   }
 };

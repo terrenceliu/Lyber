@@ -4,10 +4,11 @@
   "description": "Save more $$$ when you need a ride!",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --mode development --open --content-base src",
-    "start:lan": "webpack-dev-server --host 0.0.0.0 --mode development --open --content-base src",
+    "start": "webpack-dev-server --mode development --open --content-base ./src",
+    "start:lan": "webpack-dev-server --host 0.0.0.0 --mode development --open --content-base ./src",
     "build": "webpack --mode production",
-    "watch": "webpack --watch --mode development"
+    "watch": "webpack --watch --mode development",
+    "serve": "node index.js"
   },
   "author": "Terrence Liu",
   "license": "ISC",
@@ -16,8 +17,11 @@
     "@material-ui/icons": "^1.1.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.7.0",
+    "babel-preset-es2016": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "babel-preset-react-hmre": "^1.1.1",
     "css-loader": "^0.28.11",
     "html-webpack-plugin": "^3.2.0",
     "material-ui-places": "^1.1.7",
@@ -27,10 +31,16 @@
     "webpack-dev-server": "^3.1.4"
   },
   "dependencies": {
-    "@material-ui/core": "^1.2.1",
-    "@material-ui/icons": "^1.1.0",
+    "express": "^4.16.3",
     "google-maps-react": "^2.0.2",
+    "query-string": "^6.1.0",
     "react": "^16.4.0",
-    "react-dom": "^16.4.0"
+    "react-dom": "^16.4.0",
+    "react-router-dom": "^4.3.1",
+    "react-scroll-to-component": "^1.0.2",
+    "react-swipeable-views": "^0.12.14"
+  },
+  "engines": {
+    "node": "8.10.0"
   }
 }

@@ -1,14 +1,33 @@
 # Lyber
 
 ## About
-[Project description goes here lol]
 
-Lyber is available on iOS. Project link: https://github.com/EdwardFeng523/Lyber-ios
+[Really needs catchy project description ummm]
+
+Lyber is available on iOS. Repo link: https://github.com/EdwardFeng523/Lyber-ios
+
+Lyber is currently deployed on Heroku. Link: https://lyber-app.herokuapp.com/
+
+
+## Feature
+
+- [ ] Price Compare
+
+- [ ] ETA / Drive availabity estimate
+
+- [ ] Surge charge alert
+
+- [ ] Apply personal Promo
+
+- [ ] Save routes/places
+
+- [ ] Display price history
+
 
 
 ## TODO
 
-- [ ] CLEAN UP THE CODE URGHHH ITS SO MESSY RN
+- [x] CLEAN UP THE CODE URGHHH ITS SO MESSY RN
 
 - "Current Position": 
 
@@ -20,7 +39,7 @@ Lyber is available on iOS. Project link: https://github.com/EdwardFeng523/Lyber-
 
 - "Map"
 
-- [ ] Drag/Pin to select location
+- [x] Drag/Pin to select location
 
 - [ ] Update address info in autocomplete after dragging the marker
 
@@ -32,7 +51,7 @@ Lyber is available on iOS. Project link: https://github.com/EdwardFeng523/Lyber-
 
 - [ ] Display ETA
 
-- [ ] Format card components
+- [X] Format card components (ummm sort of)
 
 
 ## Getting Started
