@@ -5,7 +5,7 @@ const app = express();
 
 app.use(express.static(__dirname + '/dist/'));
 
-var port = process.env.PORT || 8100
+var port = process.env.PORT || 8080
 
 app.listen(port, function() {
     console.log('Server listens on port ' + port + '.');

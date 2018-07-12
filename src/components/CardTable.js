@@ -355,7 +355,7 @@ class CardTable extends Component {
                                                 Schedule
                                             </Button>
                                             <Typography color="textSecondary" noWrap>
-                                                {item.eta / 60} mins away
+                                                {parseInt(item.eta / 60, 10)} mins away
                                             </Typography>
                                         </CardContent>
                                     </Card>
@@ -398,7 +398,7 @@ class CardTable extends Component {
                                                 Schedule
                                     </Button>
                                             <Typography color="textSecondary" noWrap>
-                                                {item.eta / 60} mins away
+                                                {parseInt(item.eta / 60, 10)} mins away
                                             </Typography>
                                         </CardContent>
                                     </Card>
