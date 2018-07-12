@@ -2,26 +2,21 @@
 
 ## About
 
-[Really needs catchy project description ummm]
-
-Lyber is available on iOS. Repo link: https://github.com/EdwardFeng523/Lyber-ios
+Estimate fares. Compare services. All in one. 
 
 Lyber is currently deployed on Heroku. Link: https://lyber-app.herokuapp.com/
+
+Lyber is available on iOS. Repo link: https://github.com/EdwardFeng523/Lyber-ios
 
 
 ## Feature
 
-- [ ] Price Compare
+- Compare ride services between Uber and Lyft across every products available in thousands of cities worldwide
 
-- [ ] ETA / Drive availabity estimate
+- Seamless integration with Uber & Lyft API. Get the ride straight from the website.
 
-- [ ] Surge charge alert
+- Integrate with Google Maps API. Just drag and drop to pin-point your pick up location.
 
-- [ ] Apply personal Promo
-
-- [ ] Save routes/places
-
-- [ ] Display price history
 
 
 
@@ -35,13 +30,13 @@ Lyber is currently deployed on Heroku. Link: https://lyber-app.herokuapp.com/
 
 - [x] get lat/lng
 
-- [ ] synchronize autocomplete w/ current pos
+- [x] synchronize autocomplete w/ current pos
 
 - "Map"
 
 - [x] Drag/Pin to select location
 
-- [ ] Update address info in autocomplete after dragging the marker
+- [x] Update address info in autocomplete after dragging the marker
 
 - [ ] Display estiamted routes
 
@@ -49,7 +44,7 @@ Lyber is currently deployed on Heroku. Link: https://lyber-app.herokuapp.com/
 
 - [ ] Display available drivers nearby/wait time
 
-- [ ] Display ETA
+- [x] Display ETA
 
 - [X] Format card components (ummm sort of)
 
