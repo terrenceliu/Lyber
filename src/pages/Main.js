@@ -202,9 +202,11 @@ class Main extends Component {
         
         const queryParam = `?depar_lat=${deparLat}&depar_lng=${deparLng}&dest_lat=${destLat}&dest_lng=${destLng}`;
 
-        const estimateAPI = "https://lyber-server.herokuapp.com/api/estimate" + queryParam;
+        // const estimateAPI = "https://lyber-server.herokuapp.com/api/estimate" + queryParam;
         // const estimateAPI = "http://localhost:8000/api/estimate" + queryParam;
 
+        const estimateAPI = "https://lyber.co/api/estimate" + queryParam;
+        
         fetch(estimateAPI, {
             method: 'GET'
         })

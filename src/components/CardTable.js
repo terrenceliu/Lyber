@@ -175,7 +175,7 @@ class CardTable extends Component {
          * Log request
          */
         // const logAddr = 'http://localhost:8000/log/request'
-        const logAddr = 'https://lyber-server.herokuapp.com/log/request';
+        const logAddr = 'https://lyber.co/log/request';
         
         fetch(logAddr, {
             method: 'POST',

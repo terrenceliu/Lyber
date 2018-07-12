@@ -87,7 +87,7 @@ class ButtonAppBar extends Component {
         //     authURL = "http://localhost:8000/auth/login";
         // }
 
-        var authURL = "https://lyber-server.herokuapp.com/auth/login";
+        var authURL = "https://lyber.co/auth/login";
         
         // var authURL = "http://localhost:8000/auth/login";
 
