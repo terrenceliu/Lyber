@@ -79,8 +79,8 @@ class InputField extends Component {
                 var place = deparAC.getPlace();
                 
                 console.log("[Depar]", place.place_id, place.geometry.location.toJSON());
-               
-
+                
+                
                 if (!place.geometry) {
                     alert("Details unavailable for input: " + place.name + ".");
                     // TODO: Handle edge case
@@ -206,7 +206,7 @@ class InputField extends Component {
         this.loadAutoComplete();
         this.getCurrentLocation();
     }
-
+    
     componentDidUpdate(prevProps, prevStates) {
         /** 
          * (Fixed) 

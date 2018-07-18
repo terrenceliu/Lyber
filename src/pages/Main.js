@@ -64,9 +64,11 @@ class Main extends Component {
             deparLat: undefined,
             deparLng: undefined,
             deparAddr: undefined,
+            deparPlace: undefined,
             destLat: undefined,
             destLng: undefined,
-            deparAddr: undefined,
+            destAddr: undefined,
+            destPlace: undefined,
             estData: undefined,
             loading: false,
             userProfile: undefined
@@ -106,6 +108,7 @@ class Main extends Component {
                         deparLng: location.lng,
                     });
                 }
+                this.setPlaceID("deparPlace", location);
             } else {
                 // Clear location
                 this.setState({
@@ -129,6 +132,7 @@ class Main extends Component {
                         destLng: location.lng,
                     });
                 }
+                this.setPlaceID("destPlace", location);
             } else {
                 this.setState({
                     destLat: undefined,
@@ -141,15 +145,38 @@ class Main extends Component {
         }
     }
 
+    /**
+     * 
+     * @param {Number} deparLat
+     * @param {Number} deparLng
+     * @param {Number} destLat
+     * @param {Number} destLng
+     */
+    setPlaceID = (name, location) => {
+        var { google } = this.props;
+        var geocoder = new google.maps.Geocoder;
+
+        geocoder.geocode({'location': location}, function (results, status) {
+            if (status === 'OK') {
+                console.log("[PlaceID]", name, results[0].place_id);
+                this.setState({
+                    [name]: results[0].place_id
+                })
+            } else {
+                console.log("Failed to retrieve information");
+                return;
+            }
+        }.bind(this));
+    }
+
     geocodeLatLng(name, latlng) {
         var { google } = this.props;
         var geocoder = new google.maps.Geocoder;
         
         geocoder.geocode({'location': latlng}, function (results, status) {
             if (status === 'OK') {
-                // console.log("[GeoCoding]");
                 this.setState({
-                    [name]: results[0].formatted_address
+                    [name]: results[0].formatted_address,
                 })
             } else {
                 console.log("Failed to retrieve information");
@@ -199,6 +226,8 @@ class Main extends Component {
         const deparLng = this.state.deparLng;
         const destLat = this.state.destLat;
         const destLng = this.state.destLng;
+
+        console.log(this.state.deparPlace, this.state.destPlace);
         
         const queryParam = `?depar_lat=${deparLat}&depar_lng=${deparLng}&dest_lat=${destLat}&dest_lng=${destLng}`;
 
@@ -218,6 +247,25 @@ class Main extends Component {
                 loading: false
             });
         });
+
+        // FIXME: beta testing
+        let deparPlace = this.state.deparPlace;
+        let destPlace = this.state.destPlace;
+        const uberQuery = `?pickupRef=${deparPlace}&pickupRefType=google_places&pickupLat=${deparLat}&pickupLng=${deparLng}&destinationRef=${destPlace}&destinationRefType=google_places`
+        // const uberBetaAPI = "https://www.uber.com/api/fare-estimate-beta" + uberQuery;
+        const uberBetaAPI = "http://localhost:8000/api/estimate/uberBeta" + uberQuery;
+
+        fetch(uberBetaAPI, {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("[UberEstData]", data);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+
     }
     
     /**
@@ -274,8 +322,6 @@ class Main extends Component {
                                 deparLng={this.state.deparLng}
                                 destLat={this.state.destLat}
                                 destLng={this.state.destLng}
-                                deparViewPort={this.state.deparPlace ? this.state.deparPlace.geometry.viewport : undefined}
-                                destViewPort={this.state.destPlac ? this.state.destPlace.geometry.viewport : undefined} 
                                 updateLocation={this.updateLocation}
                             />
                             <div className={classes.padding}>

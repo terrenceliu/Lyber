@@ -174,8 +174,8 @@ class CardTable extends Component {
         /**
          * Log request
          */
-        // const logAddr = 'http://localhost:8000/log/request'
-        const logAddr = 'https://lyber.co/log/request';
+        // const logAddr = 'http://localhost:8000/api/log/request'
+        const logAddr = 'https://lyber.co/api/log/request';
         
         fetch(logAddr, {
             method: 'POST',
@@ -187,13 +187,12 @@ class CardTable extends Component {
             body: JSON.stringify(data)
         })
         .then(response => {
-            // console.log("[ReqLog] Response", response);
+            console.log("[ReqLog] Response", response);
         })
         .catch(error => {
             console.log("[ReqLog] Error", error);
         })
-
-
+        
         window.location = deepLink;
 
         
