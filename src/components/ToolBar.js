@@ -13,6 +13,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import List from '@material-ui/core/List';
 import ListItemText from '@material-ui/core/ListItemText';
+
+import Fedback from '@material-ui/icons/Feedback';
 import Home from '@material-ui/icons/Home';
 import Info from '@material-ui/icons/Info';
 
@@ -61,6 +63,15 @@ const drawerListItems = (
             </ListItemIcon>
             <ListItemText primary="About" />
         </ListItem>
+        <ListItem 
+            button
+            component={Link}
+            to={"/feedback"}>
+            <ListItemIcon>
+                <Fedback />
+            </ListItemIcon>
+            <ListItemText primary="Feedback" />
+        </ListItem>
     </div>
 );
 
@@ -87,12 +98,12 @@ class ButtonAppBar extends Component {
         //     authURL = "http://localhost:8000/auth/login";
         // }
 
-        var authURL = "https://lyber.co/auth/login";
+        // var authURL = "https://lyber.co/auth/login";
         
         // var authURL = "http://localhost:8000/auth/login";
 
-        window.location = authURL;
-        // alert("We are still working on account authorization :) Keep an eye out")
+        // window.location = authURL;
+        alert("We're still working on this feature :)")
     }
     
     render() {

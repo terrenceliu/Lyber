@@ -6,6 +6,7 @@ import ToolBar from './components/ToolBar';
 // Pages
 import Main from './pages/Main';
 import About from './pages/About';
+import Feedback from './pages/Feedback';
 
 // UI
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
@@ -33,6 +34,8 @@ class App extends Component {
                         
                             <Route exact path="/" component={Main} />
                             <Route exact path="/about" component={About} />
+                            <Route exact path="/feedback" component={Feedback} />
+
                         </div>
                     </Router>
                 </MuiThemeProvider>
