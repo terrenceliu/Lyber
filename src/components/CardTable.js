@@ -19,6 +19,9 @@ import DirectionsCar from '@material-ui/icons/DirectionsCar';
 import Avatar from '@material-ui/core/Avatar';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
+// Logo
+import uberLogo from '../assets/images/uber_logo.png';
+import lyftLogo from '../assets/images/lyft_logo.png';
 
 // Tab Related
 import classNames from 'classnames';
@@ -335,8 +338,8 @@ class CardTable extends Component {
                                                 alt="company"
                                                 src={
                                                     (item.company == "uber") 
-                                                    ? "/static/images/uber_rides_api_icon_1x_64px.png"
-                                                    : "/static/images/Lyft_Logo_Pink.png"
+                                                    ? uberLogo
+                                                    : lyftLogo
                                                 }
                                             />
                                         </CardContent>
@@ -378,8 +381,8 @@ class CardTable extends Component {
                                                 alt="company"
                                                 src={
                                                     (item.company == "uber") 
-                                                    ? "/static/images/uber_rides_api_icon_1x_64px.png"
-                                                    : "/static/images/Lyft_Logo_Pink.png"
+                                                    ? uberLogo
+                                                    : lyftLogo
                                                 }
                                             />
                                         </CardContent>
