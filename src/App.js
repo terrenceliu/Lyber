@@ -31,7 +31,7 @@ class App extends Component {
                         <div>    
                             <ToolBar disableGutters="true"/>
                     
-                        
+                            
                             <Route exact path="/" component={Main} />
                             <Route exact path="/about" component={About} />
                             <Route exact path="/feedback" component={Feedback} />
