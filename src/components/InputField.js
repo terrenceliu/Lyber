@@ -19,7 +19,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = theme => ({
     wrapper: {
-        height: "100%",
+        height: "30%",
         width: "100%"
     },
     searchButton: {
