@@ -119,7 +119,22 @@ class Feedback extends Component {
             email: this.state.email,
             comment: this.state.comment
         }
-        // console.log(data);
+        
+        const logAPI = "https://www.lyber.co/api/log/feedback";
+
+        fetch(logAPI, {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            headers: {
+                "Content-Type": "application/json; charset=utf-8"
+            },
+            body: JSON.stringify(data)
+        }).then(response => {
+            // console.log("[Feedback]", response);
+        }).catch(err => {
+            console.log("[FeedbackLog] Error", error);
+        });
 
         // Clear State
         this.setState({
