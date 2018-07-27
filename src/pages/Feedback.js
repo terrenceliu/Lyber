@@ -53,7 +53,7 @@ const styles = (theme) => ({
     header: {
         position: 'relative',
         height: '250px',
-        width: '110vw',
+        width: '100vw',
         marginLeft: '-10vw',
         marginRight: '-10vw',
         marginBottom: '10px',
@@ -138,10 +138,10 @@ class Feedback extends Component {
 
         // Clear State
         this.setState({
-            name: undefined,
-            email: undefined,
-            star: undefined,
-            comment: undefined,
+            name: "",
+            email: "",
+            star: "",
+            comment: "",
             modal: true
         })
     }
@@ -170,7 +170,7 @@ class Feedback extends Component {
                                 <img src={Travel} className={classes.headerBackground}>
                                 </img>
                                 <Typography variant="title" className={classes.headerText}>
-                                    Contact
+                                    Feedback
                                 </Typography>
                             </div>
                         </Grid>
