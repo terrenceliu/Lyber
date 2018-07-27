@@ -18,6 +18,8 @@ import { CardActions, IconButton } from "@material-ui/core";
 import DirectionsCar from '@material-ui/icons/DirectionsCar';
 import Avatar from '@material-ui/core/Avatar';
 import SvgIcon from '@material-ui/core/SvgIcon';
+import Fade from '@material-ui/core/Fade';
+import Collapse from '@material-ui/core/Collapse';
 
 // Logo
 import uberLogo from '../assets/images/uber_logo.png';
@@ -34,6 +36,7 @@ import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/ModeEdit';
 import UpIcon from '@material-ui/icons/KeyboardArrowUp';
 import green from '@material-ui/core/colors/green';
+import Paper from '@material-ui/core/Paper';
 
 // GridList
 import GridList from '@material-ui/core/GridList';
@@ -205,60 +208,6 @@ class CardTable extends Component {
 
     /**
      * 
-     * @deprecated
-     * @param {object} classes  
-     * @param {object} priceData
-     */
-    // cardFactory = (classes, theme, data) => {
-    //     console.log(data);
-    //     if (!data) {
-    //         data = []
-    //     }
-
-    //     var priceData = data.slice();
-
-    //     priceData.sort(function (a, b) {
-    //         return (a.min_estimate - b.min_estimate);
-    //     });
-
-    //     console.log(priceData);
-
-    //     return (
-    //         priceData.map((item, i) => {
-    //             return (
-    //                 <Grid item className={classes.grid_item} key={i}>
-    //                     <Card className={classes.card}>
-    //                         <CardContent className={classes.icon} >
-    //                             <IconButton variant="contained" color="primary">
-    //                                 <DirectionsCar />
-    //                             </IconButton>
-    //                         </CardContent>
-    //                         <CardContent className={classes.content} >
-    //                             <Typography variant="headline" component="p" className={classes.price} >
-    //                                 ${item.min_estimate} - ${item.max_estimate}
-    //                             </Typography>
-    //                             <Typography color="textSecondary" className={classes.name} >
-    //                                 {item.display_name}
-    //                             </Typography>
-    //                         </CardContent>
-    //                         <CardContent className={classes.request} >
-    //                             <Button size="small" color="primary"
-    //                                 onClick={() => this.requestRide(item.company, item.display_name, item.product_id, item.min_estimate, item.max_estimate, item.distance)}>
-    //                                 Schedule
-    //                             </Button>
-    //                             <Typography color="textSecondary">
-    //                                 ETA: {item.distance}
-    //                             </Typography>
-    //                         </CardContent>
-    //                     </Card>
-    //                 </Grid>
-    //             );
-    //         })
-    //     );
-    // }
-
-    /**
-     * 
      * @param {obejct} classes
      * @param {object} estData
      */
@@ -308,109 +257,113 @@ class CardTable extends Component {
         
         return (
             <div className={classes.root}>
-                <AppBar position="static" color="default">
-                    <Tabs
-                        value={this.state.value}
-                        onChange={this.handleChange}
-                        indicatorColor="primary"
-                        textColor="primary"
-                        fullWidth
-                    >
-                        <Tab label="Price" />
-                        <Tab label="Time" />
-                    </Tabs>
-                </AppBar>
-                <SwipeableViews
-                    axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                    index={this.state.value}
-                    onChangeIndex={this.handleChangeIndex}
-                >   
-                    <TabContainer dir={theme.direction}>
-                        <GridList className={classes.gridList} cols={1} cellHeight="auto">
-                            {   priceData.map(item => <GridListTile key={item.product_id}>
-                                    <Card className={classes.card}>
-                                        <CardContent className={classes.icon} >
-                                            {/* <IconButton variant="contained" color="primary">
-                                                <DirectionsCar />
-                                            </IconButton> */}
-                                            <Avatar
-                                                // className={classes.avatar}
-                                                alt="company"
-                                                src={
-                                                    (item.company == "uber") 
-                                                    ? uberLogo
-                                                    : lyftLogo
-                                                }
-                                            />
-                                        </CardContent>
-                                        <CardContent className={classes.content} >
-                                            <Typography variant="headline" component="p" className={classes.price} >
-                                                ${item.min_estimate} - ${item.max_estimate}
-                                            </Typography>
-                                            <Typography color="textSecondary" className={classes.name} >
-                                                {item.display_name}
-                                            </Typography>
-                                        </CardContent>
-                                        <CardContent className={classes.request} >
-                                            {/* <ReqRideButton onClick={ this.requestRide } /> */}
-                                            <Button size="small" color="primary"
-                                                onClick={() => this.requestRide(item.company, item.display_name, item.product_id, item.min_estimate, item.max_estimate, item.eta, "price")}>
-                                                Schedule
-                                            </Button>
-                                            <Typography color="textSecondary" noWrap>
-                                                {parseInt(item.eta / 60, 10)} mins away
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
-                                </GridListTile>
-                                )
-                            }    
-                            
-                        </GridList>
-                    </TabContainer>
-                    <TabContainer dir={theme.direction}>
-                        <GridList className={classes.gridList} cols={1} cellHeight="auto">
-                            {   timeData.map(item => <GridListTile key={item.product_id}>
-                                    <Card className={classes.card}>
-                                        <CardContent className={classes.icon} >
-                                            {/* <IconButton variant="contained" color="primary">
-                                                <DirectionsCar />
-                                            </IconButton> */}
-                                            <Avatar
-                                                // className={classes.avatar}
-                                                alt="company"
-                                                src={
-                                                    (item.company == "uber") 
-                                                    ? uberLogo
-                                                    : lyftLogo
-                                                }
-                                            />
-                                        </CardContent>
-                                        <CardContent className={classes.content} >
-                                            <Typography variant="headline" component="p" className={classes.price} >
-                                                ${item.min_estimate} - ${item.max_estimate}
-                                            </Typography>
-                                            <Typography color="textSecondary" className={classes.name} >
-                                                {item.display_name}
-                                            </Typography>
-                                        </CardContent>
-                                        <CardContent className={classes.request} >
-                                            {/* <ReqRideButton onClick={ this.requestRide } /> */}
-                                            <Button size="small" color="primary"
-                                                onClick={() => this.requestRide(item.company, item.display_name, item.product_id, item.min_estimate, item.max_estimate, item.eta, "time")}>
-                                                Schedule
-                                    </Button>
-                                            <Typography color="textSecondary" noWrap>
-                                                {parseInt(item.eta / 60, 10)} mins away
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
-                                </GridListTile>
-                                )
-                            }    
-                        </GridList>
-                    </TabContainer>
-                </SwipeableViews>
+                <Fade in={true} timeout={1000}>
+                    <AppBar position="static" color="default">
+                        <Tabs
+                            value={this.state.value}
+                            onChange={this.handleChange}
+                            indicatorColor="primary"
+                            textColor="primary"
+                            fullWidth
+                        >
+                            <Tab label="Price" />
+                            <Tab label="ETA" />
+                        </Tabs>
+                    </AppBar>
+                </Fade>
+                <Fade in={true} timeout={3000}>
+                    <SwipeableViews
+                        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                        index={this.state.value}
+                        onChangeIndex={this.handleChangeIndex}
+                    >   
+                        <TabContainer dir={theme.direction}>
+                            <GridList className={classes.gridList} cols={1} cellHeight="auto">
+                                {   priceData.map(item => <GridListTile key={item.product_id}>
+                                        <Card className={classes.card}>
+                                            <CardContent className={classes.icon} >
+                                                {/* <IconButton variant="contained" color="primary">
+                                                    <DirectionsCar />
+                                                </IconButton> */}
+                                                <Avatar
+                                                    // className={classes.avatar}
+                                                    alt="company"
+                                                    src={
+                                                        (item.company == "uber") 
+                                                        ? uberLogo
+                                                        : lyftLogo
+                                                    }
+                                                />
+                                            </CardContent>
+                                            <CardContent className={classes.content} >
+                                                <Typography variant="headline" component="p" className={classes.price} >
+                                                    ${item.min_estimate} - ${item.max_estimate}
+                                                </Typography>
+                                                <Typography color="textSecondary" className={classes.name} >
+                                                    {item.display_name}
+                                                </Typography>
+                                            </CardContent>
+                                            <CardContent className={classes.request} >
+                                                {/* <ReqRideButton onClick={ this.requestRide } /> */}
+                                                <Button size="small" color="primary"
+                                                    onClick={() => this.requestRide(item.company, item.display_name, item.product_id, item.min_estimate, item.max_estimate, item.eta, "price")}>
+                                                    Schedule
+                                                </Button>
+                                                <Typography color="textSecondary" noWrap>
+                                                    {parseInt(item.eta / 60, 10)} mins away
+                                                </Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </GridListTile>
+                                    )
+                                }    
+                                
+                            </GridList>
+                        </TabContainer>
+                        <TabContainer dir={theme.direction}>
+                            <GridList className={classes.gridList} cols={1} cellHeight="auto">
+                                {   timeData.map(item => <GridListTile key={item.product_id}>
+                                        <Card className={classes.card}>
+                                            <CardContent className={classes.icon} >
+                                                {/* <IconButton variant="contained" color="primary">
+                                                    <DirectionsCar />
+                                                </IconButton> */}
+                                                <Avatar
+                                                    // className={classes.avatar}
+                                                    alt="company"
+                                                    src={
+                                                        (item.company == "uber") 
+                                                        ? uberLogo
+                                                        : lyftLogo
+                                                    }
+                                                />
+                                            </CardContent>
+                                            <CardContent className={classes.content} >
+                                                <Typography variant="headline" component="p" className={classes.price} >
+                                                    ${item.min_estimate} - ${item.max_estimate}
+                                                </Typography>
+                                                <Typography color="textSecondary" className={classes.name} >
+                                                    {item.display_name}
+                                                </Typography>
+                                            </CardContent>
+                                            <CardContent className={classes.request} >
+                                                {/* <ReqRideButton onClick={ this.requestRide } /> */}
+                                                <Button size="small" color="primary"
+                                                    onClick={() => this.requestRide(item.company, item.display_name, item.product_id, item.min_estimate, item.max_estimate, item.eta, "time")}>
+                                                    Schedule
+                                        </Button>
+                                                <Typography color="textSecondary" noWrap>
+                                                    {parseInt(item.eta / 60, 10)} mins away
+                                                </Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </GridListTile>
+                                    )
+                                }    
+                            </GridList>
+                        </TabContainer>
+                    </SwipeableViews>
+                </Fade>
             </div>
         );
     }
@@ -422,6 +375,15 @@ class CardTable extends Component {
             align: 'top',
             offset: -100
         });
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.estData != prevProps.estData) {
+            scrollToComponent(this.cardTable, {
+                align: 'top',
+                offset: -100
+            });
+        }
     }
 
     render() {
@@ -472,7 +434,7 @@ class CardTable extends Component {
             <Grid item className={classes.wrapper} ref={(section) => { this.cardTable = section; }}>
                 <Grid container spacing={16}>
                     {
-                        estData && 
+                        // estData && 
                         this.tabFactory(classes, theme, estData)
                     }
                 </Grid>

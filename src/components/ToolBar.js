@@ -23,7 +23,7 @@ import { Link } from 'react-router-dom';
 
 const styles = {
     root: {
-        flexGrow: 1,
+        flexGrow: 1
     },
     flex: {
         flex: 1,
@@ -57,20 +57,20 @@ const drawerListItems = (
         <ListItem 
             button
             component={Link}
-            to={"/about"}>
-            <ListItemIcon>
-                <Info />
-            </ListItemIcon>
-            <ListItemText primary="About" />
-        </ListItem>
-        <ListItem 
-            button
-            component={Link}
             to={"/feedback"}>
             <ListItemIcon>
                 <Fedback />
             </ListItemIcon>
             <ListItemText primary="Feedback" />
+        </ListItem>
+        <ListItem 
+            button
+            component={Link}
+            to={"/about"}>
+            <ListItemIcon>
+                <Info />
+            </ListItemIcon>
+            <ListItemText primary="About" />
         </ListItem>
     </div>
 );
@@ -107,24 +107,25 @@ class ButtonAppBar extends Component {
     }
     
     render() {
-        const { classes } = this.props; 
+        const { classes } = this.props;
         return (
             <div className={classes.root}>
-                <AppBar position="fixed">
+                {/* <AppBar position="fixed"> */}
+                <AppBar position="static" style={{ background: 'transparent', boxShadow: 'none'}}>
                     <Toolbar>
                         <IconButton
                             className={classes.menuButton} 
-                            color="inherit" 
+                            color="primary" 
                             aria-label="Menu"
                             onClick={() => this.toggleDrawer(true)}
                             >
                             <MenuIcon />
                         </IconButton>
-                        <Typography variant="title" color="inherit" className={classes.flex}>
+                        <Typography variant="title" color="primary" className={classes.flex}>
                             Lyber
                         </Typography>
                         {/* <Button color="inherit">Login</Button> */}
-                        <IconButton className={classes.acountButton} color="inherit" aria-label="Menu" onClick={this.handleLogIn}>
+                        <IconButton className={classes.acountButton} color="primary" aria-label="Menu" onClick={this.handleLogIn}>
                             <AcountBox />
                         </IconButton>
                     </Toolbar>
@@ -133,7 +134,6 @@ class ButtonAppBar extends Component {
                     open={this.state.drawer}
                     onClose={() => this.toggleDrawer(false)}
                     onOpen={() => this.toggleDrawer('left', true)}
-                    
                 >
                     <div
                         tabIndex={0}

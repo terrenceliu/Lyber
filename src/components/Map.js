@@ -9,7 +9,7 @@ import Grid from '@material-ui/core/Grid';
 
 const styles = theme => ({
     container: {
-        marginTop: '65px',
+        // marginTop: '65px',
         height: '50%',
         width: '100%',
         boxShadow: '0px 5px 10px -5px rgba(0,0,0,0.75)'
