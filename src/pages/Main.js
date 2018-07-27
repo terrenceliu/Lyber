@@ -191,7 +191,8 @@ class Main extends Component {
 
         // Set loading status
         this.setState({
-            loading: true
+            loading: true,
+            estData: undefined
         });
 
         // Set query param
