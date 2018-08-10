@@ -153,7 +153,11 @@ class CardTable extends Component {
         var deepLink = undefined;
         if (company && deparLat && deparLng && destLat && destLng) {
             if (company == "uber") {
-                deepLink = "uber://?client_id=jOOUs484dDpd5ZtVxT5A8cp9CEknN5sz&action=setPickup" +
+                // deepLink = "uber://?client_id=jOOUs484dDpd5ZtVxT5A8cp9CEknN5sz&action=setPickup" +
+                //     `&pickup[latitude]=${deparLat}&pickup[longitude]=${deparLng}&pickup[nickname]=${deparAddr}` +   // Pick Up location
+                //     `&dropoff[latitude]=${destLat}&dropoff[longitude]=${destLng}&dropoff[nickname]=${destAddr}` + // Drop off location
+                //     `&product_id=${product_id}`;
+                deepLink = "https://m.uber.com/ul/?action=setPickup&client_id=jOOUs484dDpd5ZtVxT5A8cp9CEknN5sz&action=setPickup" +
                     `&pickup[latitude]=${deparLat}&pickup[longitude]=${deparLng}&pickup[nickname]=${deparAddr}` +   // Pick Up location
                     `&dropoff[latitude]=${destLat}&dropoff[longitude]=${destLng}&dropoff[nickname]=${destAddr}` + // Drop off location
                     `&product_id=${product_id}`;
@@ -163,7 +167,7 @@ class CardTable extends Component {
                     `&destination[latitude]=${destLat}&destination[longitude]=${destLng}`;
             }
         }
-
+        
         var data = {
             deparLat: deparLat,
             deparLng: deparLng,
@@ -181,7 +185,7 @@ class CardTable extends Component {
          * Log request
          */
         // const logAddr = 'http://localhost:8000/log/request'
-        const logAddr = 'https://lyber.co/log/request';
+        const logAddr = 'https://lyber.co/api/log/request';
         
         fetch(logAddr, {
             method: 'POST',
