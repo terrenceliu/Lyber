@@ -79,7 +79,7 @@ class InputField extends Component {
                 var place = deparAC.getPlace();
                 
                 console.log("[Depar]", place.place_id, place.geometry.location.toJSON());
-               
+                
 
                 if (!place.geometry) {
                     alert("Details unavailable for input: " + place.name + ".");
@@ -88,9 +88,9 @@ class InputField extends Component {
                 }
 
                 if (this.props.updateLocation) {
-                    this.props.updateLocation("depar", place.geometry.location.toJSON(), place.formatted_address);
+                    this.props.updateLocation("depar", place.geometry.location.toJSON(), place.formatted_address, place.place_id);
                 }
-
+                
                  // TODO: smarter way to set deparVal lol
                  this.setState({
                     deparText: place.formatted_address
@@ -108,7 +108,7 @@ class InputField extends Component {
                 }
 
                 if (this.props.updateLocation) {
-                    this.props.updateLocation("dest", place.geometry.location.toJSON(), place.formatted_address);
+                    this.props.updateLocation("dest", place.geometry.location.toJSON(), place.formatted_address, place.place_id);
                 }
 
                 this.setState({

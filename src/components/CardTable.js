@@ -224,11 +224,12 @@ class CardTable extends Component {
         var timeData = data.slice();
 
         priceData.sort(function (a, b) {
-            if (a.min_estimate != b.min_estimate) {
-                return (a.min_estimate - b.min_estimate);
-            } else {
-                return (a.max_estimate - b.max_estimate);
-            }  
+            // if (a.min_estimate != b.min_estimate) {
+            //     return (a.min_estimate - b.min_estimate);
+            // } else {
+            //     return (a.max_estimate - b.max_estimate);
+            // }  
+            return (a.fare_estimate - b.fare_estimate);
         });
 
         timeData.sort(function (a, b) {
@@ -241,23 +242,23 @@ class CardTable extends Component {
             exit: theme.transitions.duration.leavingScreen,
         };
 
-        const fabs = [
-            {
-                color: 'primary',
-                className: classes.fab,
-                icon: <AddIcon />,
-            },
-            {
-                color: 'secondary',
-                className: classes.fab,
-                icon: <EditIcon />,
-            },
-            {
-                color: 'inherit',
-                className: classNames(classes.fab, classes.fabGreen),
-                icon: <UpIcon />,
-            },
-        ];
+        // const fabs = [
+        //     {
+        //         color: 'primary',
+        //         className: classes.fab,
+        //         icon: <AddIcon />,
+        //     },
+        //     {
+        //         color: 'secondary',
+        //         className: classes.fab,
+        //         icon: <EditIcon />,
+        //     },
+        //     {
+        //         color: 'inherit',
+        //         className: classNames(classes.fab, classes.fabGreen),
+        //         icon: <UpIcon />,
+        //     },
+        // ];
         
         return (
             <div className={classes.root}>
@@ -301,7 +302,8 @@ class CardTable extends Component {
                                             </CardContent>
                                             <CardContent className={classes.content} >
                                                 <Typography variant="headline" component="p" className={classes.price} >
-                                                    ${item.min_estimate} - ${item.max_estimate}
+                                                    {/* ${item.min_estimate} - ${item.max_estimate} */}
+                                                    ${item.fare_estimate}
                                                 </Typography>
                                                 <Typography color="textSecondary" className={classes.name} >
                                                     {item.display_name}
@@ -344,7 +346,8 @@ class CardTable extends Component {
                                             </CardContent>
                                             <CardContent className={classes.content} >
                                                 <Typography variant="headline" component="p" className={classes.price} >
-                                                    ${item.min_estimate} - ${item.max_estimate}
+                                                    {/* ${item.min_estimate} - ${item.max_estimate} */}
+                                                    ${item.fare_estimate}
                                                 </Typography>
                                                 <Typography color="textSecondary" className={classes.name} >
                                                     {item.display_name}

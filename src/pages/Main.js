@@ -64,9 +64,11 @@ class Main extends Component {
             deparLat: undefined,
             deparLng: undefined,
             deparAddr: undefined,
+            deparPlace: undefined,
             destLat: undefined,
             destLng: undefined,
-            deparAddr: undefined,
+            destPlace: undefined,
+            destAddr: undefined,
             estData: undefined,
             loading: false,
             userProfile: undefined
@@ -83,27 +85,30 @@ class Main extends Component {
      * @param {Object} location         {lat: , lng: }
      * @param {String} [displayName]    Address / Nickname of the location displayed on the text field
      */
-    updateLocation = (tag, location, displayName) => {
+    updateLocation = (tag, location, displayName, place_id) => {
         
         // Optional Param
         displayName = displayName || undefined;
+
+        console.log(place_id);
         
         // console.log("[UpdateLocation]", tag, location, displayName);
 
         if (tag == "depar") {
             if (location) {
                 // Set location
-                if (displayName) {
+                if (displayName && place_id) {
                     this.setState({
                         deparLat: location.lat, 
                         deparLng: location.lng,
-                        deparAddr: displayName
+                        deparAddr: displayName,
+                        deparPlace: place_id
                     });
                 } else {
                     this.geocodeLatLng("deparAddr", location);
                     this.setState({
                         deparLat: location.lat, 
-                        deparLng: location.lng,
+                        deparLng: location.lng
                     });
                 }
             } else {
@@ -116,11 +121,12 @@ class Main extends Component {
             }
         } else if (tag == "dest") {
             if (location) {
-                if (displayName) {
+                if (displayName && place_id) {
                     this.setState({
                         destLat: location.lat, 
                         destLng: location.lng,
-                        destAddr: displayName
+                        destAddr: displayName,
+                        destPlace: place_id
                     });
                 } else {
                     this.geocodeLatLng("destAddr", location);
@@ -200,13 +206,18 @@ class Main extends Component {
         const deparLng = this.state.deparLng;
         const destLat = this.state.destLat;
         const destLng = this.state.destLng;
+
+        const destPlace = this.state.destPlace;
+        const deparPlace = this.state.deparPlace;
+
+        console.log(destPlace, deparPlace);
         
-        const queryParam = `?depar_lat=${deparLat}&depar_lng=${deparLng}&dest_lat=${destLat}&dest_lng=${destLng}`;
+        const queryParam = `?depar_lat=${deparLat}&depar_lng=${deparLng}&dest_lat=${destLat}&dest_lng=${destLng}&dest_ref=${destPlace}`;
 
         // const estimateAPI = "https://lyber-server.herokuapp.com/api/estimate" + queryParam;
         // const estimateAPI = "http://localhost:8000/api/estimate" + queryParam;
         
-        const estimateAPI = "https://lyber.co/api/estimate" + queryParam;
+        const estimateAPI = "https://lyber.co/api/estimate/beta" + queryParam;
         
         fetch(estimateAPI, {
             method: 'GET'
@@ -275,8 +286,8 @@ class Main extends Component {
                                 deparLng={this.state.deparLng}
                                 destLat={this.state.destLat}
                                 destLng={this.state.destLng}
-                                deparViewPort={this.state.deparPlace ? this.state.deparPlace.geometry.viewport : undefined}
-                                destViewPort={this.state.destPlac ? this.state.destPlace.geometry.viewport : undefined} 
+                                // deparViewPort={this.state.deparPlace ? this.state.deparPlace.geometry.viewport : undefined}
+                                // destViewPort={this.state.destPlac ? this.state.destPlace.geometry.viewport : undefined} 
                                 updateLocation={this.updateLocation}
                             />
                             <div className={classes.padding}>
