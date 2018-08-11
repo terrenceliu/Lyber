@@ -1,27 +1,17 @@
 import React, { Component } from 'react';
-import queryString from 'query-string';
 import { GoogleApiWrapper } from 'google-maps-react';
 
 // MUI
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
-import { createMuiTheme } from '@material-ui/core/styles';
-import withWidth from '@material-ui/core/withWidth';
-import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
 // Components
-import ToolBar from '../components/ToolBar';
 import Map from '../components/Map';
 import InputField from '../components/InputField';
-import SearchButton from '../components/SearchButton';
 import CardTable from '../components/CardTable';
 
 
 // UI
 import Grid from '@material-ui/core/Grid';
-import { Button } from '@material-ui/core';
-import LinearProgress from '@material-ui/core/LinearProgress';
 
 // Router
 import { BrowserRouter as Router,

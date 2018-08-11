@@ -5,38 +5,38 @@ import { withStyles } from '@material-ui/core/styles';
 import scrollToComponent from 'react-scroll-to-component';
 
 // Component
-import ReqRideButton from './ReqRideButton';
+// import ReqRideButton from './ReqRideButton';
 
 // UI
-import TextField from '@material-ui/core/TextField';
+// import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import { CardActions, IconButton } from "@material-ui/core";
-import DirectionsCar from '@material-ui/icons/DirectionsCar';
+// import { CardActions, IconButton } from "@material-ui/core";
+// import DirectionsCar from '@material-ui/icons/DirectionsCar';
 import Avatar from '@material-ui/core/Avatar';
-import SvgIcon from '@material-ui/core/SvgIcon';
+// import SvgIcon from '@material-ui/core/SvgIcon';
 import Fade from '@material-ui/core/Fade';
-import Collapse from '@material-ui/core/Collapse';
+// import Collapse from '@material-ui/core/Collapse';
 
 // Logo
 import uberLogo from '../assets/images/uber_logo.png';
 import lyftLogo from '../assets/images/lyft_logo.png';
 
 // Tab Related
-import classNames from 'classnames';
+// import classNames from 'classnames';
 import SwipeableViews from 'react-swipeable-views';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Zoom from '@material-ui/core/Zoom';
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/ModeEdit';
-import UpIcon from '@material-ui/icons/KeyboardArrowUp';
+// import Zoom from '@material-ui/core/Zoom';
+// import AddIcon from '@material-ui/icons/Add';
+// import EditIcon from '@material-ui/icons/ModeEdit';
+// import UpIcon from '@material-ui/icons/KeyboardArrowUp';
 import green from '@material-ui/core/colors/green';
-import Paper from '@material-ui/core/Paper';
+// import Paper from '@material-ui/core/Paper';
 
 // GridList
 import GridList from '@material-ui/core/GridList';
