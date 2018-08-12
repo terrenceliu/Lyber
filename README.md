@@ -4,7 +4,12 @@
 
 Estimate fares. Compare services. All in one. 
 
-Lyber is currently deployed on Heroku. Link: https://lyber-app.herokuapp.com/
+~~Lyber is currently deployed on Heroku. Link: https://lyber-app.herokuapp.com/~~
+
+Lyber is currently deployed on Amaozon AWS. Homepage:
+https://lyber.co
+
+(Note: the website is optimized for mobile devices.)
 
 Lyber is available on iOS. Repo link: https://github.com/EdwardFeng523/Lyber-ios
 

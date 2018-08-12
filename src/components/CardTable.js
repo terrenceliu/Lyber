@@ -5,38 +5,38 @@ import { withStyles } from '@material-ui/core/styles';
 import scrollToComponent from 'react-scroll-to-component';
 
 // Component
-import ReqRideButton from './ReqRideButton';
+// import ReqRideButton from './ReqRideButton';
 
 // UI
-import TextField from '@material-ui/core/TextField';
+// import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import { CardActions, IconButton } from "@material-ui/core";
-import DirectionsCar from '@material-ui/icons/DirectionsCar';
+// import { CardActions, IconButton } from "@material-ui/core";
+// import DirectionsCar from '@material-ui/icons/DirectionsCar';
 import Avatar from '@material-ui/core/Avatar';
-import SvgIcon from '@material-ui/core/SvgIcon';
+// import SvgIcon from '@material-ui/core/SvgIcon';
 import Fade from '@material-ui/core/Fade';
-import Collapse from '@material-ui/core/Collapse';
+// import Collapse from '@material-ui/core/Collapse';
 
 // Logo
 import uberLogo from '../assets/images/uber_logo.png';
 import lyftLogo from '../assets/images/lyft_logo.png';
 
 // Tab Related
-import classNames from 'classnames';
+// import classNames from 'classnames';
 import SwipeableViews from 'react-swipeable-views';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Zoom from '@material-ui/core/Zoom';
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/ModeEdit';
-import UpIcon from '@material-ui/icons/KeyboardArrowUp';
+// import Zoom from '@material-ui/core/Zoom';
+// import AddIcon from '@material-ui/icons/Add';
+// import EditIcon from '@material-ui/icons/ModeEdit';
+// import UpIcon from '@material-ui/icons/KeyboardArrowUp';
 import green from '@material-ui/core/colors/green';
-import Paper from '@material-ui/core/Paper';
+// import Paper from '@material-ui/core/Paper';
 
 // GridList
 import GridList from '@material-ui/core/GridList';
@@ -153,7 +153,11 @@ class CardTable extends Component {
         var deepLink = undefined;
         if (company && deparLat && deparLng && destLat && destLng) {
             if (company == "uber") {
-                deepLink = "uber://?client_id=jOOUs484dDpd5ZtVxT5A8cp9CEknN5sz&action=setPickup" +
+                // deepLink = "uber://?client_id=jOOUs484dDpd5ZtVxT5A8cp9CEknN5sz&action=setPickup" +
+                //     `&pickup[latitude]=${deparLat}&pickup[longitude]=${deparLng}&pickup[nickname]=${deparAddr}` +   // Pick Up location
+                //     `&dropoff[latitude]=${destLat}&dropoff[longitude]=${destLng}&dropoff[nickname]=${destAddr}` + // Drop off location
+                //     `&product_id=${product_id}`;
+                deepLink = "https://m.uber.com/ul/?action=setPickup&client_id=jOOUs484dDpd5ZtVxT5A8cp9CEknN5sz&action=setPickup" +
                     `&pickup[latitude]=${deparLat}&pickup[longitude]=${deparLng}&pickup[nickname]=${deparAddr}` +   // Pick Up location
                     `&dropoff[latitude]=${destLat}&dropoff[longitude]=${destLng}&dropoff[nickname]=${destAddr}` + // Drop off location
                     `&product_id=${product_id}`;
@@ -163,7 +167,7 @@ class CardTable extends Component {
                     `&destination[latitude]=${destLat}&destination[longitude]=${destLng}`;
             }
         }
-
+        
         var data = {
             deparLat: deparLat,
             deparLng: deparLng,
@@ -181,7 +185,7 @@ class CardTable extends Component {
          * Log request
          */
         // const logAddr = 'http://localhost:8000/log/request'
-        const logAddr = 'https://lyber.co/log/request';
+        const logAddr = 'https://lyber.co/api/log/request';
         
         fetch(logAddr, {
             method: 'POST',
@@ -220,11 +224,12 @@ class CardTable extends Component {
         var timeData = data.slice();
 
         priceData.sort(function (a, b) {
-            if (a.min_estimate != b.min_estimate) {
-                return (a.min_estimate - b.min_estimate);
-            } else {
-                return (a.max_estimate - b.max_estimate);
-            }  
+            // if (a.min_estimate != b.min_estimate) {
+            //     return (a.min_estimate - b.min_estimate);
+            // } else {
+            //     return (a.max_estimate - b.max_estimate);
+            // }  
+            return (a.fare_estimate - b.fare_estimate);
         });
 
         timeData.sort(function (a, b) {
@@ -237,23 +242,23 @@ class CardTable extends Component {
             exit: theme.transitions.duration.leavingScreen,
         };
 
-        const fabs = [
-            {
-                color: 'primary',
-                className: classes.fab,
-                icon: <AddIcon />,
-            },
-            {
-                color: 'secondary',
-                className: classes.fab,
-                icon: <EditIcon />,
-            },
-            {
-                color: 'inherit',
-                className: classNames(classes.fab, classes.fabGreen),
-                icon: <UpIcon />,
-            },
-        ];
+        // const fabs = [
+        //     {
+        //         color: 'primary',
+        //         className: classes.fab,
+        //         icon: <AddIcon />,
+        //     },
+        //     {
+        //         color: 'secondary',
+        //         className: classes.fab,
+        //         icon: <EditIcon />,
+        //     },
+        //     {
+        //         color: 'inherit',
+        //         className: classNames(classes.fab, classes.fabGreen),
+        //         icon: <UpIcon />,
+        //     },
+        // ];
         
         return (
             <div className={classes.root}>
@@ -297,7 +302,8 @@ class CardTable extends Component {
                                             </CardContent>
                                             <CardContent className={classes.content} >
                                                 <Typography variant="headline" component="p" className={classes.price} >
-                                                    ${item.min_estimate} - ${item.max_estimate}
+                                                    {/* ${item.min_estimate} - ${item.max_estimate} */}
+                                                    ${item.fare_estimate}
                                                 </Typography>
                                                 <Typography color="textSecondary" className={classes.name} >
                                                     {item.display_name}
@@ -340,7 +346,8 @@ class CardTable extends Component {
                                             </CardContent>
                                             <CardContent className={classes.content} >
                                                 <Typography variant="headline" component="p" className={classes.price} >
-                                                    ${item.min_estimate} - ${item.max_estimate}
+                                                    {/* ${item.min_estimate} - ${item.max_estimate} */}
+                                                    ${item.fare_estimate}
                                                 </Typography>
                                                 <Typography color="textSecondary" className={classes.name} >
                                                     {item.display_name}

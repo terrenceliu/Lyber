@@ -13,7 +13,7 @@ import LocationOn from '@material-ui/icons/LocationOn';
 import Search from '@material-ui/icons/Search';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-import Typography from '@material-ui/core/Typography';
+// import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -79,7 +79,7 @@ class InputField extends Component {
                 var place = deparAC.getPlace();
                 
                 console.log("[Depar]", place.place_id, place.geometry.location.toJSON());
-               
+                
 
                 if (!place.geometry) {
                     alert("Details unavailable for input: " + place.name + ".");
@@ -88,7 +88,7 @@ class InputField extends Component {
                 }
 
                 if (this.props.updateLocation) {
-                    this.props.updateLocation("depar", place.geometry.location.toJSON(), place.formatted_address);
+                    this.props.updateLocation("depar", place.geometry.location.toJSON(), place.formatted_address, place.place_id);
                 }
 
                  // TODO: smarter way to set deparVal lol
@@ -108,7 +108,7 @@ class InputField extends Component {
                 }
 
                 if (this.props.updateLocation) {
-                    this.props.updateLocation("dest", place.geometry.location.toJSON(), place.formatted_address);
+                    this.props.updateLocation("dest", place.geometry.location.toJSON(), place.formatted_address, place.place_id);
                 }
 
                 this.setState({
