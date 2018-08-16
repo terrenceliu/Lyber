@@ -119,6 +119,9 @@ const styles = theme => ({
     avatar: {
         // width: 30,
         // height: 30
+    },
+    tab: {
+        width: '50%'
     }
 });
 
@@ -270,9 +273,14 @@ class CardTable extends Component {
                             indicatorColor="primary"
                             textColor="primary"
                             fullWidth
+                            centered
                         >
-                            <Tab label="Price" />
-                            <Tab label="ETA" />
+                            <Tab tabItemContainerStyle={{
+                                width: '500px'
+                                }} label="Price" />
+                            <Tab tabItemContainerStyle={{
+                                width: '500px'
+                                }} label="ETA" />
                         </Tabs>
                     </AppBar>
                 </Fade>

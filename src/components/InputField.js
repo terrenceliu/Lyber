@@ -162,6 +162,7 @@ class InputField extends Component {
          * Select all text field when clicked.
          */
         e.target.select();
+        e.target.setSelectionRange(0, 9999);
     }
 
     getCurrentLocation = () => {
