@@ -275,12 +275,8 @@ class CardTable extends Component {
                             fullWidth
                             centered
                         >
-                            <Tab tabItemContainerStyle={{
-                                width: '500px'
-                                }} label="Price" />
-                            <Tab tabItemContainerStyle={{
-                                width: '500px'
-                                }} label="ETA" />
+                            <Tab label="Price" />
+                            <Tab label="ETA" />
                         </Tabs>
                     </AppBar>
                 </Fade>
@@ -311,7 +307,7 @@ class CardTable extends Component {
                                             <CardContent className={classes.content} >
                                                 <Typography variant="headline" component="p" className={classes.price} >
                                                     {/* ${item.min_estimate} - ${item.max_estimate} */}
-                                                    ${item.fare_estimate}
+                                                    ${item.fare_estimate.toFixed(2)}
                                                 </Typography>
                                                 <Typography color="textSecondary" className={classes.name} >
                                                     {item.display_name}
@@ -355,7 +351,7 @@ class CardTable extends Component {
                                             <CardContent className={classes.content} >
                                                 <Typography variant="headline" component="p" className={classes.price} >
                                                     {/* ${item.min_estimate} - ${item.max_estimate} */}
-                                                    ${item.fare_estimate}
+                                                    ${item.fare_estimate.toFixed(2)}
                                                 </Typography>
                                                 <Typography color="textSecondary" className={classes.name} >
                                                     {item.display_name}

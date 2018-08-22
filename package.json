@@ -27,6 +27,7 @@
     "material-ui-places": "^1.1.7",
     "style-loader": "^0.21.0",
     "webpack": "^4.11.1",
+    "webpack-bundle-analyzer": "^2.13.1",
     "webpack-cli": "^3.0.3",
     "webpack-dev-server": "^3.1.4"
   },

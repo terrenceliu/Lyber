@@ -97,8 +97,6 @@ class Main extends Component {
         
         // Optional Param
         displayName = displayName || undefined;
-
-        console.log(place_id);
         
         // console.log("[UpdateLocation]", tag, location, displayName);
 
@@ -218,32 +216,33 @@ class Main extends Component {
         const destPlace = this.state.destPlace;
         const deparPlace = this.state.deparPlace;
 
-        console.log(destPlace, deparPlace);
+        // console.log(destPlace, deparPlace);
         
         const queryParam = `?depar_lat=${deparLat}&depar_lng=${deparLng}&dest_lat=${destLat}&dest_lng=${destLng}&dest_ref=${destPlace}`;
-
-        // const estimateAPI = "https://lyber-server.herokuapp.com/api/estimate" + queryParam;
 
         // const estimateAPI = "http://localhost:8000/api/estimate/beta" + queryParam;
         
         const estimateAPI = "https://lyber.co/api/estimate/beta" + queryParam;
-        
+
+        // console.log("Estimate Fare", estimateAPI);
+
+        this.getEstimate(estimateAPI);
+    }
+    
+    getEstimate = (estimateAPI) => {
         fetch(estimateAPI, {
             method: 'GET'
         })
         .then(response => response.json())
         .then(data => {
-            console.log("[EstData]", data);
+            // console.log("[EstData]", data);
             if (data.prices && data.prices[0].fare_estimate) {
                 this.setState({
                     estData: data.prices,
                     loading: false
                 });
             } else {
-                this.setState({
-                    loading: false,
-                    estErr: true
-                });
+                this.getEstimate(estimateAPI)
             }
         })
         .catch(err => {
@@ -252,9 +251,10 @@ class Main extends Component {
                 loading: false,
                 estErr: true
             });
+            // this.getEstimate()
         });
-    }
-    
+    };
+
     /**
      * Life Cycle Hooks
      */
@@ -352,7 +352,7 @@ class Main extends Component {
                     >
                         <div className={classes.modal}>
                             <Typography variant="body1">
-                                Err loading. Please try again.
+                                Sorry, we're unable to provide the estimation for this trip.
                             </Typography>
                         </div>
                     </Modal>

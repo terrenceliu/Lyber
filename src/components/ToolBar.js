@@ -124,10 +124,12 @@ class ButtonAppBar extends Component {
                         <Typography variant="title" color="primary" className={classes.flex}>
                             Lyber
                         </Typography>
-                        {/* <Button color="inherit">Login</Button> */}
-                        <IconButton className={classes.acountButton} color="primary" aria-label="Menu" onClick={this.handleLogIn}>
-                            <AcountBox />
+                        <IconButton className={classes.acountButton} color="primary" aria-label="Menu">
+                            {/* <AcountBox /> */}
                         </IconButton>
+                        {/* <IconButton className={classes.acountButton} color="primary" aria-label="Menu" onClick={this.handleLogIn}>
+                            <AcountBox />
+                        </IconButton> */}
                     </Toolbar>
                 </AppBar>
                 <SwipeableDrawer
