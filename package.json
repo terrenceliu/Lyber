@@ -4,9 +4,9 @@
   "description": "Save more $$$ when you need a ride!",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --mode development --content-base ./src",
-    "start:lan": "webpack-dev-server --host 0.0.0.0 --mode development --content-base ./src",
-    "build": "webpack --mode production",
+    "start": "webpack-dev-server --mode development --content-base ./src --config webpack.dev.js",
+    "start:lan": "webpack-dev-server --host 0.0.0.0 --mode development --content-base ./src --config webpack.dev.js",
+    "build": "webpack --mode production --config webpack.prod.js",
     "watch": "webpack --watch --mode development",
     "serve": "node index.js"
   },
@@ -29,7 +29,8 @@
     "webpack": "^4.11.1",
     "webpack-bundle-analyzer": "^2.13.1",
     "webpack-cli": "^3.0.3",
-    "webpack-dev-server": "^3.1.4"
+    "webpack-dev-server": "^3.1.4",
+    "webpack-merge": "^4.1.4"
   },
   "dependencies": {
     "express": "^4.16.3",
