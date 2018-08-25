@@ -100,7 +100,7 @@ class InputField extends Component {
             destAC.addListener('place_changed', () => {
                 var place = destAC.getPlace();
                 
-                console.log("[Dest]", place.place_id, place.geometry.location.toJSON());
+                // console.log("[Dest]", place.place_id, place.geometry.location.toJSON());
 
                 if (!place.geometry) {
                     alert("Details unavailable for input: " + place.name + ".");
@@ -162,6 +162,7 @@ class InputField extends Component {
          * Select all text field when clicked.
          */
         e.target.select();
+        e.target.setSelectionRange(0, 9999);
     }
 
     getCurrentLocation = () => {

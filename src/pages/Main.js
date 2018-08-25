@@ -12,6 +12,8 @@ import CardTable from '../components/CardTable';
 
 // UI
 import Grid from '@material-ui/core/Grid';
+import Modal from '@material-ui/core/Modal';
+import Typography from '@material-ui/core/Typography';
 
 // Router
 import { BrowserRouter as Router,
@@ -42,7 +44,16 @@ const styles = theme => ({
         height: '15px',
         width: '100%',
         // backgroundColor: 'grey'
-    }
+    },
+    modal: {
+        margin: 'auto',
+        position: 'relative',
+        width: theme.spacing.unit * 30,
+        backgroundColor: theme.palette.background.paper,
+        boxShadow: theme.shadows[0],
+        padding: theme.spacing.unit * 4,
+        textAlign: 'center'
+    },
 });
 
 class Main extends Component {
@@ -61,8 +72,15 @@ class Main extends Component {
             destAddr: undefined,
             estData: undefined,
             loading: false,
+            estErr: false,
             userProfile: undefined
         }
+    }
+
+    handleModalClose = () => {
+        this.setState({
+            estErr: false
+        })
     }
 
     /**
@@ -79,8 +97,6 @@ class Main extends Component {
         
         // Optional Param
         displayName = displayName || undefined;
-
-        console.log(place_id);
         
         // console.log("[UpdateLocation]", tag, location, displayName);
 
@@ -196,32 +212,49 @@ class Main extends Component {
         const deparLng = this.state.deparLng;
         const destLat = this.state.destLat;
         const destLng = this.state.destLng;
-
+        
         const destPlace = this.state.destPlace;
         const deparPlace = this.state.deparPlace;
 
-        console.log(destPlace, deparPlace);
+        // console.log(destPlace, deparPlace);
         
         const queryParam = `?depar_lat=${deparLat}&depar_lng=${deparLng}&dest_lat=${destLat}&dest_lng=${destLng}&dest_ref=${destPlace}`;
 
-        // const estimateAPI = "https://lyber-server.herokuapp.com/api/estimate" + queryParam;
-        // const estimateAPI = "http://localhost:8000/api/estimate" + queryParam;
+        // const estimateAPI = "http://localhost:8000/api/estimate/beta" + queryParam;
         
         const estimateAPI = "https://lyber.co/api/estimate/beta" + queryParam;
-        
+
+        // console.log("Estimate Fare", estimateAPI);
+
+        this.getEstimate(estimateAPI);
+    }
+    
+    getEstimate = (estimateAPI) => {
         fetch(estimateAPI, {
             method: 'GET'
         })
         .then(response => response.json())
         .then(data => {
-            console.log("[EstData]", data);
+            // console.log("[EstData]", data);
+            if (data.prices && data.prices[0].fare_estimate) {
+                this.setState({
+                    estData: data.prices,
+                    loading: false
+                });
+            } else {
+                this.getEstimate(estimateAPI)
+            }
+        })
+        .catch(err => {
+            console.log(err)
             this.setState({
-                estData: data.prices,
-                loading: false
+                loading: false,
+                estErr: true
             });
+            // this.getEstimate()
         });
-    }
-    
+    };
+
     /**
      * Life Cycle Hooks
      */
@@ -313,6 +346,16 @@ class Main extends Component {
                             }
                         </Grid>
                     </div>
+                    <Modal
+                        open={this.state.estErr}
+                        onClose={this.handleModalClose}
+                    >
+                        <div className={classes.modal}>
+                            <Typography variant="body1">
+                                Sorry, we're unable to provide the estimation for this trip.
+                            </Typography>
+                        </div>
+                    </Modal>
 
             </div>
         )

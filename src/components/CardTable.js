@@ -119,6 +119,9 @@ const styles = theme => ({
     avatar: {
         // width: 30,
         // height: 30
+    },
+    tab: {
+        width: '50%'
     }
 });
 
@@ -270,6 +273,7 @@ class CardTable extends Component {
                             indicatorColor="primary"
                             textColor="primary"
                             fullWidth
+                            centered
                         >
                             <Tab label="Price" />
                             <Tab label="ETA" />
@@ -303,7 +307,7 @@ class CardTable extends Component {
                                             <CardContent className={classes.content} >
                                                 <Typography variant="headline" component="p" className={classes.price} >
                                                     {/* ${item.min_estimate} - ${item.max_estimate} */}
-                                                    ${item.fare_estimate}
+                                                    ${item.fare_estimate.toFixed(2)}
                                                 </Typography>
                                                 <Typography color="textSecondary" className={classes.name} >
                                                     {item.display_name}
@@ -347,7 +351,7 @@ class CardTable extends Component {
                                             <CardContent className={classes.content} >
                                                 <Typography variant="headline" component="p" className={classes.price} >
                                                     {/* ${item.min_estimate} - ${item.max_estimate} */}
-                                                    ${item.fare_estimate}
+                                                    ${item.fare_estimate.toFixed(2)}
                                                 </Typography>
                                                 <Typography color="textSecondary" className={classes.name} >
                                                     {item.display_name}
