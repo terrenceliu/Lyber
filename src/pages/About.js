@@ -48,6 +48,12 @@ const styles = (theme) => ({
         textAlign: 'center',
         color: 'white',
         letterSpacing: '2.5px',
+    },
+    textContainer: {
+        width: "50%",
+        height: "80%",
+        textAlign: "center",
+        // letterSpacing: '0.3em'
     }
 });
 
@@ -73,6 +79,19 @@ class About extends Component {
                             About
                         </Typography>
                     </div>
+                </Grid>
+                <Grid item xs={12}>
+                    <div
+                        id="textContainer"
+                    >
+                        <Typography variant="body1">
+                            Lyber is a mobile web application that provides
+                            exact pricing estimation among major ride-share
+                            services. 
+                        
+                        </Typography>
+                    </div>
+
                 </Grid>
 
                 </Grid>

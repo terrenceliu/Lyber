@@ -66,7 +66,7 @@ class InputField extends Component {
             // Find props
             const { google } = this.props;
             const maps = google.maps;
-
+            
             // Find hook nodes
             const deparNode = document.getElementById('deparRef');
             const destNode = document.getElementById('destRef');

@@ -98,9 +98,9 @@ class ButtonAppBar extends Component {
         //     authURL = "http://localhost:8000/auth/login";
         // }
 
-        // var authURL = "https://lyber.co/auth/login";
+        var authURL = "https://lyber.co/auth/login";
         
-        var authURL = "http://localhost:8000/api/auth/login";
+        // var authURL = "http://localhost:8000/api/auth/login";
         
         window.location = authURL;
         // alert("We're still working on this feature :)")
@@ -113,23 +113,23 @@ class ButtonAppBar extends Component {
                 {/* <AppBar position="fixed"> */}
                 <AppBar position="static" style={{ background: 'transparent', boxShadow: 'none'}}>
                     <Toolbar>
-                        <IconButton
+                        {/* <IconButton
                             className={classes.menuButton} 
                             color="primary" 
                             aria-label="Menu"
                             onClick={() => this.toggleDrawer(true)}
                             >
                             <MenuIcon />
-                        </IconButton>
+                        </IconButton> */}
                         <Typography variant="title" color="primary" className={classes.flex}>
                             Lyber
                         </Typography>
-                        <IconButton className={classes.acountButton} color="primary" aria-label="Menu">
+                        {/* <IconButton className={classes.acountButton} color="primary" aria-label="Menu"> */}
                             {/* <AcountBox /> */}
-                        </IconButton>
-                        <IconButton className={classes.acountButton} color="primary" aria-label="Menu" onClick={this.handleLogIn}>
+                        {/* </IconButton> */}
+                        {/* <IconButton className={classes.acountButton} color="primary" aria-label="Menu" onClick={this.handleLogIn}>
                             <AcountBox />
-                        </IconButton>
+                        </IconButton> */}
                     </Toolbar>
                 </AppBar>
                 <SwipeableDrawer
