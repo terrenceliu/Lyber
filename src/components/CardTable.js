@@ -218,7 +218,7 @@ class CardTable extends Component {
      * @param {obejct} classes
      * @param {object} estData
      */
-    tabFactory = (classes, theme, data) => {
+    tabFactory = (classes, theme, data, estNotSupport) => {
         var data = data || [];
 
         // // Sort Data
@@ -244,24 +244,6 @@ class CardTable extends Component {
             enter: theme.transitions.duration.enteringScreen,
             exit: theme.transitions.duration.leavingScreen,
         };
-
-        // const fabs = [
-        //     {
-        //         color: 'primary',
-        //         className: classes.fab,
-        //         icon: <AddIcon />,
-        //     },
-        //     {
-        //         color: 'secondary',
-        //         className: classes.fab,
-        //         icon: <EditIcon />,
-        //     },
-        //     {
-        //         color: 'inherit',
-        //         className: classNames(classes.fab, classes.fabGreen),
-        //         icon: <UpIcon />,
-        //     },
-        // ];
         
         return (
             <div className={classes.root}>
@@ -306,8 +288,12 @@ class CardTable extends Component {
                                             </CardContent>
                                             <CardContent className={classes.content} >
                                                 <Typography variant="headline" component="p" className={classes.price} >
-                                                    {/* ${item.min_estimate} - ${item.max_estimate} */}
-                                                    ${item.fare_estimate.toFixed(2)}
+                                                    {
+                                                        (item.fare_estimate)
+                                                        ? "$" + item.fare_estimate.toFixed(2)
+                                                        : "$" + item.min_estimate + " - " + "$" + item.max_estimate
+                                                        
+                                                    }
                                                 </Typography>
                                                 <Typography color="textSecondary" className={classes.name} >
                                                     {item.display_name}
@@ -350,8 +336,11 @@ class CardTable extends Component {
                                             </CardContent>
                                             <CardContent className={classes.content} >
                                                 <Typography variant="headline" component="p" className={classes.price} >
-                                                    {/* ${item.min_estimate} - ${item.max_estimate} */}
-                                                    ${item.fare_estimate.toFixed(2)}
+                                                    {
+                                                        (item.fare_estimate)
+                                                        ? "$" + item.fare_estimate.toFixed(2)
+                                                        : "$" + item.min_estimate + " - " + "$" + item.max_estimate
+                                                    }
                                                 </Typography>
                                                 <Typography color="textSecondary" className={classes.name} >
                                                     {item.display_name}
@@ -400,53 +389,16 @@ class CardTable extends Component {
     render() {
         const { estData } = this.props;
 
-        const { loading } = this.props;
+        const { estNotSupport } = this.props;
 
         const { classes, theme } = this.props;
-
-        const testCard = (
-            <Grid item className={classes.grid_item} >
-                <Card className={classes.card}>
-                    <CardContent className={classes.icon} >
-                        <Avatar
-                            alt="Uber"
-                            src="/static/images/uber_rides_api_icon_2x_70px.png"
-                            className={classes.avatar}
-                        />
-                        {/* <SvgIcon
-                            component={
-                                
-                            }
-                        /> */}
-                    </CardContent>
-                    <CardContent className={classes.content} >
-                        <Typography variant="headline" component="p" className={classes.price} >
-                            $8 ~ $9
-                        </Typography>
-                        <Typography color="textSecondary" className={classes.name} >
-                            Test Card
-                        </Typography>
-                    </CardContent>
-                    <CardContent className={classes.request} >
-                        {/* <ReqRideButton onClick={ this.requestRide } /> */}
-                        <Button size="small" color="primary"
-                            onClick={() => this.requestRide("Tag")}>
-                            Schedule
-                        </Button>
-                        <Typography color="textSecondary">
-                            ETA: 3mins
-                        </Typography>
-                    </CardContent>
-                </Card>
-            </Grid>
-        );
         
         return (
             <Grid item className={classes.wrapper} ref={(section) => { this.cardTable = section; }}>
                 <Grid container spacing={16}>
                     {
                         // estData && 
-                        this.tabFactory(classes, theme, estData)
+                        this.tabFactory(classes, theme, estData, estNotSupport)
                     }
                 </Grid>
             </Grid>
