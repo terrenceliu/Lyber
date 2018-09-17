@@ -222,13 +222,13 @@ class Main extends Component {
         
         const queryParam = `?depar_lat=${deparLat}&depar_lng=${deparLng}&dest_lat=${destLat}&dest_lng=${destLng}&dest_ref=${destPlace}`;
 
-        const estimateAPI = "http://localhost:8000/api/estimate/beta" + queryParam;
+        // const estimateAPI = "http://localhost:8000/api/estimate/beta" + queryParam;
         
-        // const estimateAPI = "https://lyber.co/api/estimate/beta" + queryParam;
+        const estimateAPI = "https://lyber.co/api/estimate/beta" + queryParam;
 
         // console.log("Estimate Fare", estimateAPI);
 
-        console.log("Search URL", estimateAPI);
+        // console.log("Search URL", estimateAPI);
 
         this.getEstimate(estimateAPI);
     }
@@ -239,7 +239,7 @@ class Main extends Component {
         })
         .then(response => response.json())
         .then(data => {
-            console.log("[EstData]", data);
+            // console.log("[EstData]", data);
             if (data.prices) {
                 // Check if all prices has estimate
                 for (var i = 0; i < data.prices.length; i++) {

@@ -78,7 +78,7 @@ class InputField extends Component {
             deparAC.addListener('place_changed', () => {
                 var place = deparAC.getPlace();
                 
-                console.log("[Depar]", place.place_id, place.geometry.location.toJSON());
+                // console.log("[Depar]", place.place_id, place.geometry.location.toJSON());
                 
 
                 if (!place.geometry) {
