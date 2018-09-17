@@ -160,13 +160,13 @@ class CardTable extends Component {
                 //     `&pickup[latitude]=${deparLat}&pickup[longitude]=${deparLng}&pickup[nickname]=${deparAddr}` +   // Pick Up location
                 //     `&dropoff[latitude]=${destLat}&dropoff[longitude]=${destLng}&dropoff[nickname]=${destAddr}` + // Drop off location
                 //     `&product_id=${product_id}`;
-                deepLink = "https://m.uber.com/ul/?action=setPickup&client_id=jOOUs484dDpd5ZtVxT5A8cp9CEknN5sz&action=setPickup" +
+                deepLink = "https://m.uber.com/ul/?action=setPickup&client_id=jOOUs484dDpd5ZtVxT5A8cp9CEknN5sz" +
                     `&pickup[latitude]=${deparLat}&pickup[longitude]=${deparLng}&pickup[nickname]=${deparAddr}` +   // Pick Up location
                     `&dropoff[latitude]=${destLat}&dropoff[longitude]=${destLng}&dropoff[nickname]=${destAddr}` + // Drop off location
                     `&product_id=${product_id}`;
             } else if (company == "lyft") {
-                deepLink = `lyft://ridetype?id=${product_id}&&partner=WX_vIhcHWEdw` +
-                    `pickup[latitude]=${deparLat}&pickup[longitude]=${deparLng}` +
+                deepLink = `lyft://ridetype?id=${product_id}&partner=WX_vIhcHWEdw` +
+                    `&pickup[latitude]=${deparLat}&pickup[longitude]=${deparLng}` +
                     `&destination[latitude]=${destLat}&destination[longitude]=${destLng}`;
             }
         }
