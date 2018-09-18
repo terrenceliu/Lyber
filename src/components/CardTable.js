@@ -129,7 +129,8 @@ class CardTable extends Component {
     constructor() {
         super();
         this.state = {
-            value: 0
+            value: 0,
+            estNotSupport: false
         }
     }
     
@@ -218,7 +219,7 @@ class CardTable extends Component {
      * @param {obejct} classes
      * @param {object} estData
      */
-    tabFactory = (classes, theme, data, estNotSupport) => {
+    tabFactory = (classes, theme, data) => {
         var data = data || [];
 
         // // Sort Data
@@ -289,7 +290,8 @@ class CardTable extends Component {
                                             <CardContent className={classes.content} >
                                                 <Typography variant="headline" component="p" className={classes.price} >
                                                     {
-                                                        (item.fare_estimate)
+                                                        // (item.fare_estimate)
+                                                        (!this.state.estNotSupport)
                                                         ? "$" + item.fare_estimate.toFixed(2)
                                                         : "$" + item.min_estimate + " - " + "$" + item.max_estimate
                                                         
@@ -337,7 +339,7 @@ class CardTable extends Component {
                                             <CardContent className={classes.content} >
                                                 <Typography variant="headline" component="p" className={classes.price} >
                                                     {
-                                                        (item.fare_estimate)
+                                                        (!this.state.estNotSupport)
                                                         ? "$" + item.fare_estimate.toFixed(2)
                                                         : "$" + item.min_estimate + " - " + "$" + item.max_estimate
                                                     }
@@ -389,16 +391,25 @@ class CardTable extends Component {
     render() {
         const { estData } = this.props;
 
-        const { estNotSupport } = this.props;
+        // const { estNotSupport } = this.props;
 
         const { classes, theme } = this.props;
         
+        for (var i = 0; i < estData.prices.length; i++) {
+            if (!estData.prices[i].fare_estimate) {
+                this.setState({
+                    estNotSupport: true
+                });
+                break
+            }
+        }
+
         return (
             <Grid item className={classes.wrapper} ref={(section) => { this.cardTable = section; }}>
                 <Grid container spacing={16}>
                     {
                         // estData && 
-                        this.tabFactory(classes, theme, estData, estNotSupport)
+                        this.tabFactory(classes, theme, estData)
                     }
                 </Grid>
             </Grid>
