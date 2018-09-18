@@ -84,7 +84,7 @@ class Main extends Component {
             estNotSupport: false
         })
     }
-
+    
     /**
      * 
      * Update the position
@@ -222,9 +222,9 @@ class Main extends Component {
         
         const queryParam = `?depar_lat=${deparLat}&depar_lng=${deparLng}&dest_lat=${destLat}&dest_lng=${destLng}&dest_ref=${destPlace}`;
 
-        const estimateAPI = "http://localhost:8000/api/estimate/beta" + queryParam;
+        // const estimateAPI = "http://localhost:8000/api/estimate/beta" + queryParam;
         
-        // const estimateAPI = "https://lyber.co/api/estimate/beta" + queryParam;
+        const estimateAPI = "https://lyber.co/api/estimate/beta" + queryParam;
 
         // console.log("Estimate Fare", estimateAPI);
 
@@ -345,12 +345,12 @@ class Main extends Component {
                     >
                         <div className={classes.modal}>
                             <Typography variant="body1">
-                                Currently the server only supports exact pricing estimation in Houston area. For any other cities, the exact pricing estimation
+                                Currently the server only supports services in Houston area. <br/> For any other cities, the pricing estimation
                                 could be not accurate. 
                             </Typography>
                         </div>
                     </Modal>
-
+                    
             </div>
         )
     }

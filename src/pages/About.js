@@ -80,16 +80,29 @@ class About extends Component {
                         </Typography>
                     </div>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={8}>
                     <div
                         id="textContainer"
+                        style={{
+                            // width: '70%',
+                            textAlign: 'left'
+                        }}
                     >
-                        <Typography variant="body1">
-                            Lyber is a mobile web application that provides
-                            exact pricing estimation among major ride-share
-                            services. 
-                        
+                        <Typography variant="title">
+                            Compare Services. <br/> <br/> 
+                            In One Place. <br/> <br/> <br/>
                         </Typography>
+                        <Typography variant="body1">
+                            <div>
+                                Github Repo
+                                <p><a href="https://github.com/terrenceliu/Lyber">Front End</a></p>
+                                <p><a href="https://github.com/terrenceliu/Lyber-express">Back End</a></p>
+                                <p><a href="https://github.com/EdwardFeng523/Lyber-ios">iOS</a></p>
+                                <p>Developed by <a href="https://github.com/terrenceliu">Terrence</a> & 
+                                <a href="https://github.com/EdwardFeng523"> Edward</a> </p>
+                            </div>
+                        </Typography>
+                        
                     </div>
 
                 </Grid>
