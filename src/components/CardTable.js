@@ -129,9 +129,9 @@ class CardTable extends Component {
     constructor() {
         super();
         this.state = {
-            value: 0,
-            estNotSupport: false
-        }
+            value: 0
+        };
+        this.estNotSupport = false;
     }
     
     handleChange = (event, value) => {
@@ -226,15 +226,18 @@ class CardTable extends Component {
         var priceData = data.slice();
 
         var timeData = data.slice();
-
-        priceData.sort(function (a, b) {
-            // if (a.min_estimate != b.min_estimate) {
-            //     return (a.min_estimate - b.min_estimate);
-            // } else {
-            //     return (a.max_estimate - b.max_estimate);
-            // }  
-            return (a.fare_estimate - b.fare_estimate);
-        });
+        
+        var cmp = (this.estNotSupport)
+            ? function (a, b) {
+                return (a.min_estimate == b.min_estimate)
+                    ? (a.max_estimate - b.max_estimate)
+                    : (a.min_estimate - b.min_estimate);
+            }
+            : function (a, b) {
+                return (a.fare_estimate - b.fare_estimate);
+            }
+            
+        priceData.sort(cmp);
 
         timeData.sort(function (a, b) {
             return (a.eta - b.eta);
@@ -291,7 +294,7 @@ class CardTable extends Component {
                                                 <Typography variant="headline" component="p" className={classes.price} >
                                                     {
                                                         // (item.fare_estimate)
-                                                        (!this.state.estNotSupport)
+                                                        (!this.estNotSupport)
                                                         ? "$" + item.fare_estimate.toFixed(2)
                                                         : "$" + item.min_estimate + " - " + "$" + item.max_estimate
                                                         
@@ -339,7 +342,7 @@ class CardTable extends Component {
                                             <CardContent className={classes.content} >
                                                 <Typography variant="headline" component="p" className={classes.price} >
                                                     {
-                                                        (!this.state.estNotSupport)
+                                                        (!this.estNotSupport)
                                                         ? "$" + item.fare_estimate.toFixed(2)
                                                         : "$" + item.min_estimate + " - " + "$" + item.max_estimate
                                                     }
@@ -395,11 +398,10 @@ class CardTable extends Component {
 
         const { classes, theme } = this.props;
         
-        for (var i = 0; i < estData.prices.length; i++) {
-            if (!estData.prices[i].fare_estimate) {
-                this.setState({
-                    estNotSupport: true
-                });
+        this.estNotSupport = false;
+        for (var i = 0; i < estData.length; i++) {
+            if (!estData[i].fare_estimate) {
+                this.estNotSupport = true;
                 break
             }
         }
