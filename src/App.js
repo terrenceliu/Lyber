@@ -13,7 +13,7 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import { createMuiTheme } from '@material-ui/core/styles';
 
 // Router
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, HashRouter, hashHistory } from 'react-router-dom';
 
 const theme = createMuiTheme({
     palette: {
@@ -26,19 +26,21 @@ class App extends Component {
     render() {
         return (
             <div>
-                 <MuiThemeProvider theme={theme}>
-                    <Router>
-                        <div>    
-                            <ToolBar disableGutters="true"/>
-                    
-                            
-                            <Route exact path="/" component={Main} />
-                            <Route exact path="/about" component={About} />
-                            <Route exact path="/feedback" component={Feedback} />
+                {/* <HashRouter> */}
+                    <MuiThemeProvider theme={theme}>
+                        <HashRouter history={hashHistory}>
+                            <div>    
+                                <ToolBar disableGutters="true"/>
+                                
+                                <Route exact path="/" component={Main} />
+                                <Route exact path="/about" component={About} />
+                                <Route exact path="/feedback" component={Feedback} />
 
-                        </div>
-                    </Router>
-                </MuiThemeProvider>
+                            </div>
+                        </HashRouter>
+                    </MuiThemeProvider>
+                {/* </HashRouter> */}
+                    
             </div>
         )
     }

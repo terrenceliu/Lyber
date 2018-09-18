@@ -173,7 +173,7 @@ class Feedback extends Component {
                                     Feedback
                                 </Typography>
                             </div>
-                        </Grid>
+                        </Grid> 
                         <Grid item xs={12} className={classes.formInput}>
                             <TextField
                                 id="name"

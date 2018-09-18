@@ -66,7 +66,7 @@ class InputField extends Component {
             // Find props
             const { google } = this.props;
             const maps = google.maps;
-
+            
             // Find hook nodes
             const deparNode = document.getElementById('deparRef');
             const destNode = document.getElementById('destRef');
@@ -78,7 +78,7 @@ class InputField extends Component {
             deparAC.addListener('place_changed', () => {
                 var place = deparAC.getPlace();
                 
-                console.log("[Depar]", place.place_id, place.geometry.location.toJSON());
+                // console.log("[Depar]", place.place_id, place.geometry.location.toJSON());
                 
 
                 if (!place.geometry) {

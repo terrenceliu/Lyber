@@ -90,20 +90,20 @@ class ButtonAppBar extends Component {
     }
     
     handleLogIn = () => {
-        // var authURL = undefined;
+        var authURL = undefined;
 
         // if (process.env.production) {
-        //     authURL = "https://lyber-server.herokuapp.com/auth/login";
+        //     authURL = "https://lyber.co/auth/login";
         // } else {
         //     authURL = "http://localhost:8000/auth/login";
         // }
 
-        // var authURL = "https://lyber.co/auth/login";
+        var authURL = "https://lyber.co/api/auth/login";
         
-        // var authURL = "http://localhost:8000/auth/login";
-
-        // window.location = authURL;
-        alert("We're still working on this feature :)")
+        // var authURL = "http://localhost:8000/api/auth/login";
+        
+        window.location = authURL;
+        // alert("We're still working on this feature :)")
     }
     
     render() {
@@ -124,12 +124,12 @@ class ButtonAppBar extends Component {
                         <Typography variant="title" color="primary" className={classes.flex}>
                             Lyber
                         </Typography>
-                        <IconButton className={classes.acountButton} color="primary" aria-label="Menu">
+                        {/* <IconButton className={classes.acountButton} color="primary" aria-label="Menu"> */}
                             {/* <AcountBox /> */}
-                        </IconButton>
-                        {/* <IconButton className={classes.acountButton} color="primary" aria-label="Menu" onClick={this.handleLogIn}>
+                        {/* </IconButton> */}
+                        <IconButton className={classes.acountButton} color="primary" aria-label="Menu" onClick={this.handleLogIn}>
                             <AcountBox />
-                        </IconButton> */}
+                        </IconButton>
                     </Toolbar>
                 </AppBar>
                 <SwipeableDrawer

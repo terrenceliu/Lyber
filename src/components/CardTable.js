@@ -130,7 +130,8 @@ class CardTable extends Component {
         super();
         this.state = {
             value: 0
-        }
+        };
+        this.estNotSupport = false;
     }
     
     handleChange = (event, value) => {
@@ -160,13 +161,13 @@ class CardTable extends Component {
                 //     `&pickup[latitude]=${deparLat}&pickup[longitude]=${deparLng}&pickup[nickname]=${deparAddr}` +   // Pick Up location
                 //     `&dropoff[latitude]=${destLat}&dropoff[longitude]=${destLng}&dropoff[nickname]=${destAddr}` + // Drop off location
                 //     `&product_id=${product_id}`;
-                deepLink = "https://m.uber.com/ul/?action=setPickup&client_id=jOOUs484dDpd5ZtVxT5A8cp9CEknN5sz&action=setPickup" +
+                deepLink = "https://m.uber.com/ul/?action=setPickup&client_id=jOOUs484dDpd5ZtVxT5A8cp9CEknN5sz" +
                     `&pickup[latitude]=${deparLat}&pickup[longitude]=${deparLng}&pickup[nickname]=${deparAddr}` +   // Pick Up location
                     `&dropoff[latitude]=${destLat}&dropoff[longitude]=${destLng}&dropoff[nickname]=${destAddr}` + // Drop off location
                     `&product_id=${product_id}`;
             } else if (company == "lyft") {
-                deepLink = `lyft://ridetype?id=${product_id}&&partner=WX_vIhcHWEdw` +
-                    `pickup[latitude]=${deparLat}&pickup[longitude]=${deparLng}` +
+                deepLink = `lyft://ridetype?id=${product_id}&partner=WX_vIhcHWEdw` +
+                    `&pickup[latitude]=${deparLat}&pickup[longitude]=${deparLng}` +
                     `&destination[latitude]=${destLat}&destination[longitude]=${destLng}`;
             }
         }
@@ -225,15 +226,18 @@ class CardTable extends Component {
         var priceData = data.slice();
 
         var timeData = data.slice();
-
-        priceData.sort(function (a, b) {
-            // if (a.min_estimate != b.min_estimate) {
-            //     return (a.min_estimate - b.min_estimate);
-            // } else {
-            //     return (a.max_estimate - b.max_estimate);
-            // }  
-            return (a.fare_estimate - b.fare_estimate);
-        });
+        
+        var cmp = (this.estNotSupport)
+            ? function (a, b) {
+                return (a.min_estimate == b.min_estimate)
+                    ? (a.max_estimate - b.max_estimate)
+                    : (a.min_estimate - b.min_estimate);
+            }
+            : function (a, b) {
+                return (a.fare_estimate - b.fare_estimate);
+            }
+            
+        priceData.sort(cmp);
 
         timeData.sort(function (a, b) {
             return (a.eta - b.eta);
@@ -244,24 +248,6 @@ class CardTable extends Component {
             enter: theme.transitions.duration.enteringScreen,
             exit: theme.transitions.duration.leavingScreen,
         };
-
-        // const fabs = [
-        //     {
-        //         color: 'primary',
-        //         className: classes.fab,
-        //         icon: <AddIcon />,
-        //     },
-        //     {
-        //         color: 'secondary',
-        //         className: classes.fab,
-        //         icon: <EditIcon />,
-        //     },
-        //     {
-        //         color: 'inherit',
-        //         className: classNames(classes.fab, classes.fabGreen),
-        //         icon: <UpIcon />,
-        //     },
-        // ];
         
         return (
             <div className={classes.root}>
@@ -306,8 +292,13 @@ class CardTable extends Component {
                                             </CardContent>
                                             <CardContent className={classes.content} >
                                                 <Typography variant="headline" component="p" className={classes.price} >
-                                                    {/* ${item.min_estimate} - ${item.max_estimate} */}
-                                                    ${item.fare_estimate.toFixed(2)}
+                                                    {
+                                                        // (item.fare_estimate)
+                                                        (!this.estNotSupport)
+                                                        ? "$" + item.fare_estimate.toFixed(2)
+                                                        : "$" + item.min_estimate + " - " + "$" + item.max_estimate
+                                                        
+                                                    }
                                                 </Typography>
                                                 <Typography color="textSecondary" className={classes.name} >
                                                     {item.display_name}
@@ -350,8 +341,11 @@ class CardTable extends Component {
                                             </CardContent>
                                             <CardContent className={classes.content} >
                                                 <Typography variant="headline" component="p" className={classes.price} >
-                                                    {/* ${item.min_estimate} - ${item.max_estimate} */}
-                                                    ${item.fare_estimate.toFixed(2)}
+                                                    {
+                                                        (!this.estNotSupport)
+                                                        ? "$" + item.fare_estimate.toFixed(2)
+                                                        : "$" + item.min_estimate + " - " + "$" + item.max_estimate
+                                                    }
                                                 </Typography>
                                                 <Typography color="textSecondary" className={classes.name} >
                                                     {item.display_name}
@@ -400,47 +394,18 @@ class CardTable extends Component {
     render() {
         const { estData } = this.props;
 
-        const { loading } = this.props;
+        // const { estNotSupport } = this.props;
 
         const { classes, theme } = this.props;
-
-        const testCard = (
-            <Grid item className={classes.grid_item} >
-                <Card className={classes.card}>
-                    <CardContent className={classes.icon} >
-                        <Avatar
-                            alt="Uber"
-                            src="/static/images/uber_rides_api_icon_2x_70px.png"
-                            className={classes.avatar}
-                        />
-                        {/* <SvgIcon
-                            component={
-                                
-                            }
-                        /> */}
-                    </CardContent>
-                    <CardContent className={classes.content} >
-                        <Typography variant="headline" component="p" className={classes.price} >
-                            $8 ~ $9
-                        </Typography>
-                        <Typography color="textSecondary" className={classes.name} >
-                            Test Card
-                        </Typography>
-                    </CardContent>
-                    <CardContent className={classes.request} >
-                        {/* <ReqRideButton onClick={ this.requestRide } /> */}
-                        <Button size="small" color="primary"
-                            onClick={() => this.requestRide("Tag")}>
-                            Schedule
-                        </Button>
-                        <Typography color="textSecondary">
-                            ETA: 3mins
-                        </Typography>
-                    </CardContent>
-                </Card>
-            </Grid>
-        );
         
+        this.estNotSupport = false;
+        for (var i = 0; i < estData.length; i++) {
+            if (!estData[i].fare_estimate) {
+                this.estNotSupport = true;
+                break
+            }
+        }
+
         return (
             <Grid item className={classes.wrapper} ref={(section) => { this.cardTable = section; }}>
                 <Grid container spacing={16}>

@@ -73,16 +73,18 @@ class Main extends Component {
             estData: undefined,
             loading: false,
             estErr: false,
-            userProfile: undefined
+            userProfile: undefined,
+            estNotSupport: false
         }
     }
 
     handleModalClose = () => {
         this.setState({
-            estErr: false
+            estErr: false,
+            estNotSupport: false
         })
     }
-
+    
     /**
      * 
      * Update the position
@@ -215,7 +217,7 @@ class Main extends Component {
         
         const destPlace = this.state.destPlace;
         const deparPlace = this.state.deparPlace;
-
+        
         // console.log(destPlace, deparPlace);
         
         const queryParam = `?depar_lat=${deparLat}&depar_lng=${deparLng}&dest_lat=${destLat}&dest_lng=${destLng}&dest_ref=${destPlace}`;
@@ -225,6 +227,8 @@ class Main extends Component {
         const estimateAPI = "https://lyber.co/api/estimate/beta" + queryParam;
 
         // console.log("Estimate Fare", estimateAPI);
+
+        // console.log("Search URL", estimateAPI);
 
         this.getEstimate(estimateAPI);
     }
@@ -236,13 +240,24 @@ class Main extends Component {
         .then(response => response.json())
         .then(data => {
             // console.log("[EstData]", data);
-            if (data.prices && data.prices[0].fare_estimate) {
+            if (data.prices) {
+                // Check if all prices has estimate
+                for (var i = 0; i < data.prices.length; i++) {
+                    if (!data.prices[i].fare_estimate) {
+                        this.setState({
+                            estData: data.prices,
+                            loading: false,
+                            estNotSupport: true
+
+                        })
+                        return;
+                    }
+                }
                 this.setState({
                     estData: data.prices,
                     loading: false
                 });
-            } else {
-                this.getEstimate(estimateAPI)
+                return
             }
         })
         .catch(err => {
@@ -271,30 +286,6 @@ class Main extends Component {
             });
         }
     }
-    
-    componentDidMount() {
-        // let parsed = queryString.parse(window.location.search);
-        // let accessToken = parsed.access_token;
-        
-        // if (!accessToken) {
-        //     return;
-        // }
-
-        // console.log("AccessToken", accessToken);
-
-        // fetch("https://api.uber.com/v1.2/me", {
-        //     headers: {
-        //         'Authorization': 'Bearer ' + accessToken,
-        //         'Accept-Language': 'en_U',
-        //         'Content-Type': 'application/json'
-        //     }
-        // }).then(res => res.json())
-        // .then(data => this.setState({
-        //     userProfile: data
-        // }))
-        // .then(() => console.log(this.state.userProfile))
-        // .catch(e => console.log(e));
-    }
 
     render() {
         const { classes } = this.props;
@@ -309,8 +300,6 @@ class Main extends Component {
                                 deparLng={this.state.deparLng}
                                 destLat={this.state.destLat}
                                 destLng={this.state.destLng}
-                                // deparViewPort={this.state.deparPlace ? this.state.deparPlace.geometry.viewport : undefined}
-                                // destViewPort={this.state.destPlac ? this.state.destPlace.geometry.viewport : undefined} 
                                 updateLocation={this.updateLocation}
                             />
                             <div className={classes.padding}>
@@ -326,13 +315,6 @@ class Main extends Component {
                                 loading={this.state.loading}
                             />
                             {
-                                // this.state.loading
-                                // ? <Grid item style={{
-                                //     width: '100%',
-                                // }}>
-                                //     <LinearProgress />
-                                // </Grid>
-                                // :
                                 this.state.estData &&
                                 <CardTable 
                                     estData={this.state.estData}
@@ -342,6 +324,7 @@ class Main extends Component {
                                     destLng={this.state.destLng}
                                     deparAddr={this.state.deparAddr}
                                     destAddr={this.state.destAddr}
+                                    estNotSupport={this.state.estNotSupport}
                                 />
                             }
                         </Grid>
@@ -356,7 +339,18 @@ class Main extends Component {
                             </Typography>
                         </div>
                     </Modal>
-
+                    <Modal
+                        open={this.state.estNotSupport}
+                        onClose={this.handleModalClose}
+                    >
+                        <div className={classes.modal}>
+                            <Typography variant="body1">
+                                Currently the server only supports services in Houston area. <br/> For any other cities, the pricing estimation
+                                could be not accurate. 
+                            </Typography>
+                        </div>
+                    </Modal>
+                    
             </div>
         )
     }
