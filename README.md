@@ -23,9 +23,11 @@ Lyber is available on iOS. Repo link: https://github.com/EdwardFeng523/Lyber-ios
 - Integrate with Google Maps API. Just drag and drop to pin-point your pick up location.
 
 
-
-
 ## TODO
+
+- [ ] I think I should really add some comments and clean up the code base ummm
+
+- [ ] Integrate React-Redux for state management.
 
 - [x] CLEAN UP THE CODE URGHHH ITS SO MESSY RN
 
